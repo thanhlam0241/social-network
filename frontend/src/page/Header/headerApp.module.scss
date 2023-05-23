@@ -1,0 +1,37 @@
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.title-main-left {
+  color: #2564cf;
+  min-width: 20%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+}
+.title-main-right {
+  color: #2564cf;
+  width: 7%;
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  &:hover {
+    cursor: pointer;
+    background-color: #fdfdfd;
+  }
+}
+
+.button_show-option {
+  background-color: transparent;
+  &:hover {
+    cursor: pointer;
+    background-color: #fdfdfd;
+  }
+}

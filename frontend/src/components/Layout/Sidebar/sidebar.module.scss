@@ -1,0 +1,31 @@
+.button-open-close {
+  padding-left: 9px;
+  position: fixed;
+  top: 90px;
+}
+
+.sidebar {
+  //position: fixed;
+  background-color: #fff;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+  width: 300px;
+  transition: all 0.4s ease;
+  box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.1);
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar_hide {
+  //position: fixed;
+  width: 58px;
+  background-color: #fff;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}

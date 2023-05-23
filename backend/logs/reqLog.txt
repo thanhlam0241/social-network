@@ -1,0 +1,24 @@
+Date|       |Time|      |Id|                                       |Method|         |Origin|                |Url                    |IP|
+                
+20230522	21:50:06	e6a78c90-9b84-484b-a330-3b1b64b86400		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	21:50:06	0a41e67b-18e4-4168-ab8a-d9b929d160fa		POST      		http://localhost:3000	/logout             	::1                 
+20230522	21:52:14	0d16fa18-46f5-42aa-a9b0-92f410f7f4f4		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	21:52:14	84fb3b27-55d7-4e27-a0a8-09f210d00f8f		POST      		http://localhost:3000	/logout             	::1                 
+20230522	21:52:17	3749b4ff-63c1-4972-ab32-f3081ab62e69		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230522	21:52:17	e24be9c6-f8b7-429f-97c7-f1dd4acb7e3d		POST      		http://localhost:3000	/login              	::1                 
+20230522	21:54:19	9020dd2c-34e2-4e17-b88e-96039d629bfe		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	21:54:19	937bcca5-5bcc-4df5-8f32-fc5b932b8b8b		POST      		http://localhost:3000	/logout             	::1                 
+20230522	21:54:45	54838158-2423-41ae-a8f2-38d564bd5e09		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230522	21:54:45	7bd00289-5fb4-42c1-a1a1-ed784ff3abc0		POST      		http://localhost:3000	/login              	::1                 
+20230522	21:55:02	c7d16c48-af44-401e-8f44-4892ae041b75		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	21:55:02	3ca19f19-a190-45ea-ab3a-ddc658bd7a96		POST      		http://localhost:3000	/logout             	::1                 
+20230522	22:03:53	b9cc3d45-a3cf-4e29-b4f2-f4a1e59c86b9		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230522	22:03:53	d53733a1-fa20-4249-b412-642aac0d3c0c		POST      		http://localhost:3000	/login              	::1                 
+20230522	22:08:05	f98382d8-cb5c-4adf-97fe-a690363236db		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230522	22:08:05	410ff579-e1ff-414a-a8bc-047c0081cf94		POST      		http://localhost:3000	/login              	::1                 
+20230522	22:08:07	d53047bd-494d-4e03-9f17-81a9101e52e4		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	22:08:07	4c10da24-cd92-4342-804c-cf1272702239		POST      		http://localhost:3000	/logout             	::1                 
+20230522	22:49:51	cbd7dc66-dd04-495a-ba04-9f7528602e8d		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230522	22:49:51	27918fe2-c7df-4a62-a032-b5d48bb4ff2e		POST      		http://localhost:3000	/login              	::1                 
+20230522	22:50:04	1341cc8c-9254-421c-ba64-c05427c1523e		OPTIONS   		http://localhost:3000	/logout             	::1                 
+20230522	22:50:04	2ef1bf58-8900-4dac-a104-f5979714d544		POST      		http://localhost:3000	/logout             	::1                 
