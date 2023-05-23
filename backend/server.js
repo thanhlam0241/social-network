@@ -12,6 +12,8 @@ const { errorHandler } = require('./middleware/errorHandler');
 const corsOptions = require('./config/corsOption');
 const { connect } = require('./config/db');
 
+const resIdentify = require('./utils/proto/clientNode')
+
 // const clientRedis = require('./utils/database/connection_redis');
 const authenticateToken = require('./middleware/authenToken');
 // require('./utils/connection_mongodb');
@@ -21,6 +23,8 @@ const app = express();
 const PORT = process.env.PORT || 3500;
 
 connect();
+
+
 
 app.use(helmet());
 app.use(morgan('common'));
@@ -52,12 +56,17 @@ app.use('/static', express.static('static'));
 
 app.use('/', require('./routes/root'))
 
+app.get('/identify', async (req, res) => {
+    const message = await resIdentify.identifycationByVideo('C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4')
+    res.json(message)
+})
 // middleware to authenticate token
 app.use(authenticateToken);
 
 app.use('/users', require('./routes/api/users'));
 app.use('/images/avatar', require('./routes/api/avatar'));
 app.use('/todo', require('./routes/api/todo'));
+
 
 // Route handlers
 app.all('/*', (req, res) => {
