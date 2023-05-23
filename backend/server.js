@@ -9,10 +9,11 @@ const morgan = require('morgan');
 
 const { logger } = require('./middleware/logEvents');
 const { errorHandler } = require('./middleware/errorHandler');
-const corsOptions = require('./config/corsOption');
-const { connect } = require('./config/db');
+const corsOptions = require('./utils/config/corsOption');
+const { connect } = require('./utils/config/db');
 
-const resIdentify = require('./utils/proto/clientNode')
+
+// const resIdentify = require('./utils/proto/clientNode')
 
 // const clientRedis = require('./utils/database/connection_redis');
 const authenticateToken = require('./middleware/authenToken');
