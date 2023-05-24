@@ -52,6 +52,7 @@ interface CustomizedDialogsProps {
   onClose: () => void
   children: any
   title?: string
+  width?: number
 }
 export default function CustomizedDialogs(props: CustomizedDialogsProps) {
   const { open, title, onClose, children } = props
@@ -61,7 +62,13 @@ export default function CustomizedDialogs(props: CustomizedDialogsProps) {
   }
 
   return (
-    <BootstrapDialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={open}>
+    <BootstrapDialog
+      maxWidth={'md'}
+      fullWidth={true}
+      onClose={handleClose}
+      aria-labelledby='customized-dialog-title'
+      open={open}
+    >
       <BootstrapDialogTitle id='customized-dialog-title' onClose={handleClose}>
         {title || 'Hello World'}
       </BootstrapDialogTitle>

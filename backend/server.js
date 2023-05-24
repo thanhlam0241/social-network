@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const morgan = require('morgan');
+var multer = require('multer');
 // const createError = require('http-errors');
 
 const { logger } = require('./middleware/logEvents');
@@ -19,6 +20,7 @@ const { connect } = require('./utils/config/db');
 const authenticateToken = require('./middleware/authenToken');
 // require('./utils/connection_mongodb');
 
+var upload = multer();
 const app = express();
 
 const PORT = process.env.PORT || 3500;
@@ -48,6 +50,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+
 // built-in middleware for json
 app.use(express.json());
 
@@ -56,6 +59,8 @@ app.use('/static', express.static('static'));
 // app.use('/avatar', express.static('uploads/avatar'));
 
 app.use('/', require('./routes/root'))
+
+app.use('/face', require('./routes/api/face'));
 
 app.get('/identify', async (req, res) => {
     const message = await resIdentify.identifycationByVideo('C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4')
