@@ -1,0 +1,25 @@
+.message_box {
+  height: 80px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 10px;
+  padding: 1px;
+}
+
+.message_box_input {
+  width: 90%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+  padding: 0 10px;
+  border-radius: 50px;
+}
+
+.message_box_button {
+  background-color: aqua;
+  width: 70px;
+  border-radius: 30px;
+}

@@ -8,6 +8,7 @@ import LoginForm from './features/Authentication/login/Login'
 import RegisterForm from './features/Authentication/register/Register'
 
 import MainContent from './page/main'
+import ChatPage from './page/Chat/chat-page'
 
 import RequireRoles from './features/ProtectedRoute/RequireRole'
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' element={<DefaultLayout />}>
           <Route path='main' element={<RequireRoles allowedRoles={['user']} child={<MainContent />} />} />
         </Route>
+        <Route path='/chat' element={<RequireRoles allowedRoles={['user']} child={<ChatPage />} />} />
       </Routes>
     </Router>
   )

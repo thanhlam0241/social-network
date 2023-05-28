@@ -5,8 +5,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const morgan = require('morgan');
-var multer = require('multer');
 // const createError = require('http-errors');
+
 
 const { logger } = require('./middleware/logEvents');
 const { errorHandler } = require('./middleware/errorHandler');
@@ -20,14 +20,17 @@ const { connect } = require('./utils/config/db');
 const authenticateToken = require('./middleware/authenToken');
 // require('./utils/connection_mongodb');
 
-var upload = multer();
 const app = express();
+
+
+
+app.get('/chat', (req, res) => {
+    res.sendFile(__dirname + '/views' + '/index.html');
+});
 
 const PORT = process.env.PORT || 3500;
 
 connect();
-
-
 
 app.use(helmet());
 app.use(morgan('common'));
@@ -57,6 +60,7 @@ app.use(express.json());
 //built-in middleware to serve static file
 app.use('/static', express.static('static'));
 // app.use('/avatar', express.static('uploads/avatar'));
+app.use('/node_modules', express.static('node_modules'));
 
 app.use('/', require('./routes/root'))
 
@@ -93,5 +97,33 @@ app.all('/*', (req, res) => {
 // middleware handles error
 app.use(errorHandler);
 
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    }
+});
+io.on("connection", (socket) => {
+    console.log("We are live and connected");
+    console.log(socket.id);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
+
+    socket.on('create-something', (msg) => {
+        console.log(msg);
+        socket.emit('foo', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
+
+
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -15,6 +15,10 @@ router.get('^/$|server(.html)?', (req, res) => {
 /* This code is defining various routes for handling HTTP POST requests in an Express.js application. */
 router.post('/login', authenticate.confirmLogin);
 
+// router.get('/chat', (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
+// });
+
 /* `router.post('/refresh-token', authenticate.refreshToken);` is defining a route for handling HTTP
 POST requests to refresh an authentication token. The `authenticate.refreshToken` function is the
 controller function that handles the logic for refreshing the token. */

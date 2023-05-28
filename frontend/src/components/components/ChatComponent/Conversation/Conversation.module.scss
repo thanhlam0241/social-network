@@ -1,0 +1,51 @@
+.conversation_item {
+  height: 50px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 70% 8%;
+  grid-column-gap: 1px;
+  //grid-row-gap: 5px;
+  grid-template-areas: 'avatar name active' 'avatar content active';
+}
+
+.chat-avatar {
+  height: var(--chat-avatar-size);
+  width: var(--chat-avatar-size);
+  border-radius: 50%;
+  margin-left: 5px;
+  grid-area: avatar;
+  align-self: center;
+  justify-self: center;
+}
+
+.last-message {
+  grid-area: content;
+  font-size: 1rem;
+  color: #efebe9;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.4;
+}
+
+.name_chat {
+  grid-area: name;
+  align-self: center;
+  justify-self: start;
+  font-size: 1rem;
+  font-weight: 1000;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.active-status {
+  grid-area: active;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--color-active);
+  align-self: center;
+  justify-self: center;
+}
