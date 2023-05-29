@@ -1,5 +1,6 @@
 .view-conversation {
-  width: 30%;
+  float: left;
+  width: 400px;
   height: 100%;
   border-right: 1px solid #e6e6e6;
   display: flex;
@@ -17,7 +18,25 @@
   align-items: stretch;
 
   padding: 5px;
-  &::-webkit-scrollbar {
-    width: 0px;
+  // &::-webkit-scrollbar {
+  //   width: 10px;
+  //   color: #e6e6e6;
+  // }
+}
+@media screen and (max-width: 800px) {
+  .view-conversation {
+    float: left;
+    width: 100px;
+  }
+  .list-conversation {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .view-conversation {
+    display: none;
   }
 }

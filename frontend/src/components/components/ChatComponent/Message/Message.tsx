@@ -21,7 +21,7 @@ export default function Message({ isMine }: MessageProps) {
           alt='avatar'
         />
       )}
-      <span className={isMine ? cx('message-item', 'message_item_mine') : cx('message-item')}>
+      <span className={isMine ? cx('message-item', 'message_item_mine') : cx('message-item', 'message_item_other')}>
         Message Item Hello World, Welcome to my chat box, Good morning, good afternon
         {/* {!isMine && <p className={cx('message-nickname')}>Thanh lam</p>} */}
       </span>

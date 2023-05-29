@@ -13,7 +13,12 @@ export default function SearchBox({ onChange }: SearchBoxProps) {
   }
   return (
     <section className={cx('search_box')}>
-      <input onChange={handleChange} type='text' placeholder='Search' className={cx('search_box__input')} />
+      <input
+        onChange={handleChange}
+        type='text'
+        placeholder='Tìm kiếm trên Messenger'
+        className={cx('search_box__input')}
+      />
       <span className={cx('search_icon')}>
         <SearchIcon />
       </span>

@@ -5,13 +5,14 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  background-color: #fff;
+  background-color: var(--light-mode-hover-component-color);
   border-radius: 30px;
 }
 
 .search_box__input {
   height: 100%;
   width: 80%;
+  background-color: transparent;
   border: none;
   border-radius: 10px;
   padding: 0 10px;

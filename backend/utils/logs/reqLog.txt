@@ -365,3 +365,9 @@ Date|       |Time|      |Id|                                       |Method|     
 20230528	16:39:42	0e6d2a21-e354-4ebf-b8d2-aa9ee8e39dd5		GET       		undefinded          	/favicon.ico        	::1                 
 20230528	16:39:46	73038786-5351-4679-95d9-cee35fcbd1c1		GET       		undefinded          	/node_modules/socket.io/client-dist/socket.io.js	::1                 
 20230528	16:39:46	6e1eb3a8-358a-4452-8155-fc0d9bc00600		GET       		undefinded          	/favicon.ico        	::1                 
+20230529	23:23:33	c28e30bc-c1e0-41a5-9a19-cebc8b4fd943		OPTIONS   		http://localhost:3000	/refresh-token      	::1                 
+20230529	23:23:33	3f193f33-4cf3-42a7-a13a-4f6fcdd736f7		POST      		http://localhost:3000	/refresh-token      	::1                 
+20230529	23:23:58	977375db-b439-4b0b-99e8-f00ef4074f72		OPTIONS   		http://localhost:3000	/refresh-token      	::1                 
+20230529	23:23:58	dedce3bc-17f2-4c21-b578-292954b84622		POST      		http://localhost:3000	/refresh-token      	::1                 
+20230529	23:24:11	858c490a-81f1-42e0-8b47-a3ce742e07e8		OPTIONS   		http://localhost:3000	/login              	::1                 
+20230529	23:24:11	1476ecab-304a-4d8a-b3c2-88ffa20162e7		POST      		http://localhost:3000	/login              	::1                 

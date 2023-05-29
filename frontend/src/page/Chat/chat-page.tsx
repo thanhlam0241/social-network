@@ -7,10 +7,8 @@ const Chat = () => {
       sx={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#f5f5f5',
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'row'
+        backgroundColor: '#fff',
+        overflowY: 'auto'
       }}
     >
       <ListConversation />

@@ -16,23 +16,28 @@
 .message-container-other {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-start;
 }
 
 .message-item {
   display: block;
   position: relative;
-  padding: 5px 10px;
+  padding: 5px 20px;
   border-radius: 20px;
-  background-color: #fff;
   max-width: 50%;
   overflow: break-all;
   margin: 5px 0;
 }
 
 .message_item_mine {
-  background-color: #03a9f4;
+  background-color: var(--light-mode-background-color-message-mine);
+  color: var(--light-mode-text-color-mine);
+}
+
+.message_item_other {
+  background-color: var(--light-mode-background-color-message-other);
+  color: var(--light-mode-text-color-other);
 }
 
 .message-nickname {
@@ -47,4 +52,5 @@
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
+  margin-bottom: 7px;
 }
