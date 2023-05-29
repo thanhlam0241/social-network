@@ -1,0 +1,45 @@
+:root {
+  --header-chat-height: 100px;
+  --header-chat-border-bottom: 1px solid #e6e6e6;
+  --header-chat-display: flex;
+  --header-chat-align-items: center;
+  --header-chat-justify-content: space-between;
+  --chat-avatar-size: 40px;
+  --chat-avatar-border-radius: 50%;
+  --chat-avatar-margin-left: 10px;
+}
+
+.header-chat {
+  height: 100px;
+  width: 100%;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-infor {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  font-size: larger;
+  font-weight: bold;
+}
+.chat-avatar {
+  height: var(--chat-avatar-size);
+  width: var(--chat-avatar-size);
+  border-radius: 50%;
+  margin-left: 10px;
+}
+.chat-action {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  color: var(--primary-color);
+  margin: 0 10px;
+}
+
+.action {
+  cursor: pointer;
+}

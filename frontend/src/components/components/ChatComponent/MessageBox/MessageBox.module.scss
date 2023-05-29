@@ -1,0 +1,62 @@
+.message_box {
+  height: 80px;
+  background-color: transparent;
+  display: grid;
+  grid-template-columns: 20px auto 40px;
+  grid-template-areas: 'add input button';
+  padding: 1px;
+}
+
+.action-message-box {
+  grid-area: add;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  color: var(--primary-color);
+}
+
+.input-message-area {
+  grid-area: input;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: auto;
+  height: 100%;
+}
+.input-message-area-action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 70px;
+  color: var(--primary-color);
+}
+.message_box_input {
+  min-width: calc(100% - 70px);
+  max-width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  padding: 0 20px;
+  border-radius: 50px;
+  background-color: var(--light-mode-background-color-message-other);
+}
+
+.message_box_button {
+  grid-area: button;
+  background-color: transparent;
+  width: 40px;
+  border-radius: 30px;
+  justify-self: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  color: var(--primary-color);
+}

@@ -5,12 +5,118 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <title>Socket.IO chat</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        /* html {
+            height: 10vh;
+            width: 100%;
+        } */
+
+        body {
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, " Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #form {
+            height: 3rem;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+
+        #messages {
+            height: calc(100vh - 3rem - 1px);
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            overflow-y: scroll;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        #messages::-webkit-scrollbar {
+            display: none;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #efefef;
+            text-align: right;
+        }
+    </style>
+
+    <!-- <link rel="stylesheet" href="../static/css/style.css" /> -->
 </head>
 
 <body>
-    <h1>Index</h1>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" />
+        <button type="submit">Send</button>
+    </form>
+    <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+
+        socket.on('chat message', function (msg) {
+            console.log('msg', msg);
+            let item = document.createElement('li');
+            item.textContent = msg;
+            console.log(item)
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>

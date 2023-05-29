@@ -8,6 +8,24 @@
   --default-layout-width: 1150px;
   --black: #000;
   --text-color: #333;
+
+  --primary-color: #0084ff;
+  --chat-avatar-size: 50px;
+
+  --light-mode-active-component-color: #eaf3ff;
+  --light-mode-hover-component-color: #f2f2f2;
+
+  --ligh-mode-background-color: #fff;
+  --dark-mode-background-color: #000;
+
+  --light-mode-text-color-mine: #fff;
+  --light-mode-text-color-other: #000;
+
+  --dark-mode-text-color-mine: #fff;
+  --dark-mode-text-color-other: #000;
+
+  --light-mode-background-color-message-mine: #0084ff;
+  --light-mode-background-color-message-other: #e4e6eb;
 }
 
 * {
