@@ -1,0 +1,17 @@
+.button_popper {
+  background-color: transparent;
+  border-radius: 20px;
+  height: 52px;
+  width: 280px;
+  &:hover {
+    background-color: var(--light-mode-hover-component-color);
+    cursor: pointer;
+    color: var(--primary-color);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px;
+  gap: 16px;
+  font-size: 17px;
+}

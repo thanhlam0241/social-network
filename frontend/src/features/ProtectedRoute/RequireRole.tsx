@@ -1,11 +1,16 @@
-import { Navigate } from 'react-router-dom'
-import useAuth from '~/hooks/useAuth'
+import { Navigate, Outlet } from 'react-router-dom'
+// import useAuth from '~/hooks/useAuth'
 
-export default function ReuireRoles({ allowedRoles, child }: { allowedRoles: string[]; child: React.ReactNode }) {
-  const { auth } = useAuth()
+import { useAppSelector } from '~/hooks/storeHook'
+
+export default function RequireRoles({ allowedRoles, children }: { allowedRoles: string[]; children: JSX.Element }) {
+  console.log('RequireRoles')
+  const auth = useAppSelector((state) => state.auth)
+  console.log(auth)
+  console.log(allowedRoles)
   if (!auth) return <Navigate to='/authenticate/login' />
-  if (auth?.role && allowedRoles.includes(auth.role)) {
-    return <>{child}</>
+  if (auth && auth?.role && allowedRoles.includes(auth.role)) {
+    return <>{children}</>
   }
   return <Navigate to='/' />
 }

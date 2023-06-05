@@ -24,7 +24,7 @@ const app = express();
 
 
 
-app.get('/chat', (req, res) => {
+app.get('/chatpage', (req, res) => {
     res.sendFile(__dirname + '/views' + '/index.html');
 });
 
@@ -59,12 +59,20 @@ app.use(express.json());
 
 //built-in middleware to serve static file
 app.use('/static', express.static('static'));
-// app.use('/avatar', express.static('uploads/avatar'));
+app.use('/avatar', (req, res, next) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}
+    , express.static('uploads/avatar'));
 app.use('/node_modules', express.static('node_modules'));
 
-app.use('/', require('./routes/root'))
+app.use('/', require('./routes/root'));
 
 app.use('/face', require('./routes/api/face'));
+
+app.use('/images/avatar', require('./routes/api/Account/avatar'));
+
+app.use('/images/background', require('./routes/api/Account/background'));
 
 app.get('/identify', async (req, res) => {
     const message = await resIdentify.identifycationByVideo('C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4')
@@ -73,9 +81,11 @@ app.get('/identify', async (req, res) => {
 // middleware to authenticate token
 app.use(authenticateToken);
 
-app.use('/users', require('./routes/api/users'));
-app.use('/images/avatar', require('./routes/api/avatar'));
+app.use('/users', require('./routes/api/Account/users'));
 app.use('/todo', require('./routes/api/todo'));
+app.use('/chat', require('./routes/api/Social/chat'));
+app.use('/social/friend', require('./routes/api/Social/friend'));
+
 
 
 // Route handlers
@@ -97,33 +107,8 @@ app.all('/*', (req, res) => {
 // middleware handles error
 app.use(errorHandler);
 
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-    }
-});
-io.on("connection", (socket) => {
-    console.log("We are live and connected");
-    console.log(socket.id);
+const createServerSocket = require('./utils/socket/socketServer');
 
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-    });
-
-    socket.on('create-something', (msg) => {
-        console.log(msg);
-        socket.emit('foo', msg);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
-
-
+const { server, io } = createServerSocket(app);
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

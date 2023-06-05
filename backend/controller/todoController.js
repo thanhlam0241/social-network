@@ -1,5 +1,5 @@
 const TodoItemSchema = require('../models/todoItem');
-const userSchema = require('../models/user');
+const userSchema = require('../models/Account/user');
 
 const getTodoItemsByUsername = async (req, res) => {
     try {

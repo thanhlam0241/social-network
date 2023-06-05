@@ -2,7 +2,8 @@ require('dotenv').config();
 const bcypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const userSchema = require('../../models/user');
+const userSchema = require('../../models/Account/user');
+const tokenSchema = require('../../models/Account/token');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET
@@ -24,13 +25,16 @@ const confirmLogin = async (req, res, next) => {
     try {
         const checkPassword = await bcypt.compare(req.body.password, user.password);
         if (checkPassword) {
-            const accessToken = generateAccessToken({ username: user.username, role: user.role });
+            const accessToken = generateAccessToken({ _id: user._id, username: user.username, role: user.role });
             const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
-            await userSchema.findOneAndUpdate({ username: user.username }, { token: refreshToken });
-            res.json({
-                accessToken: accessToken,
-                refreshToken: refreshToken
-            });
+            const token = new tokenSchema({ username: user.username, token: refreshToken });
+            const isSaveToken = await token.save();
+            if (isSaveToken) {
+                return res.json({
+                    accessToken: accessToken,
+                    refreshToken: refreshToken
+                });
+            }
         }
         else {
             throw createError.Conflict('Password is incorrect');
@@ -50,38 +54,38 @@ const refreshToken = async (req, res) => {
         return res.status(401).send("Access denied when try to refresh token");
     }
     try {
+        const checkToken = await tokenSchema.findOne({ token: refreshToken });
+        if (!checkToken) {
+            throw createError.Conflict('Token is not exist');
+        }
+        const user = await userSchema.findOne({ username: checkToken.username });
+        const accessToken = generateAccessToken({ _id: user._id, username: user.username, role: user.role });
+        return res.status(200).json({ accessToken: accessToken });
+    }
+    catch (err) {
+        return res.status(403).send(err);
+    }
+}
+
+const logout = async (req, res) => {
+    const token = req.user.token;
+    const refreshToken = req.body.token;
+    if (!token || !refreshToken) {
+        return res.status(401).send("Access denied when try to log out");
+    }
+    try {
         const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         if (user?.username) {
             const checkUser = await userSchema.findOne({ username: user.username })
             if (!checkUser) {
                 createError.Conflict('User is not exist');
             }
-            else {
-                if (checkUser.token !== refreshToken) {
-                    createError.Conflict('Invalid token');
-                }
-            }
         }
-        const accessToken = generateAccessToken({ username: user.username, role: user.role });
-        res.json({ accessToken: accessToken });
+        await tokenSchema.findOneAndDelete({ token: refreshToken });
+        return res.send("Logout successfully");
     }
     catch (err) {
-        res.status(403).send(err);
-    }
-}
-
-const logout = async (req, res) => {
-    const token = req.user.token;
-    if (!token) {
-        return res.status(401).send("Access denied when try to log out");
-    }
-    try {
-        const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        await userSchema.findOneAndUpdate({ username: user.username }, { token: null });
-        res.send("Logout successfully");
-    }
-    catch (err) {
-        res.status(403).send("Invalid token when try to log out");
+        return res.status(403).send("Invalid token when try to log out");
     }
 }
 

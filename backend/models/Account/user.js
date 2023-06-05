@@ -15,13 +15,21 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: 'user'
     },
-    avatar: {
-        type: String,
-        require: false
+    create_at: {
+        type: Date,
+        default: Date.now,
+        required: true
     },
-    token: {
-        type: String,
-        require: false
+    isOnline: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    userInformation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserInformation',
+        require: true,
+        unique: true
     }
 });
 

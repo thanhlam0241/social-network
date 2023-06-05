@@ -31,3 +31,11 @@
 20230524	16:25:36	d52c9032-d96b-43b8-a9e4-9715979e3f44		MulterError: Unexpected field
 20230525	15:33:52	72ccd63b-ddf2-4040-93f7-9b7a3f7e88dc		Error: ENOENT: no such file or directory, stat 'D:\VisualCode\React\TodoApp\backend\index.html'
 20230525	15:34:19	1bd3655d-9c8c-43eb-af2a-a72b9c81f510		Error: ENOENT: no such file or directory, stat 'D:\VisualCode\React\TodoApp\backendviews\index.html'
+20230531	00:26:13	3ca46370-b373-4ae1-8767-f79c673605f7		ConflictError: Password is incorrect
+20230531	12:47:57	deeac33d-1a29-42dc-8940-a7a51ec42d23		MongooseError: document must have an _id before saving
+20230531	12:50:21	f30d8024-ea48-4fc0-98a8-5f11a1dd03cb		ValidationError: Token validation failed: _id: Path `_id` is required.
+20230531	12:50:35	7cecbdf6-318f-4f05-a0df-a38ec1424341		MongooseError: document must have an _id before saving
+20230531	12:51:09	193b9602-a4fc-403e-b205-2c3a1f24b0ca		MongooseError: document must have an _id before saving
+20230531	12:53:02	399a8779-c22e-4a94-a500-94d9a2aad2ec		MongooseError: document must have an _id before saving
+20230531	13:44:15	9762bcca-6354-4715-b6aa-88b2bbd8cdfa		Error: ENOENT: no such file or directory, stat 'D:\VisualCode\React\TodoApp\backend\uploads\background\1685515390004-314589629.jpg'
+20230601	00:38:13	47b73b85-63a1-4d71-b170-1612ca56af5e		MongoServerError: E11000 duplicate key error collection: chat_application.tokens index: token_1 dup key: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRoYW5obGFtMDI0MSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjg1NTU0NjkzLCJleHAiOjE2ODYxNTk0OTN9.6jh4GS0p4USR..." }

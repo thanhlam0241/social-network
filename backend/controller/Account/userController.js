@@ -1,14 +1,17 @@
 require('dotenv').config();
 const bcypt = require('bcrypt');
-const userSchema = require('../../models/user');
+const userInformationSchema = require('../../models/Account/userInformation');
+const userSchema = require('../../models/Account/user');
+const tokenSchema = require('../../models/Account/token');
+
+const friendSchema = require('../../models/Social/friend');
 
 const getAllUsers = async (req, res) => {
     try {
         if (req.query.username) {
-            const user = await userSchema.findOne({ username: req.query.username });
+            const user = await userSchema.findOne({ username: req.query.username }).populate('userInformation');
             if (user) {
-                res.json(user);
-                return;
+                return res.json(user);
             }
             res.status(404).send("User not found");
         }
@@ -16,39 +19,50 @@ const getAllUsers = async (req, res) => {
         if (users.length === 0) {
             res.status(404).send("User not found");
         }
-        res.json(users);
+        return res.json(users);
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
-    res.json(users);
 }
 
 const createUser = async (req, res) => {
     try {
         const username = req.body.username;
         if (username === null) {
-            res.status(400).send("Username is required");
-            return;
+            return res.status(400).send("Username is required");
         }
         const userExist = await userSchema.findOne({ username: username });
         if (userExist) {
-            res.status(400).send("Username is already exist");
-            return;
+            return res.status(400).send("Username is already exist");
         }
         const hashedPassword = await bcypt.hash(req.body.password, 10);
+
+        const userInformation = new userInformationSchema();
+        await userInformation.save();
+
         const user = {
             username: username,
             password: hashedPassword,
-            role: req.body.role || 'user'
+            role: req.body.role || 'user',
+            userInformation: userInformation._id,
+            create_at: Date.now(),
+            isOnline: false
         }
-
         const newUser = new userSchema(user);
         await newUser.save();
-        res.status(201).json(newUser);
+
+        const friend = new friendSchema({
+            user: newUser._id,
+            friends: []
+        })
+        await friend.save();
+
+        return res.status(201).json(newUser);
     }
     catch (err) {
-        res.send(req.body);
+        console.log(err)
+        return res.status(500).send("Oops! Something went wrong");
     }
 }
 
@@ -63,10 +77,10 @@ const updateUserPassword = async (req, res) => {
             { username: user.username },
             { password: user.password }
         )
-        res.status(200).send("Update password successfully");
+        return res.status(200).send("Update password successfully");
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
@@ -77,10 +91,10 @@ const changePassword = async (req, res) => {
             { username: req.user.username },
             { password: hashedPassword, token: null }
         )
-        res.status(200).send("Update password successfully");
+        return res.status(200).send("Update password successfully");
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
@@ -93,33 +107,35 @@ const deleteUser = async (req, res) => {
             return;
         }
         else {
-            await userSchema.deleteOne({ username: username });
-            res.status(200).send(`Delete user successfully: ${username}`);
+            await userInformationSchema.deleteOne({ _id: user.userInformation });
+            await tokenSchema.deleteOne({ _id: user.userInformation });
+            await userSchema.deleteOne({ _id: user.userInformation });
+            return res.status(200).send(`Delete user successfully: ${username}`);
         }
     }
     catch (err) {
         console.log(err)
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
 const getUserById = (req, res) => {
     try {
         const user = userSchema.findById(req.params.id);
-        res.status(200).json(user);
+        return res.status(200).json(user);
     }
     catch (err) {
-        res.status(500).send("Can't find user with ID: " + req.params.id);
+        return res.status(500).send("Can't find user with ID: " + req.params.id);
     }
 }
 
 const getUserByUsername = (req, res) => {
     try {
         const user = userSchema.findOne({ username: req.params.username });
-        res.status(200).json(user);
+        return res.status(200).json(user);
     }
     catch (err) {
-        res.status(500).send("Can't find user with username: " + req.params.username);
+        return res.status(500).send("Can't find user with username: " + req.params.username);
     }
 }
 

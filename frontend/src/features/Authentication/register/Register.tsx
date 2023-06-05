@@ -93,9 +93,9 @@ function RegisterForm() {
   const handleReset = () => {
     setActiveStep(0)
   }
-  const handleRegister = () => {
-    navigate('/')
-  }
+  // const handleRegister = () => {
+  //   navigate('/')
+  // }
   const handleMoveLogin = () => {
     navigate('/authenticate/login')
   }

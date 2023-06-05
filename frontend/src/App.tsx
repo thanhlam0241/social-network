@@ -1,6 +1,5 @@
 //import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-
 import DefaultLayout from '~/components/Layout/DefaulltLayout/DefaultLayout'
 import AuthenticateLayout from './features/Authentication/authenLayout'
 
@@ -12,7 +11,10 @@ import ChatPage from './page/Chat/chat-page'
 
 import RequireRoles from './features/ProtectedRoute/RequireRole'
 
+// import { useAppSelector } from '~/hooks/storeHook'
 function App() {
+  //const auth = useAppSelector((state) => state.auth)
+
   return (
     <Router>
       <Routes>
@@ -20,10 +22,26 @@ function App() {
           <Route path='login' element={<LoginForm />} />
           <Route path='register' element={<RegisterForm />} />
         </Route>
+
         <Route path='/' element={<DefaultLayout />}>
-          <Route path='main' element={<RequireRoles allowedRoles={['user']} child={<MainContent />} />} />
+          <Route path='' element={<div>H</div>} />
+          <Route
+            path='todo'
+            element={
+              <RequireRoles allowedRoles={['user']}>
+                <MainContent />
+              </RequireRoles>
+            }
+          />
         </Route>
-        <Route path='/chat' element={<RequireRoles allowedRoles={['user']} child={<ChatPage />} />} />
+        <Route
+          path='/chat'
+          element={
+            <RequireRoles allowedRoles={['user']}>
+              <ChatPage />
+            </RequireRoles>
+          }
+        />
       </Routes>
     </Router>
   )

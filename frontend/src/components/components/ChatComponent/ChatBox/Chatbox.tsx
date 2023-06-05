@@ -1,4 +1,5 @@
-import { Box } from '@mui/material'
+import { useRef, useEffect } from 'react'
+
 import Message from '../Message/Message'
 import MessageBox from '../MessageBox/MessageBox'
 import HeaderChat from '../HeaderChat/HeaderChat'
@@ -9,10 +10,21 @@ import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 
 const Chatbox = () => {
+  const divRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    console.log('re-render')
+    if (divRef?.current?.lastElementChild) {
+      divRef.current.lastElementChild.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end'
+      })
+    }
+  }, [divRef])
   return (
     <div className={cx('chat-container')}>
       <HeaderChat />
-      <div className={cx('messages-container')}>
+      <div ref={divRef} className={cx('messages-container')}>
         <Message isMine />
         <Message />
         <Message />
