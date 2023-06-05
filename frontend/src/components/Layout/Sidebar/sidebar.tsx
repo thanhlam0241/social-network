@@ -1,5 +1,5 @@
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import styles from './sidebar.module.scss'
 import classNames from 'classnames/bind'
 import { useNavigate } from 'react-router-dom'
@@ -20,11 +20,12 @@ const cx = classNames.bind(styles)
 function Sidebar() {
   // const auth = useAppSelector((state) => state.auth)
   // const dispatch = useAppDispatch()
+  const location = useLocation()
 
   const [open, setOpen] = useState(true)
   const navigate = useNavigate()
 
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState<number>()
 
   const changeStateSidebar = () => {
     setOpen((prev) => !prev)
@@ -34,6 +35,12 @@ function Sidebar() {
     setSelectedIndex(index)
     navigate(link)
   }
+
+  useEffect(() => {
+    console.log(location.pathname)
+    const index = listSideBar.findIndex((item) => item.link === location.pathname)
+    setSelectedIndex(index)
+  }, [location.pathname])
 
   return (
     <div className={open ? cx('sidebar') : cx('sidebar_hide')}>

@@ -3,3 +3,5 @@ rest.http
 target
 
 .vscode
+
+utils/logs/*.txt
