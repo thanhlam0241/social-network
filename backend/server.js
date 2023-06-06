@@ -22,6 +22,18 @@ const authenticateToken = require('./middleware/authenToken');
 
 const app = express();
 
+app.get('/test/users', (req, res) => {
+    res.json([
+        {
+            name: 'test',
+            age: 20
+        },
+        {
+            name: 'test2',
+            age: 21
+        }
+    ])
+})
 
 
 app.get('/chatpage', (req, res) => {
