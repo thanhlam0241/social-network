@@ -6,8 +6,10 @@ import AuthenticateLayout from './features/Authentication/authenLayout'
 import LoginForm from './features/Authentication/login/Login'
 import RegisterForm from './features/Authentication/register/Register'
 
-import MainContent from './page/main'
+import TodoPage from './page/Todo/main'
 import ChatPage from './page/Chat/chat-page'
+import ProfilePage from './page/Profile/Profile'
+import Home from './page/Home/home'
 
 import RequireRoles from './features/ProtectedRoute/RequireRole'
 
@@ -24,12 +26,27 @@ function App() {
         </Route>
 
         <Route path='/' element={<DefaultLayout />}>
-          <Route path='' element={<div>H</div>} />
+          <Route
+            path=''
+            element={
+              <RequireRoles allowedRoles={['user']}>
+                <Home />
+              </RequireRoles>
+            }
+          />
           <Route
             path='todo'
             element={
               <RequireRoles allowedRoles={['user']}>
-                <MainContent />
+                <TodoPage />
+              </RequireRoles>
+            }
+          />
+          <Route
+            path='profile'
+            element={
+              <RequireRoles allowedRoles={['user']}>
+                <ProfilePage />
               </RequireRoles>
             }
           />

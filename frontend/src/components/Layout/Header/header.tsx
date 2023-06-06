@@ -111,7 +111,7 @@ function Header() {
         />
         {auth.token && openPopper && (
           <div ref={popperRef} className={cx('popper-avatar')}>
-            <ButtonPopper text='Profile' icon={<Person2Icon />} />
+            <ButtonPopper onClick={() => navigate('/profile')} text='Profile' icon={<Person2Icon />} />
             <ButtonPopper onClick={handleLogout} text='Logout' icon={<LogoutIcon />} />
           </div>
         )}
