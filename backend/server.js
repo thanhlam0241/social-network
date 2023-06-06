@@ -39,7 +39,7 @@ app.use(morgan('common'));
 app.use(logger);
 
 //middlerware cors option
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
 //built-in middleware to handler urlencoded data
 // in other word, form data:
