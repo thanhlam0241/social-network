@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 // import WebcamStreamCapture from '../Webcam/Webcam'
 import Capture from '../../Capture/Capture'
 import { useNavigate } from 'react-router-dom'
-import { Button, FormControl, InputLabel, Input, InputAdornment } from '@mui/material'
+import { Button, FormControl, InputLabel, Input, InputAdornment, LinearProgress } from '@mui/material'
 
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import KeyIcon from '@mui/icons-material/Key'
@@ -14,12 +14,20 @@ import React from 'react'
 import Cookies from 'js-cookie'
 
 import AuthenService from '~/service/api/authenticate/authenticateApi'
-import useAuth from '~/hooks/useAuth'
+// import useAuth from '~/hooks/useAuth'
+
+import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
+import { setAuth, AuthState } from '~/service/redux/slice/authSlice'
+import { useLoginMutation } from '~/service/redux/api/api'
 
 const cx = classNames.bind(styles)
 
 function LoginForm() {
-  const { setAuth } = useAuth()
+  //const { setAuth } = useAuth()
+  const dispatch = useAppDispatch()
+
+  const [login, { isLoading, data, error }] = useLoginMutation()
+
   const navigate = useNavigate()
   //const [, setCookie] = useCookies()
   const [open, setOpen] = React.useState(false)
@@ -31,11 +39,7 @@ function LoginForm() {
   const handleClickOpen = () => {
     setOpen(true)
   }
-  // React.useEffect(() => {
-  //   if (open) {
-  //     setOpen(false)
-  //   }
-  // }, [imgSrc, open])
+
   const handleClose = () => {
     setOpen(false)
   }
@@ -43,24 +47,17 @@ function LoginForm() {
     const username = usernameRef.current?.value
     const password = passwordRef.current?.value
     if (username && password) {
-      await AuthenService.Login({ username, password })
-        .then((res) => {
-          if (res?.success && res?.data) {
-            Cookies.set('atk', res?.data?.token, { expires: 1 })
-            Cookies.set('rtk', res?.data?.refreshToken, { expires: 7 })
-            if (setAuth) {
-              setAuth(res.data)
-              navigate('/main')
-            }
-          } else {
-            alert(res)
-          }
-        })
-        .catch((err) => {
-          alert('Some error' + err?.message)
-        })
+      await login({ username, password })
     }
   }
+  React.useEffect(() => {
+    if (data) {
+      dispatch(setAuth(data.user))
+      Cookies.set('atk', data.user.token)
+      Cookies.set('rtk', data.refreshToken)
+      navigate('/')
+    }
+  }, [data])
   const handleNavigateRegister: React.MouseEventHandler<HTMLButtonElement> | undefined = () => {
     navigate('/authenticate/register')
   }
@@ -74,7 +71,7 @@ function LoginForm() {
           sx={{ width: '100%' }}
           id='input-with-icon-adornment'
           placeholder='Type your username'
-          defaultValue='helloworld123'
+          defaultValue='thanhlam02412002'
           startAdornment={
             <InputAdornment position='start'>
               <AccountCircle />
@@ -89,7 +86,7 @@ function LoginForm() {
           sx={{ width: '100%' }}
           id='input-with-icon-password'
           placeholder='Type your password'
-          defaultValue='helloworld34242'
+          defaultValue='thanhlam02412002'
           startAdornment={
             <InputAdornment position='start'>
               <KeyIcon />
@@ -101,8 +98,7 @@ function LoginForm() {
       <Button onClick={handleLogin} variant='contained'>
         Login
       </Button>
-
-      <div className={cx('div-horizon')}></div>
+      {!isLoading ? <div className={cx('div-horizon')} /> : <LinearProgress />}
       <p>
         Or login with{' '}
         <button onClick={handleClickOpen} className={cx('button-link-face-detection')}>

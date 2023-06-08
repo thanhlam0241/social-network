@@ -1,0 +1,35 @@
+.div_task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding: 10px 20px;
+  background-color: #fff;
+  height: 52px;
+  box-shadow: 1px 1px 1px 1px #d4d1d1;
+}
+
+.check-radio {
+  width: 20px;
+}
+
+.task {
+  color: #4c7fd6;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.icon-check {
+  color: #4c7fd6;
+}
+
+.important-check {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+}

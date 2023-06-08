@@ -1,23 +1,25 @@
 const TodoItemSchema = require('../models/todoItem');
-const userSchema = require('../models/user');
+const userSchema = require('../models/Account/user');
 
-const getTodoItemsByUsername = async (req, res) => {
+const getTodoItems = async (req, res) => {
+    const username = req.user.username;
     try {
-        const todoItems = await TodoItemSchema.find({ username: req.body.username });
+        const todoItems = await TodoItemSchema.find({ username: username });
         if (todoItems.length > 0) {
             res.status(200).json(todoItems);
             return;
         }
-        res.status(404).send("Todo item not found");
+        return res.status(404).send("Todo item not found");
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
 const addTodoItem = async (req, res) => {
+    const user = req.user;
     try {
-        const username = req.body.username;
+        const username = user.username;
         const title = req.body.title;
         const description = req.body.description;
         if (!title || !username || !description) {
@@ -35,10 +37,13 @@ const addTodoItem = async (req, res) => {
         const newTodoItem = new TodoItemSchema(todoItem);
         await newTodoItem.validate();
         await newTodoItem.save();
-        res.status(201).json(newTodoItem);
+        return res.status(201).json({
+            message: "Todo item created successfully",
+            data: newTodoItem
+        });
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
@@ -54,10 +59,10 @@ const getTodoItemById = async (req, res) => {
             res.status(200).json(todoItem);
             return;
         }
-        res.status(404).send("Todo item not found");
+        return res.status(404).send("Todo item not found");
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
@@ -66,16 +71,16 @@ const updateTodoItem = async (req, res) => {
         const username = req.user.username;
         console.log(req.body)
         await TodoItemSchema.findOneAndUpdate({ _id: req.params.id, username: username }, req.body).catch(err => { console.log('The todo is not of this user') });
-        res.status(201).json('Update successfully');
+        return res.status(201).json('Update successfully');
     }
     catch (err) {
-        res.status(500).send('Some thing went wrong, maybe from server');
+        return res.status(500).send('Some thing went wrong, maybe from server');
     }
 }
 
 const deleteTodoItem = async (req, res) => {
     try {
-        const username = req.body.username;
+        const username = req.user.username;
         if (!username) {
             res.status(400).send("Some field must not be empty");
             return;
@@ -86,15 +91,15 @@ const deleteTodoItem = async (req, res) => {
             return;
         }
         await TodoItemSchema.deleteOne({ _id: req.body._id });
-        res.status(201).json('Delete successfully');
+        return res.status(201).json('Delete successfully');
     }
     catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 }
 
 module.exports = {
-    getTodoItemsByUsername,
+    getTodoItems,
     addTodoItem,
     updateTodoItem,
     deleteTodoItem,

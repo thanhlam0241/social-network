@@ -1,4 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
+
+import { Button } from '@mui/material'
 
 import SearchBox from '../SearchConversation/SearchConversation'
 import Conversation from '../Conversation/Conversation'
@@ -98,10 +101,14 @@ const listConversation = [
 ]
 
 const ListConversation = () => {
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState(1)
   return (
     <div className={cx('view-conversation')}>
+      <Button variant='outlined' onClick={() => navigate('/')}>
+        GO BACK HOME
+      </Button>
       <SearchBox onChange={setSearch} />
       <section className={cx('list-conversation')}>
         {listConversation

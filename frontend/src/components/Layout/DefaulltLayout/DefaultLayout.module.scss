@@ -5,8 +5,16 @@
   width: 100vw;
 }
 .div_body {
+  padding-top: 56px;
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: stretch;
+}
+
+.div_content {
+  flex-grow: 1;
+  max-height: calc(100vh - var(--height-header));
+  overflow-y: scroll;
+  scrollbar-width: 1px;
 }

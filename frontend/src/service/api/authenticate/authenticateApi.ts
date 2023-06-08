@@ -2,95 +2,15 @@ import axios from 'axios'
 import { AccountLoginUrl, AccountLogoutUrl, AccountGetNewTokenUrl } from '../const/url'
 import config from '../const/configAxios'
 import jwt_decode from 'jwt-decode'
-import Cookies from 'js-cookie'
 
+import { AuthState } from '~/service/redux/slice/authSlice'
 interface LoginAccountRequest {
   username: string
   password: string
 }
 
-interface IAuth {
-  username: string | undefined | null
-  role: string | undefined | null
-  token: string | undefined | null
-}
-
 class AuthenticateApi {
-  Auth: IAuth
-  constructor() {
-    this.Auth = {
-      username: '',
-      token: '',
-      role: ''
-    }
-    const atk = Cookies.get('atk')
-    if (atk) {
-      const data: { username: string; role: string } = jwt_decode(atk)
-      if (data?.username && data?.role) {
-        this.Auth = {
-          username: data.username,
-          role: data.role,
-          token: atk
-        }
-      }
-    } else {
-      const rtk = Cookies.get('rtk')
-      if (rtk) {
-        axios
-          .post(AccountGetNewTokenUrl, { token: rtk })
-          .then((response) => {
-            if (response.status === 200) {
-              const accessToken: string = response?.data?.accessToken
-              const data: { username: string; role: string } = jwt_decode(accessToken)
-              if (data?.username && data?.role) {
-                this.Auth = {
-                  username: data.username,
-                  role: data.role,
-                  token: accessToken
-                }
-              }
-            }
-          })
-          .catch((err) => {
-            console.log('Error when get access token by refresh token', err)
-            this.Auth = {
-              username: '',
-              token: '',
-              role: ''
-            }
-          })
-      } else {
-        this.Auth = {
-          username: '',
-          token: '',
-          role: ''
-        }
-      }
-    }
-  }
-  isLogin() {
-    return this.Auth?.username && this.Auth?.token && this.Auth?.role
-  }
-  getUsername() {
-    return this.Auth?.username
-  }
-  getRole() {
-    return this.Auth?.role
-  }
-  getAccessToken() {
-    return this.Auth?.token
-  }
-  SetAccessToken(token: string) {
-    const data: { username: string; role: string } = jwt_decode(token)
-    if (data?.username && data?.role) {
-      this.Auth = {
-        username: data.username,
-        role: data.role,
-        token: token
-      }
-    }
-  }
-  async Login(data: LoginAccountRequest) {
+  async Login(data: LoginAccountRequest, action: any) {
     return await axios
       .post(AccountLoginUrl, data)
       .then((response) => {
@@ -98,11 +18,11 @@ class AuthenticateApi {
           const accessToken = response?.data?.accessToken
           const data: { username: string; role: string } = jwt_decode(accessToken)
           if (data?.username && data?.role) {
-            this.Auth = {
+            action({
               username: data.username,
               role: data.role,
               token: accessToken
-            }
+            })
             return {
               success: true,
               data: {
@@ -124,31 +44,54 @@ class AuthenticateApi {
         return error
       })
   }
-  async Logout(token: string) {
-    return await axios.post(AccountLogoutUrl, {}, config(token)).then((response) => {
-      if (response?.data?.success) {
-        this.Auth = {
-          username: '',
-          token: '',
-          role: ''
-        }
-        return response.data
-      } else {
-        return response
+  async Logout(token: string | undefined, refToken: string | undefined) {
+    if (!token || !refToken) {
+      return {
+        success: false,
+        message: 'Token is null'
       }
-    })
+    }
+    return await axios
+      .post(
+        AccountLogoutUrl,
+        {
+          token: refToken
+        },
+        config(token)
+      )
+      .then((response) => {
+        if (response?.status === 200) {
+          return {
+            success: true,
+            message: 'Logout successfully'
+          }
+        } else {
+          return {
+            success: false,
+            message: 'Logout failed'
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('Error: ', error)
+        return {
+          success: false,
+          message: error
+        }
+      })
   }
   async GetNewToken(refreshToken: string) {
     return await axios
-      .post(AccountGetNewTokenUrl, config(refreshToken))
+      .post(AccountGetNewTokenUrl, { token: refreshToken })
       .then((response) => {
         if (response?.status === 200) {
           const accessToken: string = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
-          if (data?.username && data?.role) {
+          const data: { _id: string; username: string; role: string } = jwt_decode(accessToken)
+          if (data?.username && data?.role && data?._id) {
             return {
               success: true,
               data: {
+                id: data._id,
                 token: accessToken,
                 username: data.username,
                 role: data.role
@@ -163,7 +106,10 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
-        return error
+        return {
+          success: false,
+          data: error
+        }
       })
   }
 }
