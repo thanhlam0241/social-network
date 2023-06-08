@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 
 import ButtonPopper from '~/components/components/ButtonPopper/ButtonPopper'
@@ -14,10 +15,13 @@ import reactIcon from '~/assets/icons/react2.png'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
-import { useGetAvatarQuery, usePrefetch } from '~/service/redux/api/api'
 import { setAuth } from '~/service/redux/slice/authSlice'
 import authenticateApi from '~/service/api/authenticate/authenticateApi'
 import Cookies from 'js-cookie'
+
+import { getAvatar, getUrlAvatar } from '~/service/api/information/informationApi'
+
+import { useQuery } from '@tanstack/react-query'
 
 import defaultAvatar from '~/assets/images/default_avatar.png'
 
@@ -25,16 +29,20 @@ const cx = className.bind(styles)
 
 function Header() {
   const dispatch = useAppDispatch()
+
   const auth: any = useAppSelector((state) => state.auth)
-  const searchBar = useRef(null)
+
+  const searchBar = useRef<HTMLInputElement>(null)
+
   const [openPopper, setOpenPopper] = useState(false)
+
   const popperRef = useRef<HTMLDivElement>(null)
-  const avatarRef = useRef<HTMLButtonElement>(null)
 
-  const { data, isLoading, error } = useGetAvatarQuery(auth.id)
+  const avatarRef = useRef<HTMLDivElement>(null)
+
+  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id))
+
   const navigate = useNavigate()
-
-  const prefetchAvatar = usePrefetch('getAvatar')
 
   const handleClickAvatar = () => {
     setOpenPopper(!openPopper)
@@ -56,31 +64,36 @@ function Header() {
         Cookies.remove('rtk')
         dispatch(setAuth({ id: '', token: '', username: '', role: '' }))
         navigate('/authenticate/login')
-      } else {
-        alert('Logout failed')
       }
+      Cookies.remove('atk')
+      Cookies.remove('rtk')
+      dispatch(setAuth({ id: '', token: '', username: '', role: '' }))
+      navigate('/authenticate/login')
     }
+    Cookies.remove('atk')
+    Cookies.remove('rtk')
+    dispatch(setAuth({ id: '', token: '', username: '', role: '' }))
+    navigate('/authenticate/login')
   }
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!popperRef.current?.contains(event.target as Node) && !avatarRef.current?.contains(event.target as Node)) {
-        setOpenPopper(false)
-      }
-    }
-
-    document.addEventListener('click', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [])
-
-  useEffect(() => {
+    let handleClickOutside: any
     if (auth.id) {
-      prefetchAvatar(auth.id)
+      handleClickOutside = (event: MouseEvent) => {
+        if (!popperRef.current?.contains(event.target as Node) && !avatarRef.current?.contains(event.target as Node)) {
+          setOpenPopper(false)
+        }
+        if (!searchBar.current?.contains(event.target as Node)) {
+          setSearch('')
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [auth.id])
+
   return (
     <div className={cx('header-main')}>
       <div>
@@ -99,23 +112,23 @@ function Header() {
           <SearchIcon />
         </button>
       </div>
-      <button ref={avatarRef} onClick={handleClickAvatar} className={cx('div_avatar')}>
+      <div ref={avatarRef} onMouseDown={handleClickAvatar} className={cx('div_avatar')}>
         <Avatar
           sx={{
             '&:hover': {
               cursor: 'pointer'
             }
           }}
-          src={auth.id && data?.url ? data.url : defaultAvatar}
+          src={avatar?.url ? getUrlAvatar(avatar.url) : defaultAvatar}
           alt='Error'
         />
         {auth.token && openPopper && (
           <div ref={popperRef} className={cx('popper-avatar')}>
-            <ButtonPopper onClick={() => navigate('/profile')} text='Profile' icon={<Person2Icon />} />
-            <ButtonPopper onClick={handleLogout} text='Logout' icon={<LogoutIcon />} />
+            <ButtonPopper onMouseDown={() => navigate('/profile')} text='Profile' icon={<Person2Icon />} />
+            <ButtonPopper onMouseDown={() => handleLogout()} text='Logout' icon={<LogoutIcon />} />
           </div>
         )}
-      </button>
+      </div>
     </div>
   )
 }

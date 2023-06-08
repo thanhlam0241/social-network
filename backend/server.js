@@ -51,7 +51,7 @@ app.use(morgan('common'));
 app.use(logger);
 
 //middlerware cors option
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 //built-in middleware to handler urlencoded data
 // in other word, form data:
@@ -71,11 +71,18 @@ app.use(express.json());
 
 //built-in middleware to serve static file
 app.use('/static', express.static('static'));
+
 app.use('/avatar', (req, res, next) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     next();
 }
     , express.static('uploads/avatar'));
+app.use('/background', (req, res, next) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}
+    , express.static('uploads/background'));
+
 app.use('/node_modules', express.static('node_modules'));
 
 app.use('/', require('./routes/root'));
@@ -90,6 +97,8 @@ app.get('/identify', async (req, res) => {
     const message = await resIdentify.identifycationByVideo('C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4')
     res.json(message)
 })
+
+
 // middleware to authenticate token
 app.use(authenticateToken);
 

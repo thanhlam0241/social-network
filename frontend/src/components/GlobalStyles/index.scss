@@ -2,7 +2,16 @@
 
 :root {
   --primary: #fe2c55;
-  --background-color-default: #eff1f4;
+  --background-color-default: #e4e6eb;
+  --background-color-hover-default: #c8cad1;
+
+  --height-header: 56px;
+  --search-header-width: 361px;
+
+  --width-sidebar: 300px;
+  --width-sidebar-hide: 58px;
+
+  --light-mode-color: #fff;
 
   --default-layout-header: 60px;
   --default-layout-width: 1150px;
@@ -26,6 +35,8 @@
 
   --light-mode-background-color-message-mine: #0084ff;
   --light-mode-background-color-message-other: #e4e6eb;
+
+  --size-avatar: 176px;
 }
 
 * {
@@ -69,3 +80,13 @@ input::-ms-reveal,
 input::-ms-clear {
   display: none;
 }
+
+input[type='radio'] {
+  width: 20px;
+  height: 20px;
+}
+
+// ::-webkit-scrollbar {
+//   display: none;
+//   // width: 20px;
+// }

@@ -1,7 +1,6 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Cookies from 'js-cookie'
 import authenticateApi from '../../api/authenticate/authenticateApi'
@@ -25,7 +24,6 @@ export const authSlice = createSlice({
   initialState: () => {
     const atk = Cookies.get('atk')
     const rtk = Cookies.get('rtk')
-    console.log(atk)
     if (atk) {
       const data: { _id: string; username: string; role: string } = jwt_decode(atk)
       if (data?.username && data?.role && data?._id) {

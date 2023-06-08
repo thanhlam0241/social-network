@@ -29,6 +29,7 @@ const confirmLogin = async (req, res, next) => {
             const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
             const token = new tokenSchema({ username: user.username, token: refreshToken });
             const isSaveToken = await token.save();
+            console.log(isSaveToken)
             if (isSaveToken) {
                 return res.json({
                     accessToken: accessToken,
@@ -81,8 +82,13 @@ const logout = async (req, res) => {
                 createError.Conflict('User is not exist');
             }
         }
-        await tokenSchema.findOneAndDelete({ token: refreshToken });
-        return res.send("Logout successfully");
+        const a = await tokenSchema.findOneAndDelete({ token: refreshToken });
+        if (a) {
+            return res.send("Logout successfully");
+        }
+        else {
+            throw createError.Conflict('Token is not exist');
+        }
     }
     catch (err) {
         return res.status(403).send("Invalid token when try to log out");

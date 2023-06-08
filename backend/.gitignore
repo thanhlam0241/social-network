@@ -5,3 +5,7 @@ target
 .vscode
 
 utils/logs/*.txt
+
+uploads/avatar
+
+uploads/background

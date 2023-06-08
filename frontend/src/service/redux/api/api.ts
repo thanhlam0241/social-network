@@ -5,17 +5,6 @@ import type { RootState } from '../store'
 
 const baseUrl = 'http://localhost:3500/'
 
-// type prepareHeaders = (
-//   headers: Headers,
-//   api: {
-//     getState: () => unknown
-//     extra: unknown
-//     endpoint: string
-//     type: 'query' | 'mutation'
-//     forced: boolean | undefined
-//   }
-// ) => Headers | void
-
 export const api = createApi({
   // Tương tự tên Slice khi tạo Slice thông thường
   reducerPath: 'api',
@@ -27,7 +16,6 @@ export const api = createApi({
       // Lấy ra token từ store nếu có
       const token = (getState() as RootState).auth.token
 
-      console.log('Token', token)
       // Nếu có token thì gán vào headers
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
@@ -65,7 +53,6 @@ export const api = createApi({
         method: 'GET'
       }),
       transformResponse: (response: { url: string; status: number }) => {
-        console.log(response)
         return {
           ...response,
           url: baseUrl + response.url

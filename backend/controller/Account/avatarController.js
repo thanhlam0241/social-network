@@ -54,6 +54,7 @@ const uploadAndSaveAvatar = async (req, res) => {
         const userId = req.user._id;
         const user = await userSchema.findById(userId);
         const userInfo = await userInformationSchema.findById(user.userInformation);
+
         if (userInfo?.avatar) {
             fs.unlink(path.join(__filename, '..', '..', '..', 'uploads/avatar', userInfo.avatar), (err) => {
                 if (err) {

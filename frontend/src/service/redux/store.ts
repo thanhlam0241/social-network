@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import authReducer from './slice/authSlice'
 import listConversationReducer from './slice/listConservationSlice'
+import todoReducer from './slice/todoSlice'
 
 import { api } from './api/api'
 
@@ -9,7 +10,8 @@ export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth: authReducer,
-    listConversation: listConversationReducer
+    listConversation: listConversationReducer,
+    todo: todoReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
 })

@@ -73,6 +73,7 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
+        console.log('Error: ', error)
         return {
           success: false,
           message: error

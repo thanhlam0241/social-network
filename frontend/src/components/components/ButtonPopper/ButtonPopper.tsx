@@ -7,12 +7,12 @@ const cx = classNames.bind(styles)
 interface ButtonPopperProps {
   icon: any
   text: string
-  onClick?: () => void
+  onMouseDown?: () => void
 }
 
-function ButtonPopper({ icon, text, onClick }: ButtonPopperProps) {
+function ButtonPopper({ icon, text, onMouseDown }: ButtonPopperProps) {
   return (
-    <button onClick={onClick} className={cx('button_popper')}>
+    <button onMouseDown={onMouseDown} className={cx('button_popper')}>
       {icon}
       <span>{text}</span>
     </button>

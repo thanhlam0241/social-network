@@ -1,8 +1,6 @@
 import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-
+import Tooltip from '@mui/material/Tooltip'
 interface ListItemProps {
   icon: any
   text: string
@@ -41,13 +39,15 @@ export default function CustomizedListItem(props: ListItemProps) {
 
   return (
     <ListItem {...itemProps}>
-      <ListItemIcon>
-        <Icon
-          sx={{
-            color: props.colorInput || '#000'
-          }}
-        />
-      </ListItemIcon>
+      <Tooltip title={props.text}>
+        <ListItemIcon>
+          <Icon
+            sx={{
+              color: props.colorInput || '#000'
+            }}
+          />
+        </ListItemIcon>
+      </Tooltip>
       <p style={textProps}>{props.text}</p>
     </ListItem>
   )

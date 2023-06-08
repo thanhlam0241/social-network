@@ -8,10 +8,11 @@ const TodoController = require('../../controller/todoController');
 router.use(authorizeRole([ROLES.USER]))
 
 router.route('/')
-    .get(TodoController.getTodoItemsByUsername)
+    .get(TodoController.getTodoItems)
     .post(TodoController.addTodoItem)
 router.route('/:id')
     .get(TodoController.getTodoItemById)
     .put(TodoController.updateTodoItem)
+    .delete(TodoController.deleteTodoItem)
 
 module.exports = router;
