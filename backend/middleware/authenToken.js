@@ -2,8 +2,6 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
-    const baseUrl = req.originalUrl;
-    console.log(`baseUrl: ${baseUrl}`);
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) {
@@ -14,7 +12,6 @@ const authenticateToken = (req, res, next) => {
             return res.status(403).send("Token is invalid");
         }
         user.token = token;
-        console.log(user)
         req.user = user;
         next();
     })

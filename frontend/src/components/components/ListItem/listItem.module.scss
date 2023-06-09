@@ -1,0 +1,12 @@
+@media screen and (max-width: 680px) {
+  .div_body {
+    flex-direction: column;
+    gap: 0;
+  }
+  .div_content {
+    max-height: calc(100vh - var(--height-header) - 30px);
+  }
+  .text-side-bar {
+    display: none;
+  }
+}

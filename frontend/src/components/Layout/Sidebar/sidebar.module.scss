@@ -41,3 +41,27 @@
   overflow: hidden;
   text-overflow: clip;
 }
+
+@media screen and (max-width: 680px) {
+  .sidebar {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+    flex-direction: row;
+  }
+  .sidebar_hide {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+    flex-direction: row;
+  }
+  .fake-side-bar {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+  }
+  .fake-sidebar_hide {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+  }
+  .button-open-close {
+    display: none;
+  }
+}

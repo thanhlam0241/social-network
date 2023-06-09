@@ -26,7 +26,10 @@ function Avatar() {
 
   const [expandPeople, setExpandPeople] = useState(false)
 
-  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id))
+  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id), {
+    enabled: !!auth.id,
+    refetchOnWindowFocus: false
+  })
 
   const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files ? event.target?.files[0] : null

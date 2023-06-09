@@ -5,7 +5,7 @@
   width: 100vw;
 }
 .div_body {
-  padding-top: 56px;
+  padding-top: var(--height-header);
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -17,4 +17,15 @@
   max-height: calc(100vh - var(--height-header));
   overflow-y: scroll;
   scrollbar-width: 1px;
+}
+
+@media screen and (max-width: 680px) {
+  .div_body {
+    flex-direction: column;
+    gap: 2px;
+    padding-top: var(--height-header);
+  }
+  .div_content {
+    //max-height: calc(100vh - var(--height-header) - 100px);
+  }
 }

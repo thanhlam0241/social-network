@@ -24,3 +24,8 @@
 .search_icon {
   cursor: pointer;
 }
+@media screen and (max-width: 800px) and (min-width: 681px) {
+  .search_icon {
+    display: none;
+  }
+}

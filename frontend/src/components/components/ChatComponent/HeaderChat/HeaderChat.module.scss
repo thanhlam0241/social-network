@@ -25,6 +25,9 @@
   font-size: larger;
   font-weight: bold;
 }
+.return-button {
+  display: none;
+}
 .chat-avatar {
   height: var(--chat-avatar-size);
   width: var(--chat-avatar-size);
@@ -42,4 +45,23 @@
 
 .action {
   cursor: pointer;
+}
+
+@media screen and (max-width: 680px) {
+  .header-chat {
+    height: 56px;
+    padding: 3px;
+  }
+  .return-button {
+    display: block;
+    color: var(--primary-color);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .chat-avatar {
+    height: 30px;
+    width: 30px;
+  }
 }

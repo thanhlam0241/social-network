@@ -47,3 +47,34 @@
   gap: 10px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 1080px) {
+  .background_container {
+    padding: 0;
+    height: 250px;
+  }
+  .button_change_background {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  .textButtonChangeBack {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .background_container {
+    padding: 0;
+    height: 200px;
+    overflow: hidden;
+  }
+  .button_change_background {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  .textButtonChangeBack {
+    display: none;
+  }
+}

@@ -2,6 +2,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck'
 import ForumIcon from '@mui/icons-material/Forum'
 import PersonIcon from '@mui/icons-material/Person'
+import PeopleIcon from '@mui/icons-material/People'
 
 const listSideBar = [
   {
@@ -18,12 +19,18 @@ const listSideBar = [
   },
   {
     index: 2,
+    name: 'Friends',
+    link: '/friends',
+    icon: PeopleIcon
+  },
+  {
+    index: 3,
     name: 'Todo list',
     link: '/todo',
     icon: PlaylistAddCheckIcon
   },
   {
-    index: 3,
+    index: 4,
     name: 'Chat',
     link: '/chat',
     icon: ForumIcon

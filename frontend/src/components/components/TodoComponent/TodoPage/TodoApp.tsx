@@ -1,15 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
 import TaskItem from '../TaskItem/listItem'
 import { Button, Backdrop, CircularProgress, FormControl, LinearProgress } from '@mui/material'
-
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
 
 import styles from './TodoApp.module.scss'
 import classNames from 'classnames/bind'
@@ -17,6 +10,8 @@ import classNames from 'classnames/bind'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+
+import DialogTodo from '../Dialog/index'
 //api
 import { useQuery } from '@tanstack/react-query'
 import { getTodoList, addNewTodo, updateTodo, deleteTodo, ITodo } from '~/service/api/todo/todoApi'
@@ -27,18 +22,15 @@ import { useQueryClient } from '@tanstack/react-query'
 const cx = classNames.bind(styles)
 
 function TodoApp() {
-  const titleRef = useRef<HTMLInputElement>()
-  const contentRef = useRef<HTMLInputElement>()
-  const importantRef = useRef<HTMLInputElement>()
-  const completedRef = useRef<HTMLInputElement>()
-
   const auth: any = useAppSelector((state) => state.auth)
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading, error } = useQuery(['getTodoList'], () => getTodoList(auth.token))
-
-  console.log(data)
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['getTodoList'],
+    queryFn: () => getTodoList(auth.token),
+    refetchOnWindowFocus: false
+  })
 
   const [task, setTask] = useState<string>('')
   const [content, setContent] = useState<string>('')
@@ -69,39 +61,6 @@ function TodoApp() {
     setContent('')
     setImportant('no')
     setCompleted(false)
-    if (titleRef.current && contentRef.current && importantRef.current && completedRef.current) {
-      titleRef.current.value = ''
-      contentRef.current.value = ''
-      importantRef.current.value = 'no'
-      completedRef.current.checked = false
-    }
-  }
-
-  const handleUpdateTask = async () => {
-    if (titleRef.current && contentRef.current && importantRef.current && completedRef.current) {
-      setLoading(true)
-      const todo = {
-        title: titleRef.current.value || '',
-        description: contentRef.current.value || '',
-        important: importantRef.current.value === 'yes' ? true : false,
-        completed: completedRef.current.value === 'yes' ? true : false
-      }
-      if (todoNow && todoNow?.id) {
-        await updateTodo(auth.token, todo, todoNow?.id)
-          .then(() => {
-            queryClient.invalidateQueries(['getTodoList'])
-            resetAllField()
-          })
-          .catch((err) => {
-            console.log(err)
-            alert('Update todo failed')
-          })
-          .finally(() => {
-            setLoading(false)
-            setOpen(false)
-          })
-      }
-    }
   }
 
   const changeImportant = async (important: boolean, id: string) => {
@@ -157,40 +116,15 @@ function TodoApp() {
       })
   }
 
-  const handleDeleteTask = async () => {
-    setLoading(true)
-    if (todoNow && todoNow?.id) {
-      await deleteTodo(auth.token, todoNow.id)
-        .then(() => {
-          queryClient.invalidateQueries(['getTodoList'])
-          console.log('Delete todo success fully')
-        })
-        .catch((err) => {
-          console.log(err)
-          alert('Delete todo failed')
-        })
-        .finally(() => {
-          setLoading(false)
-          setOpen(false)
-        })
-    }
-  }
-
   const handleOpenDialog = (todo: ITodo) => {
-    //console.log(titleRef.current, contentRef.current, importantRef.current, completedRef.current)
     if (todo?.id?.length !== 0) {
       setTodoNow(todo)
       setOpen(true)
-      titleRef.current!.value = todo.title
-      contentRef.current!.value = todo.description
-      importantRef.current!.value = todo.important ? 'yes' : 'no'
-      completedRef.current!.value = todo.completed ? 'yes' : 'no'
     }
   }
 
   const handleCloseDialog = () => {
     setOpen(false)
-    //resetAllField()
   }
 
   return (
@@ -198,63 +132,16 @@ function TodoApp() {
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color='inherit' />
       </Backdrop>
-
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>Detail Todo</DialogTitle>
-        <DialogContent>
-          <DialogContentText>If you want to change your todo, please fill all field and click update</DialogContentText>
-          <TextField
-            margin='dense'
-            id='title'
-            label='Title'
-            type='text'
-            inputRef={titleRef}
-            fullWidth
-            variant='standard'
-            defaultValue={todoNow?.title}
-          />
-          <TextField
-            margin='dense'
-            id='content'
-            label='Content'
-            type='text'
-            inputRef={contentRef}
-            fullWidth
-            variant='standard'
-            defaultValue={todoNow?.description}
-          />
-          <FormControl variant='standard' sx={{ minWidth: 120 }}>
-            <InputLabel id='important-label'>Important</InputLabel>
-            <Select
-              defaultValue={todoNow?.important ? 'yes' : 'no'}
-              labelId='important-label'
-              id='important'
-              inputRef={importantRef}
-              label='Important'
-            >
-              <MenuItem value='yes'>Yes</MenuItem>
-              <MenuItem value='no'>No</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant='standard' sx={{ minWidth: 120, marginLeft: 10 }}>
-            <InputLabel id='completed-label'>Is completed</InputLabel>
-            <Select
-              defaultValue={todoNow?.completed ? 'yes' : 'no'}
-              labelId='completed-label'
-              id='completed'
-              inputRef={completedRef}
-              label='Completed'
-            >
-              <MenuItem value='yes'>Yes</MenuItem>
-              <MenuItem value='no'>No</MenuItem>
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleUpdateTask()}>Update</Button>
-          <Button onClick={() => handleDeleteTask()}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+      {auth.token && (
+        <DialogTodo
+          setLoading={setLoading}
+          setOpen={setOpen}
+          open={open}
+          handleCloseDialog={handleCloseDialog}
+          token={auth.token}
+          todoNow={todoNow}
+        />
+      )}
 
       {isLoading && <LinearProgress />}
       <div className={cx('add-todo-container')}>
@@ -288,10 +175,12 @@ function TodoApp() {
             onChange={(e) => setContent(e.target.value)}
             multiple
           />
-          <FormControl variant='standard' sx={{ m: 1, minWidth: 50 }}>
-            <InputLabel id='demo-simple-select-label'>Important</InputLabel>
+          <FormControl variant='standard' sx={{ maxWidth: 60, width: 'auto' }}>
+            <InputLabel sx={{ fontSize: 13 }} id='demo-simple-select-label'>
+              Important
+            </InputLabel>
             <Select
-              sx={{ width: 60 }}
+              sx={{ maxWidth: 60, width: 'auto' }}
               labelId='demo-simple-select-label'
               id='demo-simple-select'
               value={important}

@@ -14,10 +14,13 @@ import listSideBar from './listSidebar'
 
 const cx = classNames.bind(styles)
 
-function Sidebar() {
-  const location = useLocation()
+interface SidebarProps {
+  open: boolean
+  location: any
+  setOpen?: any
+}
 
-  const [open, setOpen] = useState(false)
+function Sidebar({ open, location, setOpen }: SidebarProps) {
   const navigate = useNavigate()
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => {
@@ -26,7 +29,7 @@ function Sidebar() {
   })
 
   const changeStateSidebar = () => {
-    setOpen((prev) => !prev)
+    setOpen(!open)
   }
 
   const handleListItemClick = (index: number, link: string) => {
@@ -34,15 +37,34 @@ function Sidebar() {
     navigate(link)
   }
 
+  useEffect(() => {
+    if (location.pathname === '/profile') {
+      setOpen(false)
+      setSelectedIndex(1)
+    }
+  }, [location.pathname])
+
   return (
     <div className={open ? cx('fake-side-bar') : cx('fake-sidebar_hide')}>
       <div className={open ? cx('sidebar') : cx('sidebar_hide')}>
         <div className={cx('button-open-close')}>
-          <IconButton onClick={changeStateSidebar}>
+          <IconButton disabled={location.pathname === '/profile'} onClick={changeStateSidebar}>
             <MenuIcon />
           </IconButton>
         </div>
-        <List sx={{ marginTop: 10, borderTop: '1px solid #fff' }}>
+        <List
+          sx={{
+            marginTop: 10,
+            borderTop: '1px solid #fff',
+            '@media (max-width: 768px)': {
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              marginTop: 0
+            }
+          }}
+        >
           {listSideBar.map((item) => (
             <MyListItem
               key={'sidebar' + item.index}

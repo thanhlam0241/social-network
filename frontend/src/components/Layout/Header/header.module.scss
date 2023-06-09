@@ -29,34 +29,7 @@
   overflow: hidden;
   position: relative;
   border: 1.5px solid transparent;
-  input {
-    flex: 1;
-    font-size: 16px;
-    border: none;
-    height: 100%;
-    background-color: transparent; //trong suot
-    color: var(--black);
-    caret-color: var(--primary);
-  }
 
-  input:not(:placeholder-shown) ~ .search-btn {
-    color: rgba(22, 24, 35, 0.75);
-  }
-  .search-btn {
-    width: var(--search-button-width);
-    height: 100%;
-    border: none;
-    font-size: 1.8rem;
-    // color: rgba(22, 24, 35, 0.34);
-    background-color: transparent;
-    &:hover {
-      background-color: #eaeaeb;
-      cursor: pointer;
-    }
-    &:active {
-      background-color: rgba(22, 24, 35, 0.06);
-    }
-  }
   &::after {
     content: '';
     position: absolute;
@@ -70,6 +43,39 @@
     border-color: var(--focus-color);
   }
 }
+.search-input {
+  flex: 1;
+  font-size: 16px;
+  border: none;
+  height: 100%;
+  background-color: transparent; //trong suot
+  color: var(--black);
+  caret-color: var(--primary);
+
+  &:not(:placeholder-shown) ~ .search-btn {
+    color: rgba(22, 24, 35, 0.75);
+  }
+}
+
+.search-btn {
+  width: var(--search-button-width);
+  height: 100%;
+  border: none;
+  font-size: 1.8rem;
+  // color: rgba(22, 24, 35, 0.34);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  &:hover {
+    background-color: #eaeaeb;
+    cursor: pointer;
+  }
+  &:active {
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+}
+
 .search-title {
   color: #000;
   font-size: 1.4rem;
@@ -104,4 +110,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+}
+
+@media screen and (max-width: 680px) {
+  .header-main {
+    padding: 10px 5px;
+  }
+  .search {
+    width: calc(100% - 40px - 50px);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    background-color: transparent;
+    &::after {
+      display: none;
+    }
+  }
+  .search-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+  }
+  .search-input {
+    display: none;
+  }
+  .search-title {
+    display: none;
+  }
+  .clear {
+    display: none;
+  }
 }

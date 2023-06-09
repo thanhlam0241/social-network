@@ -5,7 +5,12 @@
   --background-color-default: #e4e6eb;
   --background-color-hover-default: #c8cad1;
 
+  --color-white: #fff;
+  --color-black: #000;
+
   --height-header: 56px;
+  --height-sidebar-mobile: 45px;
+
   --search-header-width: 361px;
 
   --width-sidebar: 300px;
@@ -84,6 +89,16 @@ input::-ms-clear {
 input[type='radio'] {
   width: 20px;
   height: 20px;
+}
+
+@media screen and (max-width: 680px) {
+  html {
+    font-size: 14px;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+    // width: 20px;
+  }
 }
 
 // ::-webkit-scrollbar {

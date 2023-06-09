@@ -22,7 +22,10 @@ function Background() {
 
   const [success, setSuccess] = useState(false)
 
-  const { data: background } = useQuery(['background' + auth.id], async () => getBackground(auth.id))
+  const { data: background } = useQuery(['background' + auth.id], async () => getBackground(auth.id), {
+    enabled: !!auth.id,
+    refetchOnWindowFocus: false
+  })
 
   const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files ? event.target?.files[0] : null
@@ -76,7 +79,7 @@ function Background() {
               onChange={handleFileInput}
             />
             <CameraAltIcon />
-            Change background
+            <span className={cx('textButtonChangeBack')}>Change background</span>
           </label>
         </div>
       </section>

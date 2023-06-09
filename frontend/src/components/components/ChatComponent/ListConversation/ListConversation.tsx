@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { Button } from '@mui/material'
 
@@ -102,10 +102,19 @@ const listConversation = [
 
 const ListConversation = () => {
   const navigate = useNavigate()
+
+  const { id } = useParams()
+
   const [search, setSearch] = useState('')
-  const [selected, setSelected] = useState(1)
+
+  const [selected, setSelected] = useState(0)
+
+  const clickToConversation = (id: number) => {
+    setSelected(id)
+    navigate(`/chat/${id}`)
+  }
   return (
-    <div className={cx('view-conversation')}>
+    <div className={!id ? cx('view-conversation') : cx('view-conversation-chat')}>
       <Button variant='outlined' onClick={() => navigate('/')}>
         GO BACK HOME
       </Button>
@@ -116,7 +125,7 @@ const ListConversation = () => {
           .map((conversation, index) => (
             <Conversation
               idx={conversation.id}
-              onClick={() => setSelected(conversation.id)}
+              onClick={() => clickToConversation(conversation.id)}
               selected={selected === conversation.id}
               key={conversation?.name + index}
               name={conversation.name}

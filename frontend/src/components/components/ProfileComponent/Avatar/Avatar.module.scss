@@ -1,7 +1,7 @@
 .avatar-information-container {
   width: 100%;
   height: 160px;
-  padding: 0 20%;
+  padding: 0 20% 5px 20%;
   background-color: #fff;
 }
 
@@ -15,6 +15,7 @@
   align-items: center;
   flex-direction: row;
   gap: 10px;
+  border-bottom: 2px solid #e9e9e9;
 }
 
 .avatar-container {
@@ -62,10 +63,10 @@
 }
 
 .information {
+  padding: 15px 0;
   flex-grow: 1;
   display: flex;
   direction: column;
-  padding: 15px 0;
   align-items: center;
 }
 
@@ -136,5 +137,81 @@
   &:hover {
     cursor: pointer;
     background-color: var(--background-color-hover-default);
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .avatar-information-container {
+    height: 250px;
+    padding: 0 5% 5px 5%;
+    gap: 5px;
+  }
+  .avar_information {
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 2px;
+  }
+  .information {
+    padding: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .profile_number_friends {
+    text-align: center;
+  }
+  .profile-friends-list {
+    max-width: 100%;
+    justify-content: center;
+  }
+  .information_more {
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+  }
+}
+@media screen and (max-width: 680px) {
+  .avatar-information-container {
+    height: 250px;
+    padding: 0 5% 5px 5%;
+    gap: 5px;
+  }
+  .avar_information {
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 2px;
+  }
+  .information {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .profile_infor {
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .profile-name {
+    max-width: 100%;
+    width: auto;
+  }
+  .profile_number_friends {
+    text-align: center;
+  }
+  .profile-friends-list {
+    width: 100%;
+    justify-content: center;
+  }
+  .information_more {
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
   }
 }
