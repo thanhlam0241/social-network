@@ -1,0 +1,99 @@
+.filter-post {
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: 10px;
+}
+
+.manager-post {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.action-button {
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--background-color-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 15px;
+  max-width: 180px;
+  gap: 10px;
+  padding: 0 20px;
+  &:hover {
+    background-color: var(--background-color-hover-2);
+    cursor: pointer;
+  }
+}
+
+.view-mode-post {
+  height: 60px;
+  padding: 5px 10px;
+  gap: 10px;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.view-mode-button {
+  background-color: transparent;
+  position: relative;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px 5px 0 5px;
+  font-size: 15px;
+  &:hover {
+    background-color: var(--background-color-default);
+    cursor: pointer;
+  }
+}
+
+.view-mode-button-inactive {
+  //margin: 5px;
+  //border-bottom: 5px solid var(--color-white);
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--color-white);
+  }
+}
+
+.view-mode-button-active {
+  color: var(--primary-color);
+  // margin: 5px 5px 0 5px;
+  border-radius: 10px 10px 0 0;
+  //border-bottom: 5px solid var(--primary-color);
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+  }
+}

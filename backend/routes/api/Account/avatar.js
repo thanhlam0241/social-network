@@ -5,7 +5,7 @@ const router = express.Router()
 
 const authenticate = require('../../../middleware/authenToken');
 const authorizeRole = require('../../../middleware/authorizeRole');
-const ROLES = require('../../../models/Account/role');
+const ROLES = require('../../../models/const/role');
 
 const avatarController = require('../../../controller/Account/avatarController')
 

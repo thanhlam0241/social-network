@@ -13,7 +13,7 @@ import React from 'react'
 
 import Cookies from 'js-cookie'
 
-import AuthenService from '~/service/api/authenticate/authenticateApi'
+// import AuthenService from '~/service/api/authenticate/authenticateApi'
 // import useAuth from '~/hooks/useAuth'
 
 import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
@@ -53,8 +53,8 @@ function LoginForm() {
   React.useEffect(() => {
     if (data) {
       dispatch(setAuth(data.user))
-      Cookies.set('atk', data.user.token)
-      Cookies.set('rtk', data.refreshToken)
+      Cookies.set('atk', data.user.token, { expires: 1000 * 60 * 60 * 24 })
+      Cookies.set('rtk', data.refreshToken, { expires: 1000 * 60 * 60 * 24 * 7 })
       navigate('/')
     }
   }, [data])

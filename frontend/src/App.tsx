@@ -15,6 +15,8 @@ import ProfilePage from './page/Profile/Profile'
 import Home from './page/Home/home'
 import Friend from './page/Friend/index'
 
+import PostPage from './page/PostPage/PostPage'
+
 import RequireRoles from './features/ProtectedRoute/RequireRole'
 
 // import { useAppSelector } from '~/hooks/storeHook'
@@ -39,7 +41,7 @@ function App() {
             }
           />
           <Route
-            path='/friends'
+            path='friends'
             element={
               <RequireRoles allowedRoles={['user']}>
                 <Friend />
@@ -54,15 +56,9 @@ function App() {
               </RequireRoles>
             }
           />
-          <Route
-            path='profile'
-            element={
-              <RequireRoles allowedRoles={['user']}>
-                <ProfilePage />
-              </RequireRoles>
-            }
-          />
+          <Route path='profile' element={<ProfilePage />} />
         </Route>
+
         <Route
           path='/chat'
           element={

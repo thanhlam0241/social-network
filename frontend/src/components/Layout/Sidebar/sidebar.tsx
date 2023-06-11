@@ -11,7 +11,7 @@ import List from '@mui/material/List'
 import MyListItem from '~/components/components/ListItem'
 
 import listSideBar from './listSidebar'
-
+import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
 const cx = classNames.bind(styles)
 
 interface SidebarProps {
@@ -21,10 +21,12 @@ interface SidebarProps {
 }
 
 function Sidebar({ open, location, setOpen }: SidebarProps) {
+  const auth: any = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
 
+  console.log(location.pathname)
   const [selectedIndex, setSelectedIndex] = useState<number>(() => {
-    const index = listSideBar.findIndex((item) => item.link === location.pathname)
+    const index = listSideBar.findIndex((item) => location.pathname.toString().startsWith(item.link))
     return index === -1 ? 0 : index
   })
 
@@ -34,7 +36,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
 
   const handleListItemClick = (index: number, link: string) => {
     setSelectedIndex(index)
-    navigate(link)
+    navigate(link === '/profile' ? `/profile?id=${auth.id}` : link)
   }
 
   useEffect(() => {
@@ -56,7 +58,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
           sx={{
             marginTop: 10,
             borderTop: '1px solid #fff',
-            '@media (max-width: 768px)': {
+            '@media (max-width: 680px)': {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-around',
