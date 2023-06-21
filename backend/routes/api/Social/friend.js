@@ -6,14 +6,16 @@ router.get('/get-friends', friendController.getFriends);
 
 router.get('/get-number-of-friends', friendController.getNumberOfFriends);
 
-router.post('/add-friend-request', friendController.sendRequestFriend);
+router.post('/send-friend-request', friendController.sendRequestFriend);
 
 router.get('/get-add-friend-requests', friendController.getAddFriendRequests);
 
-router.post('/accept-add-friend-request', friendController.acceptAddFriendRequest);
+router.post('/accept-send-friend-request', friendController.acceptAddFriendRequest);
 
-router.delete('/reject-add-friend-request', friendController.rejectAddFriendRequest);
+router.delete('/reject-send-friend-request', friendController.rejectAddFriendRequest);
 
 router.delete('/delete-friend', friendController.removeFriend);
+
+router.delete('/cancel-my-request-friend', friendController.cancelMyRequestFriend);
 
 module.exports = router;

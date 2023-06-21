@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import ButtonPopper from '~/components/components/ButtonPopper/ButtonPopper'
 
@@ -40,7 +40,10 @@ function Header() {
 
   const avatarRef = useRef<HTMLDivElement>(null)
 
-  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id))
+  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id), {
+    enabled: !!auth.id,
+    refetchOnWindowFocus: false
+  })
 
   const navigate = useNavigate()
 
@@ -100,7 +103,14 @@ function Header() {
         <img style={{ width: 40 }} src={reactIcon} alt='hello' />
       </div>
       <div className={cx('search')}>
-        <input ref={searchBar} value={search} onChange={handleSearch} placeholder='Tìm kiếm' spellCheck={false} />
+        <input
+          className={cx('search-input')}
+          ref={searchBar}
+          value={search}
+          onChange={handleSearch}
+          placeholder='Tìm kiếm'
+          spellCheck={false}
+        />
         <div className={cx('clear')}>
           {search.length > 0 && (
             <button style={{ backgroundColor: 'transparent' }} onClick={clearSearch}>

@@ -26,6 +26,5 @@ export const updateTodo = async (token: string, todo: any, id: string) => {
 }
 
 export const deleteTodo = async (token: string, todoId: string) => {
-  const response = await axios.delete(`${TodoGetAllUrl}/${todoId}`, config(token))
-  return response.data
+  return await axios.delete(`${TodoGetAllUrl}/${todoId}`, config(token))
 }

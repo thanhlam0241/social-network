@@ -2,10 +2,18 @@
 
 :root {
   --primary: #fe2c55;
-  --background-color-default: #e4e6eb;
-  --background-color-hover-default: #c8cad1;
+  --background-color-default: #f0f2f5;
+  --background-color-hover-default: #e4e6e9;
+
+  --background-color-2: #e4e6e9;
+  --background-color-hover-2: #d8dadf;
+
+  --color-white: #fff;
+  --color-black: #000;
 
   --height-header: 56px;
+  --height-sidebar-mobile: 45px;
+
   --search-header-width: 361px;
 
   --width-sidebar: 300px;
@@ -52,14 +60,14 @@ html {
 body {
   width: 100%;
   height: 100%;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Segoe UI Historic', 'Montserrat', sans-serif;
   font-size: 15px;
   line-height: 1.5;
   text-rendering: optimizeSpeed;
   color: var(--text-color);
   background-attachment: fixed;
   overflow-y: visible;
-  background-color: #faf9f8;
+  background-color: #f0f2f5;
 }
 
 button,
@@ -86,7 +94,12 @@ input[type='radio'] {
   height: 20px;
 }
 
-// ::-webkit-scrollbar {
-//   display: none;
-//   // width: 20px;
-// }
+@media screen and (max-width: 680px) {
+  html {
+    font-size: 14px;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+    // width: 20px;
+  }
+}

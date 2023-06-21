@@ -13,11 +13,11 @@ import React from 'react'
 
 import Cookies from 'js-cookie'
 
-import AuthenService from '~/service/api/authenticate/authenticateApi'
+// import AuthenService from '~/service/api/authenticate/authenticateApi'
 // import useAuth from '~/hooks/useAuth'
 
-import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
-import { setAuth, AuthState } from '~/service/redux/slice/authSlice'
+import { useAppDispatch } from '~/hooks/storeHook'
+import { setAuth } from '~/service/redux/slice/authSlice'
 import { useLoginMutation } from '~/service/redux/api/api'
 
 const cx = classNames.bind(styles)
@@ -46,15 +46,20 @@ function LoginForm() {
   const handleLogin = async () => {
     const username = usernameRef.current?.value
     const password = passwordRef.current?.value
-    if (username && password) {
-      await login({ username, password })
+    try {
+      if (username && password) {
+        await login({ username, password })
+        console.log(data)
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
   React.useEffect(() => {
     if (data) {
       dispatch(setAuth(data.user))
-      Cookies.set('atk', data.user.token)
-      Cookies.set('rtk', data.refreshToken)
+      Cookies.set('atk', data.user.token, { expires: 1 })
+      Cookies.set('rtk', data.refreshToken, { expires: 7 })
       navigate('/')
     }
   }, [data])

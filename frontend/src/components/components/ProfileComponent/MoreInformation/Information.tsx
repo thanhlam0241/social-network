@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
-import { useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import classNames from 'classnames/bind'
 
@@ -72,7 +72,18 @@ function Information() {
         <Tabs
           value={value}
           onChange={handleChange}
-          sx={{ backgroundColor: '#fff', padding: '0 20%' }}
+          sx={{
+            backgroundColor: '#fff',
+            padding: '0 20%',
+            '@media (max-width: 1080px)': {
+              padding: '0 5%',
+              fontSize: '0.6rem'
+            },
+            '@media (max-width: 680px)': {
+              padding: '0',
+              fontSize: '0.6rem'
+            }
+          }}
           aria-label='basic tabs example'
         >
           {listTab.map((item) => (

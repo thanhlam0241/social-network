@@ -6,19 +6,24 @@ import CreateIcon from '@mui/icons-material/Create'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 import { Snackbar, Alert } from '@mui/material'
 
 import { getAvatar, getUrlAvatar, updateAvatar } from '~/service/api/information/informationApi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-
+import { useParams } from 'react-router-dom'
 import { useAppSelector } from '~/hooks/storeHook'
 
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
 
-function Avatar() {
+interface AvatarProps {
+  id: any
+}
+
+function Avatar({ id }: AvatarProps) {
   const auth = useAppSelector((state) => state.auth)
   const queryClient = useQueryClient()
 
@@ -26,7 +31,10 @@ function Avatar() {
 
   const [expandPeople, setExpandPeople] = useState(false)
 
-  const { data: avatar } = useQuery(['avatar' + auth.id], async () => getAvatar(auth.id))
+  const { data: avatar } = useQuery(['avatar' + (id || auth.id)], async () => getAvatar(id || auth.id), {
+    enabled: !!id,
+    refetchOnWindowFocus: false
+  })
 
   const handleFileInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files ? event.target?.files[0] : null
@@ -68,19 +76,21 @@ function Avatar() {
       <div className={cx('avar_information')}>
         <div className={cx('avatar-container')}>
           <img className={cx('avatar')} src={avatar?.url ? getUrlAvatar(avatar?.url) : default_avatar} alt='Avatar' />
-          <div className={cx('change_avatar')}>
-            <label className={cx('input-file')} htmlFor='upload-photo-avatar'>
-              <input
-                style={{ display: 'none' }}
-                id='upload-photo-avatar'
-                name='upload-photo-avatar'
-                type='file'
-                multiple={false}
-                onChange={handleFileInput}
-              />
-              <CameraAltIcon />
-            </label>
-          </div>
+          {id === auth.id && (
+            <div className={cx('change_avatar')}>
+              <label className={cx('input-file')} htmlFor='upload-photo-avatar'>
+                <input
+                  style={{ display: 'none' }}
+                  id='upload-photo-avatar'
+                  name='upload-photo-avatar'
+                  type='file'
+                  multiple={false}
+                  onChange={handleFileInput}
+                />
+                <CameraAltIcon />
+              </label>
+            </div>
+          )}
         </div>
         <div className={cx('information')}>
           <div className={cx('profile_infor')}>
@@ -95,10 +105,17 @@ function Avatar() {
             </div>
           </div>
           <div className={cx('information_more')}>
-            <button className={cx('profile-button')}>
-              <CreateIcon />
-              <span>Edit profile</span>
-            </button>
+            {id === auth.id ? (
+              <button className={cx('profile-button')}>
+                <CreateIcon />
+                <span>Edit profile</span>
+              </button>
+            ) : (
+              <button className={cx('profile-button')}>
+                <PersonAddIcon />
+                <span>Add friend</span>
+              </button>
+            )}
             <button onClick={handleExpandPeople} className={cx('profile-button')}>
               {expandPeople ? <ExpandMoreIcon /> : <ExpandLessIcon />}{' '}
             </button>

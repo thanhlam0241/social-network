@@ -1,6 +1,12 @@
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Tooltip from '@mui/material/Tooltip'
+
+import styles from './listItem.module.scss'
+import classNames from 'classnames/bind'
+import { NONAME } from 'dns'
+
+const cx = classNames.bind(styles)
 interface ListItemProps {
   icon: any
   text: string
@@ -25,8 +31,18 @@ export default function CustomizedListItem(props: ListItemProps) {
         background: '#e2e2e2 !important',
         borderLeft: '2px solid #e2e2e2'
       },
-      borderLeft: props?.selected ? '2px solid #2564cf' : '2px solid #fff',
-      height: 60
+      borderLeft: props?.selected ? '5px solid #2564cf' : '5px solid #fff',
+      height: 60,
+      '@media (max-width: 680px)': {
+        width: '60px',
+        borderLeft: 'none',
+        borderBottom: props?.selected ? '5px solid #2564cf' : '5px solid #fff',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 30,
+        textAlign: 'center'
+      }
     }
   }
 
@@ -43,12 +59,18 @@ export default function CustomizedListItem(props: ListItemProps) {
         <ListItemIcon>
           <Icon
             sx={{
-              color: props.colorInput || '#000'
+              color: props.colorInput || '#000',
+              '@media (max-width: 680px)': {
+                display: 'block',
+                margin: '0 auto'
+              }
             }}
           />
         </ListItemIcon>
       </Tooltip>
-      <p style={textProps}>{props.text}</p>
+      <p className={cx('text-side-bar')} style={textProps}>
+        {props.text}
+      </p>
     </ListItem>
   )
 }

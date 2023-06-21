@@ -2,12 +2,20 @@
   width: var(--width-sidebar);
   height: calc(100vh - 56px);
   transition: all 0.4s ease;
+  box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.1);
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .fake-sidebar_hide {
   width: var(--width-sidebar-hide);
   height: calc(100vh - 56px);
   transition: all 0.4s ease;
+  box-shadow: inset -1px 0 0 0 rgba(0, 0, 0, 0.1);
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .button-open-close {
@@ -27,6 +35,7 @@
   text-overflow: clip;
   white-space: nowrap;
   overflow: hidden;
+  z-index: 10;
 }
 
 .sidebar_hide {
@@ -40,4 +49,28 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;
+}
+
+@media screen and (max-width: 680px) {
+  .sidebar {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+    flex-direction: row;
+  }
+  .sidebar_hide {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+    flex-direction: row;
+  }
+  .fake-side-bar {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+  }
+  .fake-sidebar_hide {
+    width: 100%;
+    height: var(--height-sidebar-mobile);
+  }
+  .button-open-close {
+    display: none;
+  }
 }

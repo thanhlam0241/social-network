@@ -1,0 +1,10 @@
+.profile_div_child {
+  width: 100%;
+  height: auto;
+  padding: 20px 20%;
+}
+@media screen and (max-width: 690px) {
+  .profile_div_child {
+    padding: 20px 10%;
+  }
+}

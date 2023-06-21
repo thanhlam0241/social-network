@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authorizeRole = require('../../middleware/authorizeRole');
-const ROLES = require('../../models/Account/role');
+const ROLES = require('../../models/const/role');
 
 const TodoController = require('../../controller/todoController');
 

@@ -1,27 +1,23 @@
-import React from 'react'
+import { useState } from 'react'
 import Header from '../Header/header'
 import Sidebar from '../Sidebar/sidebar'
 import styles from './DefaultLayout.module.scss'
 import className from 'classnames/bind'
-import { Outlet, useNavigate } from 'react-router-dom'
-
-import jwt_decode from 'jwt-decode'
-import Cookies from 'js-cookie'
-
-import authenticateApi from '~/service/api/authenticate/authenticateApi'
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
-import { setAuth } from '~/service/redux/slice/authSlice'
+import { Outlet, useLocation } from 'react-router-dom'
 
 const cx = className.bind(styles)
 
 function DefaultLayout() {
+  const location = useLocation()
+  const [open, setOpen] = useState(() => {
+    if (location.pathname === '/') return true
+    return false
+  })
   return (
     <div className={cx('main-container')}>
       <Header />
       <div className={cx('div_body')}>
-        <Sidebar />
+        <Sidebar open={open} location={location} setOpen={setOpen} />
         <div className={cx('div_content')}>
           <Outlet />
         </div>

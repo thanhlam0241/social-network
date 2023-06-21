@@ -5,6 +5,9 @@
   flex-direction: column;
   align-items: stretch;
   gap: 20px;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
 }
 .add-todo-container {
   display: flex;
@@ -59,7 +62,7 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  padding: 5px 15px;
+  padding: 5px 20px;
 }
 .input-content-todo {
   width: 600px;
@@ -72,4 +75,24 @@
   border-radius: 5px;
   font-size: 20px;
   transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 680px) {
+  .input-todo {
+    width: auto;
+  }
+  .input-content-todo {
+    font-size: 15px;
+    max-width: 200px;
+    width: auto;
+  }
+}
+@media (max-width: 1040px) {
+  .input-todo {
+    width: auto;
+  }
+  .input-content-todo {
+    font-size: 20px;
+    width: auto;
+  }
 }

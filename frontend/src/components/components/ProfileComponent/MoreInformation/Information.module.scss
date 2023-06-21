@@ -5,3 +5,9 @@
   z-index: 2;
   background-color: black;
 }
+
+@media screen and (max-width: 1080px) {
+  .information-container {
+    padding: 10px;
+  }
+}

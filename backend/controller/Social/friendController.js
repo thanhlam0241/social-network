@@ -36,6 +36,8 @@ const sendRequestFriend = async (req, res) => {
         text: req.body.text
     });
     try {
+        const isExist = await addFriendSchema.findOne({ sender: user._id, receiver: req.body.receiver });
+        if (isExist) return res.status(400).json({ message: 'You have already sent a friend request to this user' });
         await addFriend.save();
         const newConversation = new conversationSchema();
         await newConversation.save();
@@ -106,6 +108,17 @@ const removeFriend = async (req, res) => {
     }
 }
 
+const cancelMyRequestFriend = async (req, res) => {
+    const user = req.user;
+    const receiver = req.body.receiver;
+    try {
+        await addFriendSchema.deleteOne({ sender: user._id, receiver: receiver });
+        return res.status(200).json({ message: 'Cancel my request friend successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: error });
+    }
+}
+
 module.exports = {
     getFriends,
     getNumberOfFriends,
@@ -113,5 +126,6 @@ module.exports = {
     getAddFriendRequests,
     acceptAddFriendRequest,
     rejectAddFriendRequest,
-    removeFriend
+    removeFriend,
+    cancelMyRequestFriend
 }

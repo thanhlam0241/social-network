@@ -19,6 +19,7 @@
   object-fit: cover;
   object-position: center;
   border-radius: 0 0 10px 10px;
+  overflow: hidden;
   z-index: 2;
 }
 .button_change_background {
@@ -46,4 +47,35 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1040px) {
+  .background_container {
+    padding: 10px;
+    height: 250px;
+  }
+  .button_change_background {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  .textButtonChangeBack {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .background_container {
+    padding: 10px;
+    height: 200px;
+    overflow: hidden;
+  }
+  .button_change_background {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  .textButtonChangeBack {
+    display: none;
+  }
 }

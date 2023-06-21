@@ -1,6 +1,8 @@
 import ListConversation from '~/components/components/ChatComponent/ListConversation/ListConversation'
-import ChatBox from '~/components/components/ChatComponent/ChatBox/Chatbox'
+import { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
+
 const Chat = () => {
   return (
     <Box
@@ -8,11 +10,15 @@ const Chat = () => {
         width: '100%',
         height: '100%',
         backgroundColor: '#fff',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
       }}
     >
       <ListConversation />
-      <ChatBox />
+      {/* <ChatBox /> */}
+      <Outlet />
     </Box>
   )
 }

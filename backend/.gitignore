@@ -6,6 +6,6 @@ target
 
 utils/logs/*.txt
 
-uploads/avatar
+uploads/avatar/*
 
-uploads/background
+uploads/background/*

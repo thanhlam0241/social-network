@@ -1,7 +1,7 @@
 import styles from './Register.module.scss'
 import classNames from 'classnames/bind'
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import Capture from '../../Capture/Capture'
 import {
   Typography,

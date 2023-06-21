@@ -69,9 +69,8 @@ const refreshToken = async (req, res) => {
 }
 
 const logout = async (req, res) => {
-    const token = req.user.token;
     const refreshToken = req.body.token;
-    if (!token || !refreshToken) {
+    if (!refreshToken) {
         return res.status(401).send("Access denied when try to log out");
     }
     try {
@@ -82,13 +81,8 @@ const logout = async (req, res) => {
                 createError.Conflict('User is not exist');
             }
         }
-        const a = await tokenSchema.findOneAndDelete({ token: refreshToken });
-        if (a) {
-            return res.send("Logout successfully");
-        }
-        else {
-            throw createError.Conflict('Token is not exist');
-        }
+        await tokenSchema.findOneAndDelete({ token: refreshToken });
+        return res.send("Logout successfully");
     }
     catch (err) {
         return res.status(403).send("Invalid token when try to log out");

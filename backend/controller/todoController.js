@@ -79,6 +79,7 @@ const updateTodoItem = async (req, res) => {
 }
 
 const deleteTodoItem = async (req, res) => {
+    const todoId = req.params.id;
     try {
         const username = req.user.username;
         if (!username) {
@@ -86,12 +87,15 @@ const deleteTodoItem = async (req, res) => {
             return;
         }
         const userExist = await userSchema.findOne({ username: username });
-        if (userExist) {
+        if (!userExist) {
             res.status(404).send("Username is not existed");
             return;
         }
-        await TodoItemSchema.deleteOne({ _id: req.body._id });
-        return res.status(201).json('Delete successfully');
+        const isDeleted = await TodoItemSchema.findByIdAndRemove({ _id: todoId });
+        console.log(isDeleted)
+        if (isDeleted) {
+            return res.status(201).json('Delete successfully');
+        }
     }
     catch (err) {
         return res.status(500).send();

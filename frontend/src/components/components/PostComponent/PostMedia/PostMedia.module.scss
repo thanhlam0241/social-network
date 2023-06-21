@@ -1,0 +1,14 @@
+.post-media-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  height: auto;
+  padding: 0.5rem 0;
+}
+
+.image-container {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
