@@ -9,30 +9,35 @@ const listSideBar = [
     index: 0,
     name: 'Home',
     link: '/',
+    root: '/',
     icon: HomeIcon
   },
   {
     index: 1,
     name: 'Profile',
     link: '/profile',
+    root: '/profile',
     icon: PersonIcon
   },
   {
     index: 2,
     name: 'Friends',
-    link: '/friends',
+    link: '/friends/recommend',
+    root: '/friends',
     icon: PeopleIcon
   },
   {
     index: 3,
     name: 'Todo list',
     link: '/todo',
+    root: '/todo',
     icon: PlaylistAddCheckIcon
   },
   {
     index: 4,
     name: 'Chat',
     link: '/chat',
+    root: '/chat',
     icon: ForumIcon
   }
 ]

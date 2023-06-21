@@ -9,7 +9,7 @@ function PostMedia() {
     <main className={cx('post-media-container')}>
       <img
         className={cx('image-container')}
-        src='http://localhost:3500/background/1686422656416-157674390.png'
+        src='http://localhost:3500/avatar/1686426738875-834258115.jpg'
         alt='post-media'
       />
     </main>

@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
-import { useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import classNames from 'classnames/bind'
 

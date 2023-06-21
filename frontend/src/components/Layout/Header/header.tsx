@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import ButtonPopper from '~/components/components/ButtonPopper/ButtonPopper'
 

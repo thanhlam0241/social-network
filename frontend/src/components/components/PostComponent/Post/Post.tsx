@@ -5,6 +5,8 @@ import PostHeader from '../PostHeader/PostHeader'
 import PostText from '../PostTextContent/PostText'
 import PostMedia from '../PostMedia/PostMedia'
 import Interaction from '../InteractInformation/Interaction'
+import ActionPost from '../ActionPost/ActionPost'
+import CommentPost from '../CommentPost/CommentPost'
 
 import classNames from 'classnames/bind'
 
@@ -17,8 +19,8 @@ function Post() {
       <PostText />
       <PostMedia />
       <Interaction />
-      <div>Action</div>
-      <div>Comment container</div>
+      <ActionPost />
+      <CommentPost />
     </section>
   )
 }

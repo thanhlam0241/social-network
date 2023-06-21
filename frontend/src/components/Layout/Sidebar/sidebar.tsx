@@ -24,9 +24,15 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
   const auth: any = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  console.log(location.pathname)
+  console.log(location.pathname.startsWith('/friends'))
+
   const [selectedIndex, setSelectedIndex] = useState<number>(() => {
-    const index = listSideBar.findIndex((item) => location.pathname.toString().startsWith(item.link))
+    const index = listSideBar.findIndex((item) => {
+      if (item.root.length > 1) {
+        return location.pathname.toString().startsWith(item.root)
+      }
+    })
+    console.log(index)
     return index === -1 ? 0 : index
   })
 
@@ -40,9 +46,8 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
   }
 
   useEffect(() => {
-    if (location.pathname === '/profile') {
+    if (location.pathname === '/profile' || location.pathname.startsWith('/friends')) {
       setOpen(false)
-      setSelectedIndex(1)
     }
   }, [location.pathname])
 
@@ -50,7 +55,10 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
     <div className={open ? cx('fake-side-bar') : cx('fake-sidebar_hide')}>
       <div className={open ? cx('sidebar') : cx('sidebar_hide')}>
         <div className={cx('button-open-close')}>
-          <IconButton disabled={location.pathname === '/profile'} onClick={changeStateSidebar}>
+          <IconButton
+            disabled={location.pathname === '/profile' || location.pathname.startsWith('/friends')}
+            onClick={changeStateSidebar}
+          >
             <MenuIcon />
           </IconButton>
         </div>

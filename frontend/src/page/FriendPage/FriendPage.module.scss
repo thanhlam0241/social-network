@@ -1,0 +1,21 @@
+.friend-page {
+  display: flex;
+  flex-direction: row;
+  //background-color: var(--color-white);
+  gap: 20px;
+  padding: 0 10px;
+  align-items: flex-start;
+  // @include Responsive(XS) {
+  //   flex-direction: column;
+  // }
+}
+
+.content-friend-page {
+  width: calc(100% - 300px);
+}
+
+@media screen and (max-width: 680px) {
+  .content-friend-page {
+    width: calc(100% - 50px - 20px);
+  }
+}

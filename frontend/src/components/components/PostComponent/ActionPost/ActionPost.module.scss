@@ -1,0 +1,25 @@
+.action-post {
+  width: 100%;
+  margin: 5px 10px;
+  height: 44px;
+  border-bottom: 1px solid #e6ecf0;
+  border-top: 1px solid #e6ecf0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-action-post {
+  background-color: transparent;
+  padding: 5px;
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  &:hover {
+    background-color: var(--background-color-hover-default);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}

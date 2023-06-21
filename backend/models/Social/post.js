@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    vidro: {
+    video: {
         type: String,
         required: false
     },
@@ -33,10 +33,6 @@ const postSchema = new mongoose.Schema({
         type: Date,
         required: false
     },
-    comments: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
-    }],
     tags: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tag'

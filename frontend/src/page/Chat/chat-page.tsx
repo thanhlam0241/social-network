@@ -1,7 +1,7 @@
 import ListConversation from '~/components/components/ChatComponent/ListConversation/ListConversation'
 import { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
-import { Outlet, useLocation, useParams } from 'react-router'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 
 const Chat = () => {
   return (

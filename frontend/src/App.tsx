@@ -3,17 +3,30 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import DefaultLayout from '~/components/Layout/DefaulltLayout/DefaultLayout'
 import AuthenticateLayout from './features/Authentication/authenLayout'
 
+// Authentication module
 import LoginForm from './features/Authentication/login/Login'
 import RegisterForm from './features/Authentication/register/Register'
 
+// Chat module
 import ChatEmpty from './components/components/ChatComponent/ChatEmpty'
 import ChatBox from '~/components/components/ChatComponent/ChatBox/Chatbox'
-
-import TodoPage from './page/Todo/main'
 import ChatPage from './page/Chat/chat-page'
+
+// Todo module
+import TodoPage from './page/Todo/main'
+
+// Profile module
 import ProfilePage from './page/Profile/Profile'
+
+//Home module
 import Home from './page/Home/home'
-import Friend from './page/Friend/index'
+
+//Friend module
+import FriendPage from './page/FriendPage/FriendPage'
+import Recommend from './features/Friend/Recommend/Recommend'
+import FriendRequestReceive from './features/Friend/FriendRequest/FriendRequestReceive'
+import FriendRequestSend from './features/Friend/FriendRequest/FriendRequestSend'
+import AllFriend from './features/Friend/All/AllFriend'
 
 import PostPage from './page/PostPage/PostPage'
 
@@ -44,10 +57,15 @@ function App() {
             path='friends'
             element={
               <RequireRoles allowedRoles={['user']}>
-                <Friend />
+                <FriendPage />
               </RequireRoles>
             }
-          />
+          >
+            <Route path='recommend' element={<Recommend />} />
+            <Route path='request-receive' element={<FriendRequestReceive />} />
+            <Route path='request-send' element={<FriendRequestSend />} />
+            <Route path='all' element={<AllFriend />} />
+          </Route>
           <Route
             path='todo'
             element={

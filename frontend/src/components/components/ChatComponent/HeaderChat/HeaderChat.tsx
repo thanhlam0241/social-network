@@ -5,7 +5,7 @@ import VideocamIcon from '@mui/icons-material/Videocam'
 import InfoIcon from '@mui/icons-material/Info'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 

@@ -16,6 +16,8 @@ function PostPage() {
         <AddPost />
         <FilterPost />
         <Post />
+        <Post />
+        <Post />
       </main>
     </div>
   )

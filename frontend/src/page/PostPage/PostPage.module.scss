@@ -5,11 +5,24 @@
   background-color: transparent;
   justify-content: space-between;
   gap: 20px;
+  padding-bottom: 30px;
+  align-items: flex-start;
 }
 
 .post-area {
-  flex-grow: 1;
+  //flex-grow: 1;
+  width: calc(100% - 370px);
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+@media screen and (max-width: 1040px) {
+  .post-page {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .post-area {
+    width: 100%;
+  }
 }

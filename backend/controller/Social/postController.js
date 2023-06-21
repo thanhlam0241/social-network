@@ -1,6 +1,9 @@
-import PostSchema from '../../models/Social/postSchema.js';
+const PostSchema = require('../../models/Social/postSchema.js');
+const emotionPostSchema = require('../../models/Social/emotionPost.js');
+const commentPostSchema = require('../../models/Social/commentPost.js');
 const fs = require('fs');
 const path = require('path');
+
 // Path: backend\controller\Social\postController.js
 
 const tagSchema = require('../../models/const/tag.js');
@@ -229,16 +232,28 @@ const getPostsOfUser = async (req, res) => {
     }
 }
 
-const numberOfEmotion = async (req, res) => {
+const getNumberOfEmotions = async (req, res) => {
     const postId = req.params.id;
     try {
-        const post = await PostSchema.findById(postId);
-
+        const numberOfEmotions = await emotionPostSchema.countDocuments({ inPost: postId });
+        return res.status(200).json({ numberOfEmotions });
     }
     catch (err) {
-
+        return res.status(500).json({ msgs: "Opps! Something went wrong with our server when getting number of emotions in post. Please wait and try again" });
     }
 }
+
+const getNumberOfComments = async (req, res) => {
+    const postId = req.params.id;
+    try {
+        const numberOfComments = await commentPostSchema.countDocuments({ inPost: postId });
+        return res.status(200).json({ numberOfComments });
+    }
+    catch (err) {
+        return res.status(500).json({ msgs: "Opps! Something went wrong with our server when getting number of comments in post. Please wait and try again" });
+    }
+}
+
 module.export = {
     createPost,
     getPost,
@@ -248,5 +263,7 @@ module.export = {
     updatePost,
     makeEmotion,
     getAllPostsWithHashtag,
-    getPostsOfUser
+    getPostsOfUser,
+    getNumberOfEmotions,
+    getNumberOfComments
 }
