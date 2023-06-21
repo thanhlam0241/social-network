@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
         }
         const hashedPassword = await bcypt.hash(req.body.password, 10);
 
-        const userInformation = new userInformationSchema();
+        const userInformation = new userInformationSchema({ firstName: 'New', lastName: 'User' });
         await userInformation.save();
 
         const user = {

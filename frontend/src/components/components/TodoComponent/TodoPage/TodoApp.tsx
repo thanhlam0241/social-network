@@ -13,11 +13,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 import DialogTodo from '../Dialog/index'
 //api
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getTodoList, addNewTodo, updateTodo, deleteTodo, ITodo } from '~/service/api/todo/todoApi'
 //redux
 import { useAppSelector } from '~/hooks/storeHook'
-import { useQueryClient } from '@tanstack/react-query'
 
 const cx = classNames.bind(styles)
 

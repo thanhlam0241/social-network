@@ -106,7 +106,7 @@ app.use('/users', require('./routes/api/Account/users'));
 app.use('/todo', require('./routes/api/todo'));
 app.use('/chat', require('./routes/api/Social/chat'));
 app.use('/social/friend', require('./routes/api/Social/friend'));
-
+app.use('/social/people', require('./routes/api/Social/people'));
 
 
 // Route handlers
