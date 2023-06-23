@@ -6,6 +6,10 @@ import { Button } from '@mui/material'
 import SearchBox from '../SearchConversation/SearchConversation'
 import Conversation from '../Conversation/Conversation'
 
+import { useAppSelector } from '~/hooks/storeHook'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { getConversation } from '~/service/api/chat/chatApi'
+
 import styles from './ListConversation.module.scss'
 import classNames from 'classnames/bind'
 
@@ -101,6 +105,18 @@ const listConversation = [
 ]
 
 const ListConversation = () => {
+  const auth: any = useAppSelector((state) => state.auth)
+
+  const {
+    data: conversations,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['getConversation'],
+    queryFn: () => getConversation(auth.token, 1),
+    refetchOnWindowFocus: false
+  })
+
   const navigate = useNavigate()
 
   const { id } = useParams()
@@ -113,6 +129,7 @@ const ListConversation = () => {
     setSelected(id)
     navigate(`/chat/${id}`)
   }
+
   return (
     <div className={!id ? cx('view-conversation') : cx('view-conversation-chat')}>
       <Button variant='outlined' onClick={() => navigate('/')}>
@@ -120,7 +137,7 @@ const ListConversation = () => {
       </Button>
       <SearchBox onChange={setSearch} />
       <section className={cx('list-conversation')}>
-        {listConversation
+        {/* {listConversation
           .filter((conversation) => conversation.name.toLocaleLowerCase().includes(search))
           .map((conversation, index) => (
             <Conversation
@@ -133,7 +150,33 @@ const ListConversation = () => {
               isActive={conversation.isActive}
               lastMessage={conversation.lastMessage}
             />
-          ))}
+          ))} */}
+        {isLoading && <div>Loading...</div>}
+        {isLoading ||
+          conversations?.length === 0 ||
+          conversations?.map((conversation: any) => {
+            const otherParticipantIdx = conversation.participants.find(
+              (participant: any) => participant._id !== auth.id
+            )
+            const otherParticipant = conversation.participants[otherParticipantIdx]
+            const firstName = otherParticipant?.userInformation.firstName
+            const lastName = otherParticipant?.userInformation.lastName
+            let fullName = ''
+            if (!firstName || !lastName) {
+              fullName = 'Unknown User'
+            } else {
+              fullName = firstName + ' ' + lastName
+            }
+            return (
+              <Conversation
+                key={conversation._id}
+                onClick={() => clickToConversation(conversation?._id)}
+                selected={selected === conversation?._id}
+                name={fullName}
+                avatar={otherParticipant?.avatar}
+              />
+            )
+          })}
       </section>
     </div>
   )

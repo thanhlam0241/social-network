@@ -12,17 +12,32 @@ const numberOfRequestFriendToYouPerPage = 20;
 const numberOfYourRequestFriendPerPage = 20;
 const numberOfYourFriendPerPage = 20;
 
+const getAllMyRequestFriends = async (req, res) => {
+    const user = req.user;
+    try {
+        const listRequestFriends = await FriendRequestSchema.find({ sender: user._id });
+        return res.status(200).json({
+            success: true, data: listRequestFriends.map((request) => {
+                return request.receiver;
+            })
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 const getRecommendPeople = async (req, res) => {
     const { page } = req.params;
     if (!page || !requestValidation.checkNumber(page)) {
         return res.status(400).json({ message: 'Invalid request' });
     }
     const skip = (parseInt(page) - 1) * numberOfRecommendPeoplePerPage;
-    const user = req.user;
+    const userId = req.user._id;
     try {
-        const listFriends = await FriendSchema.find({ user: user._id });
+        const listFriends = await FriendSchema.find({ user: userId });
 
-        const listRecommendPeople = await UserSchema.find({ _id: { $nin: listFriends } })
+        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [...listFriends, userId] } })
             .populate('userInformation', '-__v -_id -email -phone -address')
             .select('isOnline userInformation ')
             .skip(skip)
@@ -137,5 +152,6 @@ module.exports = {
     getRecommendPeople,
     getRequestFriendToYou,
     getYourRequestFriend,
-    getYourFriend
+    getYourFriend,
+    getAllMyRequestFriends
 }

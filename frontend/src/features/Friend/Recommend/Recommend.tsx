@@ -6,7 +6,7 @@ import { Snackbar, Alert } from '@mui/material'
 
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-import { getPeopleRecommend, sendFriendRequest } from '~/service/api/people/peopleApi'
+import { getPeopleRecommend, sendFriendRequest, allFriendRequest } from '~/service/api/people/peopleApi'
 
 import SendFriendRequestForm from '~/components/components/Friend/SendRequestDialog'
 
@@ -17,7 +17,7 @@ const cx = classNames.bind(styles)
 function Recommend() {
   const auth: any = useAppSelector((state) => state.auth)
 
-  //const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
   const [idToSendFriendRequest, setIdToSendFriendRequest] = useState<string>('' as string)
 
@@ -31,12 +31,23 @@ function Recommend() {
     refetchOnWindowFocus: false
   })
 
+  const {
+    data: myFriendRequest,
+    isLoading: loadingMyFriendRequest,
+    error: errorMyFriendRequest
+  } = useQuery({
+    queryKey: ['getAllMyFriendRequest'],
+    queryFn: () => allFriendRequest(auth.token),
+    refetchOnWindowFocus: false
+  })
+
   const friendRequestMutation = useMutation({
     mutationFn: (newTodo: { receiver: string; text: string }) => {
       return sendFriendRequest(auth.token, newTodo)
     },
     onSuccess: () => {
       setSuccess(true)
+      queryClient.invalidateQueries(['getAllMyFriendRequest'])
     },
     onError: (error) => {
       console.log(error)
@@ -75,7 +86,7 @@ function Recommend() {
       <SendFriendRequestForm onSend={handleSendFriendRequest} open={open} handleClose={() => setOpen(false)} />
       <h2>Someone you can know</h2>
       <ul className={cx('friend-recommend-content')}>
-        {!isLoading && !error ? (
+        {!isLoading && !error && myFriendRequest?.data ? (
           data?.data.map((item: any) => (
             <li className={cx('friend-item')} key={item._id}>
               <FriendCard
@@ -83,6 +94,7 @@ function Recommend() {
                 id={item._id}
                 name={item?.name}
                 avatar={item?.avatar}
+                isSend={myFriendRequest?.data.includes(item._id)}
               />
             </li>
           ))

@@ -2,16 +2,18 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const authenticateTokenSocket = (socket, next) => {
-    const token = socket.handshake.token;
+    const token = socket.handshake.auth.token;
+    //console.log(token)
     if (token == null) {
-        return res.status(401).send("Token is required");
+        return next(new Error("Token is required"));
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).send("Token is invalid");
+            return next(new Error("Token is invalid"));
         }
-        user.token = token;
+        //user.token = token;
         socket.user = user;
+        //console.log("socket.user", socket.user)
         next();
     })
 }

@@ -9,10 +9,11 @@ interface Props {
   id?: string
   name?: string
   avatar?: string
+  isSend?: boolean
   onClick?: () => void
 }
 
-export default function MultiActionAreaCard({ name, avatar, onClick }: Props) {
+export default function MultiActionAreaCard({ name, avatar, onClick, isSend }: Props) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -24,15 +25,21 @@ export default function MultiActionAreaCard({ name, avatar, onClick }: Props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button
-          onClick={onClick}
-          sx={{ margin: '0 auto', width: '100%' }}
-          variant='outlined'
-          size='small'
-          color='primary'
-        >
-          Send friend request
-        </Button>
+        {!isSend ? (
+          <Button
+            onClick={onClick}
+            sx={{ margin: '0 auto', width: '100%' }}
+            variant='outlined'
+            size='small'
+            color='primary'
+          >
+            Send friend request
+          </Button>
+        ) : (
+          <Button sx={{ margin: '0 auto', width: '100%' }} variant='outlined' size='small' color='secondary'>
+            Cancel friend request
+          </Button>
+        )}
       </CardActions>
     </Card>
   )

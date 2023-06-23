@@ -48,7 +48,7 @@ app.use(helmet());
 app.use(morgan('common'));
 
 //custom middleware logger
-app.use(logger);
+//app.use(logger);
 
 //middlerware cors option
 app.use(cors(corsOptions));

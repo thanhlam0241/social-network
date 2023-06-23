@@ -2,7 +2,6 @@ const addFriendSchema = require('../../models/Social/addFriend');
 const friendSchema = require('../../models/Social/friend');
 
 const conversationSchema = require('../../models/Chat/conversation');
-const participantSchema = require('../../models/Chat/participant');
 
 
 const getFriends = async (req, res) => {
@@ -39,18 +38,24 @@ const sendRequestFriend = async (req, res) => {
         const isExist = await addFriendSchema.findOne({ sender: user._id, receiver: req.body.receiver });
         if (isExist) return res.status(400).json({ message: 'You have already sent a friend request to this user' });
         await addFriend.save();
-        const newConversation = new conversationSchema();
+        const newConversation = new conversationSchema({
+            isGroup: false,
+            participants: [
+                user._id,
+                req.body.receiver
+            ]
+        });
         await newConversation.save();
-        const newParticipant = new participantSchema({
-            conversation: newConversation._id,
-            user: user._id
-        });
-        await newParticipant.save();
-        const newParticipant2 = new participantSchema({
-            conversation: newConversation._id,
-            user: req.body.receiver
-        });
-        await newParticipant2.save();
+        // const newParticipant = new participantSchema({
+        //     conversation: newConversation._id,
+        //     user: user._id
+        // });
+        // await newParticipant.save();
+        // const newParticipant2 = new participantSchema({
+        //     conversation: newConversation._id,
+        //     user: req.body.receiver
+        // });
+        // await newParticipant2.save();
         return res.status(200).json({ message: 'Send request friend successfully' });
     } catch (error) {
         return res.status(500).json({ message: error });

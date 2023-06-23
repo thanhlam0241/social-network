@@ -10,8 +10,26 @@ import SendIcon from '@mui/icons-material/Send'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 const cx = classNames.bind(styles)
 
-export default function MessageBox() {
+interface Props {
+  conversationId?: string
+  sendMessage?: any
+}
+
+export default function MessageBox({ sendMessage }: Props) {
   const [message, setMessage] = useState<string>('')
+
+  const handleSendMessage = () => {
+    if (sendMessage) {
+      sendMessage(message)
+      setMessage('')
+    }
+  }
+
+  const handleKeyDown = (e: any) => {
+    if (message && e.key === 'Enter') {
+      handleSendMessage()
+    }
+  }
 
   return (
     <section className={cx('message_box')}>
@@ -26,12 +44,15 @@ export default function MessageBox() {
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           type='text'
           className={cx('message_box_input')}
           placeholder='Type a message'
         />
       </aside>
-      <span className={cx('message_box_button')}>{message.length > 0 ? <SendIcon /> : <ThumbUpIcon />}</span>
+      <span className={cx('message_box_button')}>
+        {message.length > 0 ? <SendIcon sx={{ cursor: 'pointer' }} onClick={handleSendMessage} /> : <ThumbUpIcon />}
+      </span>
     </section>
   )
 }

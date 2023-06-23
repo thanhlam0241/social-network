@@ -5,9 +5,11 @@ const cx = classNames.bind(styles)
 
 interface MessageProps {
   isMine?: boolean
+  text?: string
 }
 
-export default function Message({ isMine }: MessageProps) {
+export default function Message({ text, isMine }: MessageProps) {
+  console.log(text, isMine)
   return (
     <section
       className={
@@ -22,7 +24,7 @@ export default function Message({ isMine }: MessageProps) {
         />
       )}
       <span className={isMine ? cx('message-item', 'message_item_mine') : cx('message-item', 'message_item_other')}>
-        Message Item Hello World, Welcome to my chat box, Good morning, good afternon
+        {text || 'Default message'}
         {/* {!isMine && <p className={cx('message-nickname')}>Thanh lam</p>} */}
       </span>
     </section>

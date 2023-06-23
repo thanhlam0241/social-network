@@ -8,7 +8,8 @@ import {
   SendFriendRequestUrl,
   AcceptFriendRequestUrl,
   RejectFriendRequestUrl,
-  CancelFriendRequestUrl
+  CancelFriendRequestUrl,
+  AllRequestFriendUrl
 } from '../const/url'
 
 export const getPeopleRecommend = async (token: string, page: number) => {
@@ -16,7 +17,7 @@ export const getPeopleRecommend = async (token: string, page: number) => {
   return res.data
 }
 
-export const getMyAllFriend = async (token: string, page: number) => {
+export const getMyFriend = async (token: string, page: number) => {
   const res = await axios.get(MyAllFriendUrl + `/${page}`, config(token))
   return res.data
 }
@@ -45,5 +46,9 @@ export const cancelFriendRequest = async (token: string, sender: string) => {
 }
 export const rejectFriendRequest = async (token: string, receiver: string) => {
   const res = await axios.post(RejectFriendRequestUrl, { receiver }, config(token))
+  return res.data
+}
+export const allFriendRequest = async (token: string) => {
+  const res = await axios.get(AllRequestFriendUrl, config(token))
   return res.data
 }
