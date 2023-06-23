@@ -23,4 +23,4 @@ addFriendSchema.query.listAddFriendRequests = function (userId) {
     return this.find({ receiver: userId }).populate('sender').select('sender text');
 }
 
-module.exports = mongoose.model('AddFriend', addFriendSchema);
+module.exports = mongoose.model('FriendRequest', addFriendSchema);

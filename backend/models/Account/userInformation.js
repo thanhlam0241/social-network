@@ -35,4 +35,10 @@ const UserInformationSchema = new mongoose.Schema({
     }
 });
 
+UserInformationSchema.virtual('fullName').get(function () {
+    let firstName = this.firstName || 'Unknown';
+    let lastName = this.lastName || 'People';
+    return firstName + ' ' + lastName;
+});
+
 module.exports = mongoose.model('UserInformation', UserInformationSchema)

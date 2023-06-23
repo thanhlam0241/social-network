@@ -1,6 +1,7 @@
 const http = require('http');
 const { Server } = require("socket.io");
 const authenticateTokenSocket = require('../../middleware/authenTokenSocket');
+const messageSchema = require('../../models/Chat/message')
 const createServerSocket = (app) => {
     const server = http.createServer(app);
     const io = new Server(server, {
@@ -15,8 +16,9 @@ const createServerSocket = (app) => {
             skipMiddlewares: true, // 0.1 second
         }
     });
-
+    global.onlineUsers = new Map();
     io.on("connection", (socket) => {
+        global.chatSocket = socket;
         if (socket.recovered) {
             console.log("recovered");
             // recovery was successful: socket.id, socket.rooms and socket.data were restored
@@ -24,42 +26,41 @@ const createServerSocket = (app) => {
         else {
             io.use(authenticateTokenSocket);
 
-            socket.on("setup", (userData) => {
-                socket.join(userData._id);
-                socket.emit("connected");
-            });
+            // socket.on("setup", (userData) => {
+            //     socket.join(userData._id);
+            //     socket.emit("connected", userData._id);
+            // });
 
             socket.on('join-room', (room) => {
-                socket.join(room);
+                if (room) socket.join(room);
+                //socket.in(room).emit('connected', socket.id);
             });
 
             socket.on("typing", (room) => socket.in(room).emit("typing"));
 
             socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-            // {
-            //     chat: {
-            //         users: [User],
-            //             chatId: number
-            //     },
-            //     sender: {
-            //         _id: string,
-            //     }
-            // }
-            socket.on("chat message", (messageInfor) => {
-                const chat = messageInfor.chat;
-
-                if (!chat?.users) return console.log("chat.users not defined");
-
-                chat.users.forEach((user) => {
-                    if (user._id == messageInfor.sender._id) return;
-                    socket.in(user._id).emit("message recieved", messageInfor);
-                });
+            socket.on("send-message", async (messageInfor) => {
+                try {
+                    console.log(messageInfor)
+                    const newMessage = new messageSchema({
+                        conversation: messageInfor.room,
+                        sender: messageInfor.sender,
+                        text: messageInfor.text,
+                    });
+                    const isSuccess = await newMessage.save();
+                    if (isSuccess) {
+                        const chatId = messageInfor.room;
+                        io.to(chatId).emit("receive-message", messageInfor);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
             });
 
-            socket.off("setup", () => {
+            socket.off("join-room", () => {
                 console.log("USER DISCONNECTED");
-                socket.leave(userData._id);
+                socket.leave('Leave room', room);
             });
 
             socket.on('disconnect', () => {

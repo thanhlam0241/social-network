@@ -1,9 +1,8 @@
 const conversationSchema = require('../../models/Chat/conversation');
-const participantSchema = require('../../models/Chat/participant');
 const messageSchema = require('../../models/Chat/message');
 
 const numberConversationPerPage = 15;
-const numberMessagePerPage = 10;
+const numberMessagePerPage = 20;
 
 const getConversationById = async (req, res) => {
     try {
@@ -21,12 +20,14 @@ const getConversationById = async (req, res) => {
 const getConversationsByUser = async (req, res) => {
     try {
         const page = req.params.page;
-        const conversations = await participantSchema.find({ user: req.user._id })
+        const user = req.user;
+        const conversations = await conversationSchema.find({ participants: user._id })
             .populate({
-                path: 'conversation', select: 'isGroup last_message',
-                sort: [['last_message.create_at', -1]]
+                path: 'participants', select: 'isOnline userInformation', populate: {
+                    path: 'userInformation',
+                    select: 'firstName lastName avatar -_id'
+                }
             })
-            .select('conversation')
             .skip((page - 1) * numberConversationPerPage)
             .limit(numberConversationPerPage);
         if (conversations) {
@@ -43,13 +44,13 @@ const getAllMessageInConversation = async (req, res) => {
     try {
         const page = req.params.page;
         const messages = await messageSchema.find({ conversation: req.params.id })
-            .populate({ path: 'sender', select: 'username avatar isOnline userInformation' })
+            //.populate({ path: 'sender', select: 'avatar isOnline userInformation' })
             .sort({ create_at: -1 })
             .skip((page - 1) * numberMessagePerPage)
             .limit(numberMessagePerPage)
             ;
         if (messages) {
-            return res.json(messages);
+            return res.json(messages.sort((a, b) => a.create_at - b.create_at));
         }
         return res.status(404).send("Message not found");
     }

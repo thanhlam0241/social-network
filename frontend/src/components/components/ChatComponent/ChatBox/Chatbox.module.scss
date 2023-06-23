@@ -12,8 +12,11 @@
 }
 
 .messages-container {
+  //flex-grow: 1;
+  height: calc(100% - 50px - 100px);
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 10px;
   overflow-y: scroll;
 }
