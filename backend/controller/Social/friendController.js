@@ -28,15 +28,16 @@ const getNumberOfFriends = async (req, res) => {
 
 const sendRequestFriend = async (req, res) => {
     const user = req.user;
-    console.log(user._id)
-    const addFriend = new addFriendSchema({
-        sender: user._id,
-        receiver: req.body.receiver,
-        text: req.body.text
-    });
     try {
         const isExist = await addFriendSchema.findOne({ sender: user._id, receiver: req.body.receiver });
         if (isExist) return res.status(400).json({ message: 'You have already sent a friend request to this user' });
+        const isFriend = await friendSchema.findOne({ user: user._id, friends: req.body.receiver });
+        if (isFriend) return res.status(400).json({ message: 'You are already friend with this user' })
+        const addFriend = new addFriendSchema({
+            sender: user._id,
+            receiver: req.body.receiver,
+            text: req.body.text
+        });
         await addFriend.save();
         const newConversation = new conversationSchema({
             isGroup: false,
@@ -46,16 +47,7 @@ const sendRequestFriend = async (req, res) => {
             ]
         });
         await newConversation.save();
-        // const newParticipant = new participantSchema({
-        //     conversation: newConversation._id,
-        //     user: user._id
-        // });
-        // await newParticipant.save();
-        // const newParticipant2 = new participantSchema({
-        //     conversation: newConversation._id,
-        //     user: req.body.receiver
-        // });
-        // await newParticipant2.save();
+
         return res.status(200).json({ message: 'Send request friend successfully' });
     } catch (error) {
         return res.status(500).json({ message: error });
@@ -117,9 +109,12 @@ const cancelMyRequestFriend = async (req, res) => {
     const user = req.user;
     const receiver = req.body.receiver;
     try {
-        await addFriendSchema.deleteOne({ sender: user._id, receiver: receiver });
+        console.log({ sender: user._id, receiver: receiver })
+        const isDelete = await addFriendSchema.deleteOne({ sender: user._id, receiver: receiver });
+        console.log(isDelete)
         return res.status(200).json({ message: 'Cancel my request friend successfully' });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: error });
     }
 }

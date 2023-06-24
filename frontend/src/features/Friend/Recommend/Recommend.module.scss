@@ -3,11 +3,29 @@
 
 .friend-recommend-content {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 10px;
   row-gap: 10px;
   margin: 20px 0;
 }
 
 .friend-item {
+}
+
+@media screen and (max-width: 1200px) {
+  .friend-recommend-content {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 1040px) {
+  .friend-recommend-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .friend-recommend-content {
+    grid-template-columns: 1fr;
+  }
 }

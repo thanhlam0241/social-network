@@ -12,10 +12,10 @@ router.get('/get-add-friend-requests', friendController.getAddFriendRequests);
 
 router.post('/accept-send-friend-request', friendController.acceptAddFriendRequest);
 
-router.delete('/reject-send-friend-request', friendController.rejectAddFriendRequest);
+router.post('/reject-send-friend-request', friendController.rejectAddFriendRequest);
 
 router.delete('/delete-friend', friendController.removeFriend);
 
-router.delete('/cancel-my-request-friend', friendController.cancelMyRequestFriend);
+router.post('/cancel-my-request-friend', friendController.cancelMyRequestFriend);
 
 module.exports = router;

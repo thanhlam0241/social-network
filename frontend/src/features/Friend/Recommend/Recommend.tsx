@@ -4,11 +4,10 @@ import { useState, useCallback } from 'react'
 import FriendCard from '~/components/components/Friend/FriendCard'
 import { Snackbar, Alert } from '@mui/material'
 
+import SendFriendRequestForm from '~/components/components/Friend/SendRequestDialog'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
 import { getPeopleRecommend, sendFriendRequest, allFriendRequest } from '~/service/api/people/peopleApi'
-
-import SendFriendRequestForm from '~/components/components/Friend/SendRequestDialog'
 
 import { useAppSelector } from '~/hooks/storeHook'
 
@@ -30,6 +29,8 @@ function Recommend() {
     queryFn: () => getPeopleRecommend(auth.token, 1),
     refetchOnWindowFocus: false
   })
+
+  //console.log(data?.data)
 
   const {
     data: myFriendRequest,
@@ -86,15 +87,15 @@ function Recommend() {
       <SendFriendRequestForm onSend={handleSendFriendRequest} open={open} handleClose={() => setOpen(false)} />
       <h2>Someone you can know</h2>
       <ul className={cx('friend-recommend-content')}>
-        {!isLoading && !error && myFriendRequest?.data ? (
+        {!isLoading && !error && data?.data ? (
           data?.data.map((item: any) => (
             <li className={cx('friend-item')} key={item._id}>
               <FriendCard
                 onClick={() => startFriendRequest(item._id)}
                 id={item._id}
                 name={item?.name}
-                avatar={item?.avatar}
-                isSend={myFriendRequest?.data.includes(item._id)}
+                avatar={item?.userInformation.avatar}
+                isSend={myFriendRequest?.data?.includes(item._id)}
               />
             </li>
           ))
