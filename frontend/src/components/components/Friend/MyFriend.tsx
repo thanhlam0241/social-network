@@ -20,13 +20,16 @@ export default function MultiActionAreaCard({ name, image, viewProfile, removeFr
       <CardActionArea>
         <CardMedia
           sx={{ objectFit: 'cover', objectPosition: 'center', height: 200 }}
+          height='200'
           component='img'
           image={image ? `http://localhost:3500/avatar/${image}` : defaultAvatar}
+          //image={image ? `https://i0.wp.com/gamingonphone.com/wp-content/uploads/2021/03/image-1.jpg` : defaultAvatar}
           alt='green iguana'
         />
         <CardContent>
           <Typography
             gutterBottom
+            // variant='h5'
             sx={{
               fontSize: '1.5em',
               display: 'inline-block',
@@ -41,18 +44,8 @@ export default function MultiActionAreaCard({ name, image, viewProfile, removeFr
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Button
-          sx={{
-            display: 'block',
-            maxWidth: '100%',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-          variant='text'
-          color='primary'
-        >
+      <CardActions>
+        <Button variant='outlined' sx={{ margin: '0 auto', width: '100%' }} size='small' color='primary'>
           Remove friend
         </Button>
       </CardActions>

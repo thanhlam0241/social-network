@@ -63,7 +63,8 @@ const uploadAndSaveAvatar = async (req, res) => {
             })
         }
         const avatar = req.file.filename;
-        userInfo.avatar = avatar;
+        userInfo.avatar = 'resized-' + avatar;
+        fs.unlinkSync(req.file.path)
         await userInfo.save();
         return res.json({ msgs: "Avatar uploaded successfully" });
     }

@@ -1,4 +1,4 @@
-.header-friend-page {
+.header-setting-page {
   width: 360px;
   height: 500px;
   background-color: var(--color-white);
@@ -9,7 +9,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: clip;
-  position: sticky;
 }
 
 .header-page-title {
@@ -54,7 +53,7 @@
   .header-page-title {
     display: none;
   }
-  .friend-header-nav {
+  .setting-header-nav {
     display: none;
   }
 }
