@@ -34,17 +34,18 @@ const getRecommendPeople = async (req, res) => {
     }
     const skip = (parseInt(page) - 1) * numberOfRecommendPeoplePerPage;
     const userId = req.user._id;
+    console.log(userId)
     try {
-        const listFriends = await FriendSchema.find({ user: userId });
+        const listFriends = (await FriendSchema.findOne({ user: userId }));
 
-        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [...listFriends, userId] } })
+        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [...listFriends.friends, userId] } })
             .populate('userInformation', '-__v -_id -email -phone -address')
             .select('isOnline userInformation ')
             .skip(skip)
             .limit(numberOfRecommendPeoplePerPage);
 
         if (listRecommendPeople?.length === 0) {
-            return res.status(200).json({ success: false, message: 'There is no people! The page is exceed the max page' });
+            return res.status(404).json({ success: false, message: 'There is no people! The page is exceed the max page' });
         }
 
         return res.status(200).json({ success: true, data: listRecommendPeople });

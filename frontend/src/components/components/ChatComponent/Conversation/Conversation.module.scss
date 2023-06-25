@@ -39,6 +39,8 @@
   height: var(--chat-avatar-size);
   width: var(--chat-avatar-size);
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 .status-indicator {
   position: absolute;

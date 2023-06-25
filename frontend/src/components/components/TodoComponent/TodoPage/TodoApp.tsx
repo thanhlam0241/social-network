@@ -192,7 +192,7 @@ function TodoApp() {
           </FormControl>
         </div>
       </div>
-      {!isLoading && !error && data?.length > 0 ? (
+      {!isLoading && !error && data?.length > 0 && (
         <div className={cx('list-todo')}>
           {data?.length > 0 &&
             data.map((item: any) => (
@@ -216,7 +216,8 @@ function TodoApp() {
               />
             ))}
         </div>
-      ) : (
+      )}
+      {isLoading && (
         <div>
           <p>Loading...</p>
         </div>

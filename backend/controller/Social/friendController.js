@@ -39,15 +39,17 @@ const sendRequestFriend = async (req, res) => {
             text: req.body.text
         });
         await addFriend.save();
-        const newConversation = new conversationSchema({
-            isGroup: false,
-            participants: [
-                user._id,
-                req.body.receiver
-            ]
-        });
-        await newConversation.save();
-
+        const isExistChat = await conversationSchema.findOne({ participants: [user._id, req.body.receiver] });
+        if (!isExistChat) {
+            const newConversation = new conversationSchema({
+                isGroup: false,
+                participants: [
+                    user._id,
+                    req.body.receiver
+                ]
+            });
+            await newConversation.save();
+        }
         return res.status(200).json({ message: 'Send request friend successfully' });
     } catch (error) {
         return res.status(500).json({ message: error });

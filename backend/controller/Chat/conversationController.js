@@ -5,11 +5,32 @@ const numberConversationPerPage = 15;
 const numberMessagePerPage = 20;
 
 const getConversationById = async (req, res) => {
+    const userId = req.user._id;
     try {
-        const conversation = await conversationSchema.findById(req.params.id);
+        let conversation = await conversationSchema
+            .findOne({ _id: req.params.id })
+            .populate(
+                {
+                    path: 'participants', select: 'userInformation',
+                    populate: {
+                        path: 'userInformation',
+                        select: 'firstName lastName fullName avatar -_id'
+                    }
+                }
+            )
+            .select('participants')
+            ;
+
         if (conversation) {
+            conversation = {
+                _id: conversation._id,
+                participants: conversation.participants.filter(
+                    (participant) => participant._id.toString() !== userId
+                )
+            }
             return res.json(conversation);
         }
+
         return res.status(404).send("Conversation not found");
     }
     catch (err) {

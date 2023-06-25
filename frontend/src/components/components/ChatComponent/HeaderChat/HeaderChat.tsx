@@ -5,11 +5,17 @@ import VideocamIcon from '@mui/icons-material/Videocam'
 import InfoIcon from '@mui/icons-material/Info'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
+import default_avatar from '~/assets/images/default_avatar.png'
+
 import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
-function HeaderChat() {
+interface HeaderChatProps {
+  infor?: any
+}
+
+function HeaderChat({ infor }: HeaderChatProps) {
   const navigate = useNavigate()
   return (
     <div className={cx('header-chat')}>
@@ -19,10 +25,14 @@ function HeaderChat() {
         </button>
         <img
           className={cx('chat-avatar')}
-          src='https://lh3.googleusercontent.com/ogw/AOLn63GIHa9tjuXqbWnBLozu-DG8i2tCoLTKkhfrtCZ83A=s32-c-mo'
+          src={
+            infor[0]?.userInformation?.avatar
+              ? `http://localhost:3500/avatar/${infor[0]?.userInformation?.avatar}`
+              : default_avatar
+          }
           alt='avatar'
         />
-        <p>Thanh Lam</p>
+        <p>{infor[0]?.userInformation?.firstName + ' ' + infor[0]?.userInformation?.lastName}</p>
       </section>
       <section className={cx('chat-action')}>
         <LocalPhoneIcon
