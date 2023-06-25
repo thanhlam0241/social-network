@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 
-const messageSchema = require('./message');
-
 const ConversationSchema = new mongoose.Schema({
     create_at: {
         type: Date,
         default: Date.now,
         required: true
     },
-    isGroup: {
-        type: Boolean,
-        default: false,
-        required: false
-    },
-    last_message: {
-        type: messageSchema.schema,
+    groupName: {
+        type: String,
         require: false
+    },
+    lastMessage: {
+        type: String,
+        require: true,
+        default: 'Now you are connected on chat'
     },
     participants: [{
         type: mongoose.Schema.Types.ObjectId,

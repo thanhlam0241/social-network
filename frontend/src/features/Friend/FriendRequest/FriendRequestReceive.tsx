@@ -3,51 +3,63 @@ import classNames from 'classnames/bind'
 
 import FriendRequest from '~/components/components/Friend/FriendRequest'
 
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+
+import { getPeopleFriendRequest, acceptFriendRequest, rejectFriendRequest } from '~/service/api/people/peopleApi'
+
+import { useAppSelector } from '~/hooks/storeHook'
+
 const cx = classNames.bind(styles)
 
-const data = [
-  {
-    id: '1',
-    name: 'Nguyen Van A',
-    avatar: 'https://picsum.photos/206',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van B',
-    avatar: 'https://picsum.photos/207',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van C',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van D',
-    avatar: 'https://picsum.photos/201',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van E',
-    avatar: 'https://picsum.photos/202',
-    title: 'Friend request'
-  }
-]
-
 function FriendRequestPage() {
+  const auth = useAppSelector((state) => state.auth)
+
+  const queryClient = useQueryClient()
+
+  const {
+    data: dataFriendRequest,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['getPeopleFriendRequest'],
+    queryFn: () => getPeopleFriendRequest(auth.token, 1),
+    refetchOnWindowFocus: false
+  })
+
+  const acceptFriendRequestMutation = useMutation({
+    mutationFn: (id: string) => acceptFriendRequest(auth.token, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getPeopleFriendRequest'])
+    }
+  })
+
+  const rejectFriendRequestMutation = useMutation({
+    mutationFn: (id: string) => rejectFriendRequest(auth.token, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getPeopleFriendRequest'])
+    }
+  })
+
+  console.log(dataFriendRequest?.data)
+
   return (
     <main className={cx('friend-request')}>
       <h2>Friend requests to you</h2>
       <ul className={cx('friend-request-content')}>
-        {data.map((item, index) => (
-          <li key={index} className={cx('friend-item')}>
-            <FriendRequest type='receive' name={item.name} avatar={item.avatar} title={item.title} />
-          </li>
-        ))}
+        {!isLoading &&
+          !error &&
+          dataFriendRequest?.data?.length > 0 &&
+          dataFriendRequest.data.map((item: any) => (
+            <FriendRequest
+              key={item.sender._id}
+              type='receive'
+              name={item?.sender.userInformation?.fullName}
+              avatar={item?.sender.userInformation?.avatar}
+              title={item?.text}
+              onAccept={() => acceptFriendRequestMutation.mutate(item.sender._id)}
+              onReject={() => rejectFriendRequestMutation.mutate(item.sender._id)}
+            />
+          ))}
       </ul>
     </main>
   )

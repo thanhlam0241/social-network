@@ -6,6 +6,11 @@ interface messageInfor {
   text: string
   sender: string
 }
+
+interface lastMessageInfor {
+  room?: string
+  message: string
+}
 export interface ServerToClientEvents {
   noArg: () => void
   basicEmit: (a: number, b: string, c: Buffer) => void
@@ -13,11 +18,13 @@ export interface ServerToClientEvents {
   connected: () => void
   'receive-message': (messageInfor: messageInfor) => void
   'join-room': (room?: string) => void
+  'last-message': (lastMessage: lastMessageInfor) => void
+  setup: (id: any) => void
 }
 
 export interface ClientToServerEvents {
   hello: () => void
-  setup: (userData: any) => void
+  setup: (id: any) => void
   'join-room': (room?: string) => void
   'send-message': (messageInfor: messageInfor) => void
 }

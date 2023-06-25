@@ -3,6 +3,11 @@ import config from '../const/configAxios'
 
 import { ConversationUrl, ConversationForUser, MessageUrl } from '../const/url'
 
+export const getConversationById = async (token: string, conversationId: string) => {
+  const res = await axios.get(ConversationUrl + conversationId, config(token))
+  return res.data
+}
+
 export const getConversation = async (token: string, page: number) => {
   const res = await axios.get(ConversationForUser + `${page}`, config(token))
   return res.data

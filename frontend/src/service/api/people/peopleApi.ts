@@ -40,12 +40,12 @@ export const acceptFriendRequest = async (token: string, sender: string) => {
   const res = await axios.post(AcceptFriendRequestUrl, { sender }, config(token))
   return res.data
 }
-export const cancelFriendRequest = async (token: string, sender: string) => {
-  const res = await axios.post(CancelFriendRequestUrl, { sender }, config(token))
+export const rejectFriendRequest = async (token: string, sender: string) => {
+  const res = await axios.post(RejectFriendRequestUrl, { sender }, config(token))
   return res.data
 }
-export const rejectFriendRequest = async (token: string, receiver: string) => {
-  const res = await axios.post(RejectFriendRequestUrl, { receiver }, config(token))
+export const cancelFriendRequest = async (token: string, receiver: string) => {
+  const res = await axios.post(CancelFriendRequestUrl, { receiver }, config(token))
   return res.data
 }
 export const allFriendRequest = async (token: string) => {

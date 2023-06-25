@@ -15,9 +15,9 @@ function PostPage() {
       <main className={cx('post-area')}>
         <AddPost />
         <FilterPost />
+        {/* <Post />
         <Post />
-        <Post />
-        <Post />
+        <Post /> */}
       </main>
     </div>
   )

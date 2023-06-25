@@ -33,8 +33,11 @@ export default function Conversation({
         onClick?.()
       }
     },
+
     [onClick]
   )
+
+  //console.log('Avatar', avatar)
   return (
     <section
       role='button'
@@ -49,7 +52,9 @@ export default function Conversation({
         <img
           className={cx('chat-avatar')}
           src={
-            avatar || 'https://lh3.googleusercontent.com/ogw/AOLn63GIHa9tjuXqbWnBLozu-DG8i2tCoLTKkhfrtCZ83A=s32-c-mo'
+            avatar
+              ? `http://localhost:3500/avatar/${avatar}`
+              : 'https://lh3.googleusercontent.com/ogw/AOLn63GIHa9tjuXqbWnBLozu-DG8i2tCoLTKkhfrtCZ83A=s32-c-mo'
           }
           alt='avatar'
         />

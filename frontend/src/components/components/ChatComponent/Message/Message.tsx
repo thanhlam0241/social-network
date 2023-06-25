@@ -1,15 +1,17 @@
 import styles from './Message.module.scss'
 import classNames from 'classnames/bind'
 
+import default_avatar from '~/assets/images/default_avatar.jpg'
+
 const cx = classNames.bind(styles)
 
 interface MessageProps {
   isMine?: boolean
   text?: string
+  avatar?: string
 }
 
-export default function Message({ text, isMine }: MessageProps) {
-  console.log(text, isMine)
+export default function Message({ text, isMine, avatar }: MessageProps) {
   return (
     <section
       className={
@@ -19,7 +21,7 @@ export default function Message({ text, isMine }: MessageProps) {
       {!isMine && (
         <img
           className={cx('message-avatar')}
-          src='https://lh3.googleusercontent.com/ogw/AOLn63GIHa9tjuXqbWnBLozu-DG8i2tCoLTKkhfrtCZ83A=s32-c-mo'
+          src={avatar ? `http://localhost:3500/avatar/${avatar}` : default_avatar}
           alt='avatar'
         />
       )}

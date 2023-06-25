@@ -17,7 +17,12 @@ export default function MultiActionAreaCard({ name, avatar, onClick, isSend }: P
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
-        <CardMedia component='img' height='200' image={avatar || defaultAvatar} alt='green iguana' />
+        <CardMedia
+          component='img'
+          height='200'
+          image={avatar ? `http://localhost:3500/avatar/${avatar}` : defaultAvatar}
+          alt='green iguana'
+        />
         <CardContent>
           <Typography gutterBottom variant='h5' component='div'>
             {name || 'New User'}
