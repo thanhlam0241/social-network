@@ -38,4 +38,6 @@ authenticate the user making the request. The `authenticate.logout` function is 
 function that handles the logic for logging out the authenticated user. */
 router.post('/logout', authenticateToken, authenticate.logout);
 
+
+
 module.exports = router

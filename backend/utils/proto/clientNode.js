@@ -1,21 +1,12 @@
-const { response } = require("express");
 const { IdentificationService, RegisterService, VerificationService } = require("./grpcServices");
 
 //const response = clientIdentification.Identify({ video_path: 'C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4' })
 const main = async () => {
     try {
         console.log('Hello world 1')
-        IdentificationService.identify('C:/Users/linh2/OneDrive/Ảnh kỉ niệm/Camera Roll/WIN_20230522_15_49_32_Pro.mp4')
+        RegisterService.register('TranPhucManhLinh', 'C:/Users/linh2/OneDrive/Ảnh kỉ niệm/Camera Roll/WIN_20230522_15_49_32_Pro.mp4')
             .then(response => {
                 console.log('IdentificationService.identify result 1:', response)
-            });
-        IdentificationService.identify('C:/Users/linh2/OneDrive/Ảnh kỉ niệm/Camera Roll/WIN_20230522_15_49_32_Pro.mp4')
-            .then(response => {
-                console.log('IdentificationService.identify result 2:', response)
-            });
-        IdentificationService.identify('C:/Users/linh2/OneDrive/Ảnh kỉ niệm/Camera Roll/WIN_20230522_15_49_32_Pro.mp4')
-            .then(response => {
-                console.log('IdentificationService.identify result 3:', response)
             });
     }
     catch (err) {

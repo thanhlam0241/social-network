@@ -1,5 +1,7 @@
-require('dotenv').config();
+// require('dotenv-flow').config();
 const mongoose = require("mongoose");
+
+console.log(process.env.DATABASE_URL);
 
 async function connect() {
     try {

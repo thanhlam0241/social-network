@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv-flow').config();
 const bcypt = require('bcrypt');
 const userSchema = require('../../models/user');
 

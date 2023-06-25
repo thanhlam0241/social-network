@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv-flow').config();
 const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
