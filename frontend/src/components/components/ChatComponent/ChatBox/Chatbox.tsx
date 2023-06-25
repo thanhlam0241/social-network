@@ -7,14 +7,14 @@ import HeaderChat from '../HeaderChat/HeaderChat'
 
 import { useAppSelector } from '~/hooks/storeHook'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
-import { getMessagesInConversation, sendMessage, deleteMessage } from '~/service/api/chat/chatApi'
+import { getMessagesInConversation, sendMessage, deleteMessage, getConversationById } from '~/service/api/chat/chatApi'
 
 //socket
 import createSocket, { ServerToClientEvents, ClientToServerEvents } from '~/service/socket-client/socketClient'
+import { Socket } from 'socket.io-client'
 
 import styles from './Chatbox.module.scss'
 import classNames from 'classnames/bind'
-import { Socket } from 'socket.io-client'
 
 const cx = classNames.bind(styles)
 
@@ -42,14 +42,17 @@ const Chatbox = () => {
     refetchOnWindowFocus: false
   })
 
-  console.log(auth)
-  console.log(messages)
-  // const sendMessageMutation = useMutation({
-  //   mutationFn: (message: string) => sendMessage(auth.token, id, message),
-  //   onSuccess: (data) => {
-  //     console.log(data)
-  //   }
-  // })
+  const {
+    data: conversationInfor,
+    isLoading: loadingConversation,
+    error: errorConversation
+  } = useQuery({
+    queryKey: ['conversation', id],
+    queryFn: () => getConversationById(auth.token, id!),
+    enabled: !!id,
+    refetchOnWindowFocus: false
+  })
+
   useEffect(() => {
     if (messages) {
       setChatMessages(messages)
@@ -110,12 +113,23 @@ const Chatbox = () => {
 
   return (
     <div className={cx('chat-container')}>
-      <HeaderChat />
+      {conversationInfor && <HeaderChat infor={conversationInfor.participants} />}
       <div ref={divRef} className={cx('messages-container')}>
-        {chatMessages.length > 0 &&
+        {conversationInfor &&
+          chatMessages.length > 0 &&
           auth.id &&
           chatMessages.map((message, index) => {
-            return <Message key={index} isMine={message.sender === auth.id} text={message.text} />
+            return (
+              <Message
+                key={index}
+                isMine={message.sender === auth.id}
+                text={message.text}
+                avatar={
+                  conversationInfor.participants.find((participant: any) => participant._id === message.sender)
+                    ?.userInformation?.avatar
+                }
+              />
+            )
           })}
         <div ref={endRef} style={{ height: '1px', backgroundColor: 'transparent' }}></div>
       </div>
