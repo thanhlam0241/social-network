@@ -3,6 +3,7 @@ const path = require('path');
 
 const authenticate = require('../controller/Account/authenticate');
 const userController = require('../controller/Account/userController');
+const videoController = require('../controller/videoController');
 const authenticateToken = require('../middleware/authenToken');
 
 const router = express.Router();
@@ -24,6 +25,10 @@ router.post('/refresh-token', authenticate.refreshToken);
 requests to register a new user. The `userController.createUser` function is the controller function
 that handles the logic for creating a new user. */
 router.post('/register', userController.createUser);
+
+
+router.post('/uploadVideo', videoController.multer, videoController.uploadVideo);
+router.post('/uploadImages',videoController.setReqId, videoController.multerImages, videoController.uploadImages);
 
 /* `router.post('/changePassword', authenticateToken, userController.changePassword)` is defining a
 route for handling HTTP POST requests to change the password of a user. The `authenticateToken`

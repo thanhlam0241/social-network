@@ -45,7 +45,10 @@ const createUser = async (req, res) => {
 
         const newUser = new userSchema(user);
         await newUser.save();
-        res.status(201).json(newUser);
+        res.status(201).json({
+            username: newUser.username,
+            role: newUser.role
+        });
     }
     catch (err) {
         res.send(req.body);

@@ -1,6 +1,6 @@
 .register-form {
-  width: 100%;
-  height: 100%;
+  width: 800px;
+  height: 640px;
   margin: auto auto;
   background-color: #fff;
   border-radius: 10px;
@@ -8,9 +8,10 @@
   flex-direction: column;
   align-items: center;
   padding: 20px 0 0 0;
-  gap: 30px;
   position: relative;
 }
+
+
 
 .footer-signin {
   position: absolute;
@@ -28,4 +29,11 @@
   &:hover {
     color: #2013b8;
   }
+}
+.register-box{
+  width: 500px;
+  margin-top: 50px;
+  .register-box-field{
+    margin-bottom: 15px;
+  } 
 }
