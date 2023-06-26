@@ -5,6 +5,8 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
+import queryString from 'query-string'
+
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import classNames from 'classnames/bind'
@@ -46,14 +48,19 @@ function a11yProps(index: number) {
 
 const listTab = [
   { id: 0, name: 'Posts', link: '' },
-  { id: 1, name: 'Introduction', link: '?sk=about' },
-  { id: 2, name: 'Friend', link: '?sk=friends' },
-  { id: 3, name: 'Images', link: '?sk=photos' },
-  { id: 4, name: 'Videos', link: '?sk=videos' }
+  { id: 1, name: 'Introduction', link: '&sk=about' },
+  { id: 2, name: 'Friend', link: '&sk=friends' },
+  { id: 3, name: 'Images', link: '&sk=photos' },
+  { id: 4, name: 'Videos', link: '&sk=videos' }
 ]
 
 function Information() {
   const location = useLocation()
+
+  const query = queryString.parse(location.search)
+
+  console.log(location.pathname)
+  console.log(location.search)
 
   const [value, setValue] = useState(() => {
     const tab = listTab.findIndex((item) => item.link === location.search)
@@ -89,7 +96,7 @@ function Information() {
           {listTab.map((item) => (
             <Tab
               key={'tab' + item.id}
-              onClick={() => navigate(location.pathname + item.link)}
+              onClick={() => navigate(location.pathname + `?id=${query.id}` + item.link)}
               label={item.name}
               {...a11yProps(item.id)}
             />

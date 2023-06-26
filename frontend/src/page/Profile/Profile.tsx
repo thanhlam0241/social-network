@@ -4,6 +4,7 @@ import queryString from 'query-string'
 import styles from './Profile.module.scss'
 import classNames from 'classnames/bind'
 import PostPage from '../PostPage/PostPage'
+import UserInformation from '../UserInformation/UserInfor'
 
 const cx = classNames.bind(styles)
 
@@ -11,7 +12,7 @@ function ProfilePage() {
   const location = useLocation()
   const query = queryString.parse(location.search)
   console.log(query)
-  const Element = query?.sk === 'about' ? <Outlet /> : <PostPage />
+  const Element = query?.sk === 'about' ? <UserInformation /> : <PostPage />
   if (query?.id) {
     return (
       <header>

@@ -13,6 +13,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
 import reactIcon from '~/assets/icons/react2.png'
 import LogoutIcon from '@mui/icons-material/Logout'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 import { useAppSelector, useAppDispatch } from '~/hooks/storeHook'
 import { setAuth } from '~/service/redux/slice/authSlice'
@@ -135,6 +136,11 @@ function Header() {
         {auth.token && openPopper && (
           <div ref={popperRef} className={cx('popper-avatar')}>
             <ButtonPopper onMouseDown={() => navigate('/profile')} text='Profile' icon={<Person2Icon />} />
+            <ButtonPopper
+              onMouseDown={() => navigate('/settings?tab=account')}
+              text='Setting'
+              icon={<SettingsIcon />}
+            />
             <ButtonPopper onMouseDown={() => handleLogout()} text='Logout' icon={<LogoutIcon />} />
           </div>
         )}

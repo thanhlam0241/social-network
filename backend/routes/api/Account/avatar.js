@@ -1,4 +1,5 @@
 const multer = require('multer');
+const sharp = require('sharp');
 const express = require('express');
 const path = require('path')
 const router = express.Router()
@@ -39,6 +40,23 @@ router.route('/').get(avatarController.getMyAvatarImage).post(async (req, res, n
         next();
     }
     )
+}, async function (req, res, next) {
+    if (!req.file) {
+        res.json({ success: false });
+    } else {
+        /* res.json({ success: true, files: req.files }); */
+        /* req.files các file upload return về một array, qua đó chúng ta có thể dễ dàng xử lý  */
+        /* chú ý: nhớ rename file lại không nữa sinh ra lỗi. ở đay mình rename theo kích thuước mình resize. */
+        await sharp(req.file.path)
+            .resize(400, 400)
+            .jpeg({ quality: 90 })
+            .toFile(
+                path.resolve('./uploads/avatar/' + 'resized-' + req.file.filename)
+            )
+
+        next();
+
+    }
 },
     avatarController.uploadAndSaveAvatar
 );
