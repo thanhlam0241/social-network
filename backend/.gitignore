@@ -9,3 +9,5 @@ utils/logs/*.txt
 uploads/avatar/*
 
 uploads/background/*
+
+.env
