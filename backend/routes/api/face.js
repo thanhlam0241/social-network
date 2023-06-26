@@ -7,7 +7,7 @@ const FaceController = require('../../controller/Account/faceController');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, "uploads/video"), // cb -> callback
     filename: (req, file, cb) => {
-        cb(null, `video-temp.webm`);
+        cb(null, `video-temp.mp4`);
     },
 });
 
