@@ -25,7 +25,7 @@ const cx = classNames.bind(styles)
 
 function RegisterForm() {
   const navigate = useNavigate()
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeStep, setActiveStep] = useState(1)
   const [skipped, setSkipped] = useState(new Set<number>())
 
   const [username, setUsername] = useState('')
@@ -93,15 +93,15 @@ function RegisterForm() {
   const handleReset = () => {
     setActiveStep(0)
   }
-  // const handleRegister = () => {
-  //   navigate('/')
-  // }
+  const handleRegister = () => {
+    navigate('/')
+  }
   const handleMoveLogin = () => {
     navigate('/authenticate/login')
   }
   return (
     <div className={cx('register-form')}>
-      <h1 style={{ fontWeight: 1000, margin: 5 }}>Register</h1>
+      <h1 style={{ fontWeight: 1000, margin: '0 0 20px 0' }}>Register</h1>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {}
@@ -144,8 +144,12 @@ function RegisterForm() {
             <Button onClick={handleNext}>{activeStep === steps.length - 1 ? 'Finish' : 'Next'}</Button>
           </Box>
           {activeStep === 0 && (
-            <Box key='step-one' sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <FormControl sx={{ width: '80%' }} variant='standard'>
+            <Box
+              className={cx('register-box')}
+              key='step-one'
+              sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+            >
+              <FormControl className={cx('register-box-field')} sx={{ width: '80%' }} variant='standard'>
                 <InputLabel htmlFor='input-with-icon-adornment'>Username</InputLabel>
                 <Input
                   sx={{ width: '100%' }}
@@ -160,7 +164,7 @@ function RegisterForm() {
                   }
                 />
               </FormControl>
-              <FormControl sx={{ width: '80%' }} variant='standard'>
+              <FormControl className={cx('register-box-field')} sx={{ width: '80%' }} variant='standard'>
                 <InputLabel htmlFor='input-with-icon-password'>Password</InputLabel>
                 <Input
                   sx={{ width: '100%' }}
@@ -176,7 +180,7 @@ function RegisterForm() {
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '80%' }} variant='standard'>
+              <FormControl className={cx('register-box-field')} sx={{ width: '80%' }} variant='standard'>
                 <InputLabel htmlFor='input-with-icon-confirm-password'>Confirm password</InputLabel>
                 <Input
                   sx={{ width: '100%' }}
@@ -193,7 +197,7 @@ function RegisterForm() {
               </FormControl>
             </Box>
           )}
-          {activeStep === 1 && <Capture width={300} setUrl={setImgSrc} />}
+          {activeStep === 1 && <Capture setUrl={setImgSrc} />}
         </>
       )}
 

@@ -1,43 +1,23 @@
-const grpc = require("@grpc/grpc-js");
-const protoLoader = require("@grpc/proto-loader");
-const path = require("path");
+const { IdentificationService, RegisterService, VerificationService } = require("./grpcServices");
 
-const protoObjectIdentification = protoLoader.loadSync(path.resolve(__dirname, "./identification.proto"));
-
-const protoObjectRegister = protoLoader.loadSync(path.resolve(__dirname, "./register.proto"));
-
-const protoVerification = protoLoader.loadSync(path.resolve(__dirname, "./verification.proto"));
-
-const IdentificationDefinition = grpc.loadPackageDefinition(protoObjectIdentification);
-
-console.log(IdentificationDefinition)
-
-const clientIdentification = new IdentificationDefinition.IdentificationService("localhost:50051", grpc.credentials.createInsecure());
-
-console.log(clientIdentification)
-
-const identifycationByVideo = async (video_path) => {
+//const response = clientIdentification.Identify({ video_path: 'C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4' })
+const main = async () => {
     try {
         console.log('Hello world 1')
-        await clientIdentification.Identify({ video_path: video_path }, (err, response) => {
-            if (err) {
-                console.log('Error when identify video')
-                return err
-            }
-            console.log('Hello world 2')
-            console.log(response)
-            return response
-        })
+        RegisterService.register('TranPhucManhLinh', 'C:/Users/linh2/OneDrive/Ảnh kỉ niệm/Camera Roll/WIN_20230522_15_49_32_Pro.mp4')
+            .then(response => {
+                console.log('IdentificationService.identify result 1:', response)
+            });
     }
     catch (err) {
-        console.log('Error when identify video')
+        console.log('Try-catch Error: ', err)
         return err
     }
 }
 
-// const response = clientIdentification.Identify({ video_path: 'C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4' })
+
 
 module.exports = {
-    identifycationByVideo
+    main
 }
 
