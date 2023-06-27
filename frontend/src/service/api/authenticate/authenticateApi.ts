@@ -2,7 +2,6 @@ import axios from 'axios'
 import { AccountGetNewTokenUrl, AccountLoginUrl, AccountLoginWithFaceIdUrl, AccountLogoutUrl } from '../const/url'
 import config from '../const/configAxios'
 import jwt_decode from 'jwt-decode'
-import Cookies from 'js-cookie'
 
 import { AuthState } from '~/service/redux/slice/authSlice'
 interface LoginAccountRequest {

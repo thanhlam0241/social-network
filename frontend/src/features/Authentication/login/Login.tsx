@@ -35,19 +35,10 @@ function LoginForm() {
   const navigate = useNavigate()
   //const [, setCookie] = useCookies()
   const [loginMethod, setLoginMethod] = React.useState<LoginMethod>('face')
-  const [open, setOpen] = React.useState(false)
-  const [imgSrc, setImgSrc] = React.useState<string | null>(null)
 
   const usernameRef = React.useRef<HTMLInputElement>(null)
   const passwordRef = React.useRef<HTMLInputElement>(null)
 
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
   const handleLogin = async () => {
     const username = usernameRef.current?.value
     const password = passwordRef.current?.value
@@ -73,12 +64,10 @@ function LoginForm() {
     await AuthenService.LoginWithFaceId(data)
       .then((res) => {
         if (res?.success && res?.data) {
-          Cookies.set('atk', res?.data?.token, { expires: 1 })
-          Cookies.set('rtk', res?.data?.refreshToken, { expires: 7 })
-          if (setAuth) {
-            setAuth(res.data)
-            navigate('/main')
-          }
+          dispatch(setAuth(res.data))
+          Cookies.set('atk', res.data.token, { expires: 1 })
+          Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
+          navigate('/')
         } else {
           alert(res)
           console.log(res)
