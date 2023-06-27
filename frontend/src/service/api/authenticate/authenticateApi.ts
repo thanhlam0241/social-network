@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { AccountLoginUrl, AccountLogoutUrl, AccountGetNewTokenUrl } from '../const/url'
+import { AccountGetNewTokenUrl, AccountLoginUrl, AccountLoginWithFaceIdUrl, AccountLogoutUrl } from '../const/url'
 import config from '../const/configAxios'
 import jwt_decode from 'jwt-decode'
+import Cookies from 'js-cookie'
 
 import { AuthState } from '~/service/redux/slice/authSlice'
 interface LoginAccountRequest {
@@ -41,6 +42,40 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
+        return error
+      })
+  }
+  async LoginWithFaceId(imgBlobs: Blob[]) {
+    const formdata = new FormData()
+    for (let i = 0; i < imgBlobs.length; i++) {
+      formdata.append('faces', imgBlobs[i], `${i + 1}.jfif`)
+    }
+    return await axios
+      .post(AccountLoginWithFaceIdUrl, formdata)
+      .then((response) => {
+        if (response?.status === 200) {
+          const accessToken = response?.data?.accessToken
+          const data: { username: string; role: string } = jwt_decode(accessToken)
+          if (data?.username && data?.role) {
+            return {
+              success: true,
+              data: {
+                token: accessToken,
+                refreshToken: response?.data?.refreshToken,
+                username: data.username,
+                role: data.role
+              }
+            }
+          }
+        } else {
+          return {
+            success: false,
+            data: response
+          }
+        }
+      })
+      .catch((error) => {
+        console.log('error15: ', error)
         return error
       })
   }

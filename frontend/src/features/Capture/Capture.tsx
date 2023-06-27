@@ -13,12 +13,12 @@ const videoConstraints: MediaTrackConstraints = {
 }
 
 interface CaptureProps {
-  setUrl: any
+  onCaptured: (imgs: Blob[]) => Promise<void> | void
   width?: number
   height?: number
 }
 
-const Capture = ({ setUrl, width, height }: CaptureProps) => {
+const Capture = ({ onCaptured, width, height }: CaptureProps) => {
   const webcamRef = useRef<Webcam>(null)
   // const captureBtnRef = useRef<any>(null)
   const [btnDisabled, setBtnDisabled] = useState<boolean>(false)
@@ -66,34 +66,44 @@ const Capture = ({ setUrl, width, height }: CaptureProps) => {
       setBtnDisabled(true)
       let imageCount = 0
       let cam = webcamRef.current
-      let formdata = new FormData()
+      // let formdata = new FormData();
+      let imgBlobs: Blob[] = []
       let timeId = setInterval(async () => {
         const imageSrc = cam.getScreenshot()
         if (imageSrc) {
           imageCount++
           setProgress(imageCount)
           let blob = await fetch(imageSrc).then((r) => r.blob())
-          formdata.append('images', blob, `${imageCount}.jfif`)
+          imgBlobs.push(blob)
+          // formdata.append("images", blob, `${imageCount}.jfif`)
           if (imageCount == 30) {
             clearInterval(timeId)
-            var requestOptions = {
-              method: 'POST',
-              body: formdata
-              // redirect: 'follow'
+
+            let promise = onCaptured?.(imgBlobs)
+
+            if (promise instanceof Promise) {
+              await promise
             }
 
-            fetch('http://localhost:3500/uploadImages', requestOptions)
-              .then((response) => response.text())
-              .then((result) => console.log(result))
-              .catch((error) => console.log('error', error))
-              .finally(() => {
-                setBtnDisabled(false)
-              })
+            setBtnDisabled(false)
+            // var requestOptions = {
+            //   method: 'POST',
+            //   body: formdata,
+            //   // redirect: 'follow'
+            // };
+
+            // fetch("http://localhost:3500/uploadImages", requestOptions)
+            //   .then(response => response.text())
+            //   .then(result => console.log(result))
+            //   .catch(error => console.log('error', error))
+            //   .finally(()=>{
+            //     setBtnDisabled(false);
+            //   });
           }
         }
       }, 200)
     }
-  }, [webcamRef, setBtnDisabled, setProgress])
+  }, [webcamRef, onCaptured, setBtnDisabled, setProgress])
 
   const onUserMedia = (stream: MediaStream) => {
     // mediaStreamRef.current = stream;

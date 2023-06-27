@@ -1,8 +1,7 @@
-export const baseUrl = 'http://localhost:3500'
-//const baseUrl = 'https://express-app-ii3u.onrender.com'
-
-//account api
+// const baseUrl = 'http://localhost:3500'
+const baseUrl = '/api'
 export const AccountLoginUrl = baseUrl + '/login'
+export const AccountLoginWithFaceIdUrl = baseUrl + '/loginFaceid'
 export const AccountRegisterUrl = baseUrl + '/register'
 export const AccountLogoutUrl = baseUrl + '/logout'
 export const AccountGetNewTokenUrl = baseUrl + '/refresh-token'

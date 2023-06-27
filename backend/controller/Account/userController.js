@@ -5,6 +5,35 @@ const userSchema = require('../../models/Account/user');
 const tokenSchema = require('../../models/Account/token');
 
 const friendSchema = require('../../models/Social/friend');
+const fs = require('fs');
+const crypto = require('crypto');
+const path = require('path');
+const multer = require('multer');
+const grpc = require('../../utils/proto/grpcServices');
+
+const setReqId = (req, res, next) => {
+    req.id = crypto.randomUUID();
+    next();
+}
+
+const uploadFacesToFolderMulter = multer({
+    storage: multer.diskStorage({
+        filename: function (req, file, cb) {
+            // cb(null, crypto.randomUUID() + '.jfif')
+            cb(null, file.originalname)
+        },
+        destination: function (req, file, cb) {
+            let dir = path.join(__filename, '..', '..', '..', 'uploads/faces', req.id);
+            if (!fs.existsSync(dir)) {
+                fs.mkdir(dir, () => {
+                    cb(null, dir);
+                });
+            }
+            else
+                cb(null, dir);
+        }
+    }),
+}).array('faces', 30)
 
 const getAllUsers = async (req, res) => {
     try {
@@ -32,23 +61,49 @@ const createUser = async (req, res) => {
         if (username === null) {
             return res.status(400).send("Username is required");
         }
+
         const userExist = await userSchema.findOne({ username: username });
         if (userExist) {
-            return res.status(400).send("Username is already exist");
+            res.status(400).json({ msgs: "Username is already exist", stepError: "userPass" });
+            return;
         }
-        const hashedPassword = await bcypt.hash(req.body.password, 10);
+
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ msgs: "Images/jpeg required.", stepError: "face" });
+        }
+        const user = {
+            username: username,
+            role: req.body.role || 'user',
+            create_at: Date.now()
+        }
+        let result = await grpc.IdentificationService.identify(req.files[0].destination);
+        // console.log(result);
+        if (result.userId) {
+            const faceExist = await userSchema.findOne({ faceId: result.userId });
+            if (faceExist) {
+                return res.status(400).json({ msgs: "Face is already exist", stepError: "face" });
+            }
+            user.faceId = result.userId;
+
+        }
+        else {
+            let result = await grpc.RegisterService.register(user.username, req.files[0].destination);
+            // console.log(result);
+            if (result.success) {
+                user.faceId = user.username;
+            }
+            else {
+                return res.status(400).json({ msgs: "Face can't be resgistered. Images maybe low quality or doesn't contain face or your face isn't in the center.", stepError: "face" });
+            }
+        }
 
         const userInformation = new userInformationSchema({ firstName: 'New', lastName: 'User' });
         await userInformation.save();
+        user.userInformation = userInformation._id;
 
-        const user = {
-            username: username,
-            password: hashedPassword,
-            role: req.body.role || 'user',
-            userInformation: userInformation._id,
-            create_at: Date.now(),
-            isOnline: false
-        }
+        const hashedPassword = await bcypt.hash(req.body.password, 10);
+        user.password = hashedPassword;
+
         const newUser = new userSchema(user);
         await newUser.save();
 
@@ -147,5 +202,7 @@ module.exports = {
     deleteUser,
     getUserById,
     getUserByUsername,
-    changePassword
+    changePassword,
+    setReqId,
+    multerFaces: uploadFacesToFolderMulter
 }

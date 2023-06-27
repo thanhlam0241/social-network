@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const userSchema = require('../../models/Account/user');
 const tokenSchema = require('../../models/Account/token');
+const grpc = require('../../utils/proto/grpcServices');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET
@@ -40,6 +41,31 @@ const confirmLogin = async (req, res, next) => {
         else {
             throw createError.Conflict('Password is incorrect');
         }
+    }
+    catch (err) {
+        if (err.isJoi === true) {
+            err.status = 422;
+        }
+        next(err);
+    }
+}
+
+const confirmLoginWithFaceId = async (req, res, next) => {
+    let result = await grpc.IdentificationService.identify(req.files[0].destination);
+
+    const user = await userSchema.findOne({ faceId: result.userId });
+
+    if (!user) {
+        return res.status(404).send(`Not Exist Your Face Id`);
+    }
+    try {
+        const accessToken = generateAccessToken({ username: user.username, role: user.role });
+        const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
+        // await userSchema.findOneAndUpdate({ username: user.username }, { token: refreshToken });
+        res.json({
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        });
     }
     catch (err) {
         if (err.isJoi === true) {
@@ -92,5 +118,6 @@ const logout = async (req, res) => {
 module.exports = {
     confirmLogin,
     refreshToken,
-    logout
+    logout,
+    confirmLoginWithFaceId
 }
