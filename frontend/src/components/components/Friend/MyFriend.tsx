@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { Button, CardActionArea, CardActions } from '@mui/material'
 
 import defaultAvatar from '~/assets/images/default_avatar.png'
+import { AvatarUrl } from '~/service/api/const/url'
 
 interface Props {
   name?: string
@@ -22,7 +23,7 @@ export default function MultiActionAreaCard({ name, image, viewProfile, removeFr
           sx={{ objectFit: 'cover', objectPosition: 'center', height: 200 }}
           height='200'
           component='img'
-          image={image ? `http://localhost:3500/avatar/${image}` : defaultAvatar}
+          image={image ? `${AvatarUrl}{image}` : defaultAvatar}
           //image={image ? `https://i0.wp.com/gamingonphone.com/wp-content/uploads/2021/03/image-1.jpg` : defaultAvatar}
           alt='green iguana'
         />

@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
         ref: 'UserInformation',
         require: true,
         unique: true
+    },
+    faceId: {
+        type: String,
+        require: true
     }
 });
 

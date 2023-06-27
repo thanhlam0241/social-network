@@ -1,4 +1,4 @@
-require('dotenv-flow').config({ override: true });
+require('dotenv').config({ override: true });
 const path = require('path');
 const express = require('express');
 const cors = require('cors');

@@ -5,6 +5,9 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { Button, CardActionArea, CardActions } from '@mui/material'
 import defaultAvatar from '~/assets/images/default_avatar.jpg'
+
+import { AvatarUrl } from '~/service/api/const/url'
+
 interface Props {
   id?: string
   name?: string
@@ -20,7 +23,7 @@ export default function MultiActionAreaCard({ name, avatar, onClick, isSend }: P
         <CardMedia
           component='img'
           height='200'
-          image={avatar ? `http://localhost:3500/avatar/${avatar}` : defaultAvatar}
+          image={avatar ? `${AvatarUrl}{avatar}` : defaultAvatar}
           alt='green iguana'
         />
         <CardContent>

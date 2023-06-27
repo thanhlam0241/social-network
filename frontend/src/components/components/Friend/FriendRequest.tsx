@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { Button, CardActionArea, CardActions } from '@mui/material'
 
 import defaultAvatar from '~/assets/images/default_avatar.png'
+import { AvatarUrl } from '~/service/api/const/url'
 
 interface FriendRequestProps {
   type: 'send' | 'receive'
@@ -24,7 +25,7 @@ export default function FriendRequest({ type, name, avatar, title, onAccept, onR
         <CardMedia
           component='img'
           height='200'
-          image={avatar ? `http://localhost:3500/avatar/${avatar}` : defaultAvatar}
+          image={avatar ? `${AvatarUrl}${avatar}` : defaultAvatar}
           alt='green iguana'
         />
         <CardContent>

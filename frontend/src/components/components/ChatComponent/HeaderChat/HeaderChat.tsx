@@ -6,6 +6,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
 import default_avatar from '~/assets/images/default_avatar.png'
+import { AvatarUrl } from '~/service/api/const/url'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -25,11 +26,7 @@ function HeaderChat({ infor }: HeaderChatProps) {
         </button>
         <img
           className={cx('chat-avatar')}
-          src={
-            infor[0]?.userInformation?.avatar
-              ? `http://localhost:3500/avatar/${infor[0]?.userInformation?.avatar}`
-              : default_avatar
-          }
+          src={infor[0]?.userInformation?.avatar ? `${AvatarUrl}${infor[0]?.userInformation?.avatar}` : default_avatar}
           alt='avatar'
         />
         <p>{infor[0]?.userInformation?.firstName + ' ' + infor[0]?.userInformation?.lastName}</p>
