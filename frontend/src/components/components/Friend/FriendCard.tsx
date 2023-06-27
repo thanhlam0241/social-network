@@ -23,7 +23,7 @@ export default function MultiActionAreaCard({ name, avatar, onClick, isSend }: P
         <CardMedia
           component='img'
           height='200'
-          image={avatar ? `${AvatarUrl}{avatar}` : defaultAvatar}
+          image={avatar ? `${AvatarUrl}${avatar}` : defaultAvatar}
           alt='green iguana'
         />
         <CardContent>

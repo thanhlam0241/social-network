@@ -36,9 +36,9 @@ const getRecommendPeople = async (req, res) => {
     const userId = req.user._id;
     console.log(userId)
     try {
-        const listFriends = (await FriendSchema.findOne({ user: userId }));
+        //const listFriends = (await FriendSchema.findOne({ user: userId }));
 
-        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [...listFriends.friends, userId] } })
+        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [ userId] } })
             .populate('userInformation', '-__v -_id -email -phone -address')
             .select('isOnline userInformation ')
             .skip(skip)

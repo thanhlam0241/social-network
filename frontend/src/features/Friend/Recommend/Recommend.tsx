@@ -32,15 +32,15 @@ function Recommend() {
 
   //console.log(data?.data)
 
-  const {
-    data: myFriendRequest,
-    isLoading: loadingMyFriendRequest,
-    error: errorMyFriendRequest
-  } = useQuery({
-    queryKey: ['getAllMyFriendRequest'],
-    queryFn: () => allFriendRequest(auth.token),
-    refetchOnWindowFocus: false
-  })
+  // const {
+  //   data: myFriendRequest,
+  //   isLoading: loadingMyFriendRequest,
+  //   error: errorMyFriendRequest
+  // } = useQuery({
+  //   queryKey: ['getAllMyFriendRequest'],
+  //   queryFn: () => allFriendRequest(auth.token),
+  //   refetchOnWindowFocus: false
+  // })
 
   const friendRequestMutation = useMutation({
     mutationFn: (newTodo: { receiver: string; text: string }) => {
@@ -94,8 +94,8 @@ function Recommend() {
                 onClick={() => startFriendRequest(item._id)}
                 id={item._id}
                 name={item?.name}
-                avatar={item?.userInformation.avatar}
-                isSend={myFriendRequest?.data?.includes(item._id)}
+                avatar={item?.userInformation?.avatar}
+                //isSend={myFriendRequest?.data?.includes(item._id)}
               />
             </li>
           ))

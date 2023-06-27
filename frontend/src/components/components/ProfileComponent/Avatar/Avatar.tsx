@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
+import {baseUrl} from '~/service/api/const/url'
+
 import { Snackbar, Alert } from '@mui/material'
 
 import { getAvatar, getUrlAvatar, updateAvatar } from '~/service/api/information/informationApi'
@@ -20,7 +22,7 @@ import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 
 interface AvatarProps {
-  id: any
+  id: string
 }
 
 function Avatar({ id }: AvatarProps) {
@@ -75,7 +77,7 @@ function Avatar({ id }: AvatarProps) {
       </Snackbar>
       <div className={cx('avar_information')}>
         <div className={cx('avatar-container')}>
-          <img className={cx('avatar')} src={avatar?.url ? getUrlAvatar(avatar?.url) : default_avatar} alt='Avatar' />
+          <img className={cx('avatar')} src={avatar?.url ?`${baseUrl}/${avatar?.url}` : default_avatar} alt='Avatar' />
           {id === auth.id && (
             <div className={cx('change_avatar')}>
               <label className={cx('input-file')} htmlFor='upload-photo-avatar'>

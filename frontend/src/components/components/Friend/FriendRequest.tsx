@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { Button, CardActionArea, CardActions } from '@mui/material'
 
-import defaultAvatar from '~/assets/images/default_avatar.png'
+import defaultAvatar from '~/assets/images/default_avatar.jpg'
 import { AvatarUrl } from '~/service/api/const/url'
 
 interface FriendRequestProps {

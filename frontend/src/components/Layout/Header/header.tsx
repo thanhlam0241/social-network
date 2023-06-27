@@ -8,6 +8,8 @@ import className from 'classnames/bind'
 import styles from './header.module.scss'
 import Avatar from '@mui/material/Avatar'
 
+import {baseUrl} from '~/service/api/const/url'
+
 import Person2Icon from '@mui/icons-material/Person2'
 import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -32,6 +34,8 @@ function Header() {
   const dispatch = useAppDispatch()
 
   const auth: any = useAppSelector((state) => state.auth)
+
+  console.log(auth)
 
   const searchBar = useRef<HTMLInputElement>(null)
 
@@ -130,7 +134,7 @@ function Header() {
               cursor: 'pointer'
             }
           }}
-          src={avatar?.url ? getUrlAvatar(avatar.url) : defaultAvatar}
+          src={avatar?.url ? `${baseUrl}/${avatar.url}` : defaultAvatar}
           alt='Error'
         />
         {auth.token && openPopper && (

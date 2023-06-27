@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 // import WebcamStreamCapture from '../Webcam/Webcam'
 import Capture from '../../Capture/Capture'
 import { useNavigate } from 'react-router-dom'
-import { Button, FormControl, InputLabel, Input, InputAdornment } from '@mui/material'
+import { Button, FormControl, InputLabel, Input, InputAdornment, alertClasses } from '@mui/material'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
@@ -30,7 +30,7 @@ function LoginForm() {
   //const { setAuth } = useAuth()
   const dispatch = useAppDispatch()
 
-  const [login, { isLoading, data, error }] = useLoginMutation()
+  //const [login, { isLoading, data, error }] = useLoginMutation()
 
   const navigate = useNavigate()
   //const [, setCookie] = useCookies()
@@ -44,38 +44,55 @@ function LoginForm() {
     const password = passwordRef.current?.value
     try {
       if (username && password) {
-        await login({ username, password })
-        console.log(data)
+        //await login({ username, password })
+        // if(!data){
+        //   throw Error('Failed to login')
+        // }
+        await AuthenService.Login({ username, password })
+          .then((res) => {
+            if (res?.success && res?.data) {
+              dispatch(setAuth(res.data))
+              Cookies.set('atk', res.data.token, { expires: 1 })
+              Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
+              navigate('/')
+            } else {
+              console.log(res)
+              alert(res)
+            }
+          }
+          )
       }
     } catch (err) {
       console.log(err)
+      alert('Failed to login'+err)
     }
   }
-  React.useEffect(() => {
-    if (data) {
-      dispatch(setAuth(data.user))
-      Cookies.set('atk', data.user.token, { expires: 1 })
-      Cookies.set('rtk', data.refreshToken, { expires: 7 })
-      navigate('/')
-    }
-  }, [data])
+  // React.useEffect(() => {
+  //   if (data) {
+  //     dispatch(setAuth(data.user))
+  //     Cookies.set('atk', data.user.token, { expires: 1 })
+  //     Cookies.set('rtk', data.refreshToken, { expires: 7 })
+  //     navigate('/')
+  //   }
+  // }, [data])
 
   const handleLoginWithFaceId = async (data: Blob[]) => {
     await AuthenService.LoginWithFaceId(data)
       .then((res) => {
         if (res?.success && res?.data) {
+          console.log(res)
           dispatch(setAuth(res.data))
           Cookies.set('atk', res.data.token, { expires: 1 })
           Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
           navigate('/')
         } else {
-          alert(res)
           console.log(res)
+          alert(res)
         }
       })
       .catch((err) => {
         console.log(err)
-        alert('Some errors: ' + err?.message)
+        alert(err?.message || 'Something went wrong')
       })
   }
   const handleNavigateRegister: React.MouseEventHandler<HTMLButtonElement> | undefined = () => {

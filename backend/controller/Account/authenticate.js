@@ -28,15 +28,15 @@ const confirmLogin = async (req, res, next) => {
         if (checkPassword) {
             const accessToken = generateAccessToken({ _id: user._id, username: user.username, role: user.role });
             const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
-            const token = new tokenSchema({ username: user.username, token: refreshToken });
-            const isSaveToken = await token.save();
-            console.log(isSaveToken)
-            if (isSaveToken) {
-                return res.json({
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                });
-            }
+           // const token = new tokenSchema({ username: user.username, token: refreshToken });
+           //const isSaveToken = await token.save();
+            // console.log(isSaveToken)
+            // if (isSaveToken) {
+            // }
+            return res.json({
+                accessToken: accessToken,
+                refreshToken: refreshToken
+            });
         }
         else {
             throw createError.Conflict('Password is incorrect');

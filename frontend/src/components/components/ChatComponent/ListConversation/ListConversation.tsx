@@ -103,8 +103,8 @@ const ListConversation = () => {
                     ? conversation?.participants[1]
                     : conversation?.participants[0]
 
-                const firstName = otherParticipant?.userInformation.firstName
-                const lastName = otherParticipant?.userInformation.lastName
+                const firstName = otherParticipant?.userInformation?.firstName
+                const lastName = otherParticipant?.userInformation?.lastName
                 let fullName = ''
                 if (!firstName || !lastName) {
                   fullName = 'Unknown User'

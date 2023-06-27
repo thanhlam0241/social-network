@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 
 import styles from './Conversation.module.scss'
 import classNames from 'classnames/bind'
-
+import {baseUrl} from '~/service/api/const/url'
 import CircleIcon from '@mui/icons-material/Circle'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 

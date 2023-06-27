@@ -10,7 +10,7 @@ interface LoginAccountRequest {
 }
 
 class AuthenticateApi {
-  async Login(data: LoginAccountRequest, action: any) {
+  async Login(data: LoginAccountRequest) {
     return await axios
       .post(AccountLoginUrl, data)
       .then((response) => {
@@ -18,11 +18,6 @@ class AuthenticateApi {
           const accessToken = response?.data?.accessToken
           const data: { username: string; role: string } = jwt_decode(accessToken)
           if (data?.username && data?.role) {
-            action({
-              username: data.username,
-              role: data.role,
-              token: accessToken
-            })
             return {
               success: true,
               data: {
@@ -41,7 +36,7 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
-        return error
+        return error.response.data
       })
   }
   async LoginWithFaceId(imgBlobs: Blob[]) {
@@ -74,8 +69,7 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
-        console.log('error15: ', error)
-        return error
+        return error.response.data
       })
   }
   async Logout(token: string | undefined, refToken: string | undefined) {
