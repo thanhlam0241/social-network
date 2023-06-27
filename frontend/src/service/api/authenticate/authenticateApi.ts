@@ -1,93 +1,100 @@
-import axios from 'axios'
-import { AccountLoginUrl, AccountLogoutUrl, AccountGetNewTokenUrl } from '../const/url'
-import config from '../const/configAxios'
-import jwt_decode from 'jwt-decode'
-import Cookies from 'js-cookie'
+import axios from "axios";
+import {
+  AccountGetNewTokenUrl,
+  AccountLoginUrl,
+  AccountLoginWithFaceIdUrl,
+  AccountLogoutUrl,
+} from "../const/url";
+import config from "../const/configAxios";
+import jwt_decode from "jwt-decode";
+import Cookies from "js-cookie";
 
 interface LoginAccountRequest {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
 interface IAuth {
-  username: string | undefined | null
-  role: string | undefined | null
-  token: string | undefined | null
+  username: string | undefined | null;
+  role: string | undefined | null;
+  token: string | undefined | null;
 }
 
 class AuthenticateApi {
-  Auth: IAuth
+  Auth: IAuth;
   constructor() {
     this.Auth = {
-      username: '',
-      token: '',
-      role: ''
-    }
-    const atk = Cookies.get('atk')
+      username: "",
+      token: "",
+      role: "",
+    };
+    const atk = Cookies.get("atk");
     if (atk) {
-      const data: { username: string; role: string } = jwt_decode(atk)
+      const data: { username: string; role: string } = jwt_decode(atk);
       if (data?.username && data?.role) {
         this.Auth = {
           username: data.username,
           role: data.role,
-          token: atk
-        }
+          token: atk,
+        };
       }
     } else {
-      const rtk = Cookies.get('rtk')
+      const rtk = Cookies.get("rtk");
       if (rtk) {
         axios
           .post(AccountGetNewTokenUrl, { token: rtk })
           .then((response) => {
             if (response.status === 200) {
-              const accessToken: string = response?.data?.accessToken
-              const data: { username: string; role: string } = jwt_decode(accessToken)
+              const accessToken: string = response?.data?.accessToken;
+              const data: { username: string; role: string } = jwt_decode(
+                accessToken,
+              );
               if (data?.username && data?.role) {
                 this.Auth = {
                   username: data.username,
                   role: data.role,
-                  token: accessToken
-                }
+                  token: accessToken,
+                };
               }
             }
           })
           .catch((err) => {
-            console.log('Error when get access token by refresh token', err)
+            console.log("Error when get access token by refresh token", err);
             this.Auth = {
-              username: '',
-              token: '',
-              role: ''
-            }
-          })
+              username: "",
+              token: "",
+              role: "",
+            };
+          });
       } else {
         this.Auth = {
-          username: '',
-          token: '',
-          role: ''
-        }
+          username: "",
+          token: "",
+          role: "",
+        };
       }
     }
   }
   isLogin() {
-    return this.Auth?.username && this.Auth?.token && this.Auth?.role
+    return this.Auth?.username && this.Auth?.token && this.Auth?.role;
   }
   getUsername() {
-    return this.Auth?.username
+    return this.Auth?.username;
   }
   getRole() {
-    return this.Auth?.role
+    return this.Auth?.role;
   }
   getAccessToken() {
-    return this.Auth?.token
+    return this.Auth?.token;
   }
   SetAccessToken(token: string) {
-    const data: { username: string; role: string } = jwt_decode(token)
+    const data: { username: string; role: string } = jwt_decode(token);
     if (data?.username && data?.role) {
       this.Auth = {
         username: data.username,
         role: data.role,
-        token: token
-      }
+        token: token,
+      };
     }
   }
   async Login(data: LoginAccountRequest) {
@@ -95,79 +102,126 @@ class AuthenticateApi {
       .post(AccountLoginUrl, data)
       .then((response) => {
         if (response?.status === 200) {
-          const accessToken = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
+          const accessToken = response?.data?.accessToken;
+          const data: { username: string; role: string } = jwt_decode(
+            accessToken,
+          );
           if (data?.username && data?.role) {
             this.Auth = {
               username: data.username,
               role: data.role,
-              token: accessToken
-            }
+              token: accessToken,
+            };
             return {
               success: true,
               data: {
                 token: accessToken,
                 refreshToken: response?.data?.refreshToken,
                 username: data.username,
-                role: data.role
-              }
-            }
+                role: data.role,
+              },
+            };
           }
         } else {
           return {
             success: false,
-            data: response
-          }
+            data: response,
+          };
         }
       })
       .catch((error) => {
-        return error
+        return error;
+      });
+  }
+  async LoginWithFaceId(imgBlobs: Blob[]) {
+    var formdata = new FormData();
+    for (let i = 0; i < imgBlobs.length; i++) {
+      formdata.append("faces", imgBlobs[i], `${i + 1}.jfif`);
+    }
+    return await axios
+      .post(AccountLoginWithFaceIdUrl, formdata)
+      .then((response) => {
+        if (response?.status === 200) {
+          const accessToken = response?.data?.accessToken;
+          const data: { username: string; role: string } = jwt_decode(
+            accessToken,
+          );
+          if (data?.username && data?.role) {
+            this.Auth = {
+              username: data.username,
+              role: data.role,
+              token: accessToken,
+            };
+            return {
+              success: true,
+              data: {
+                token: accessToken,
+                refreshToken: response?.data?.refreshToken,
+                username: data.username,
+                role: data.role,
+              },
+            };
+          }
+        } else {
+          return {
+            success: false,
+            data: response,
+          };
+        }
       })
+      .catch((error) => {
+        console.log("error15: ", error);
+        return error;
+      });
   }
   async Logout(token: string) {
-    return await axios.post(AccountLogoutUrl, {}, config(token)).then((response) => {
-      if (response?.data?.success) {
-        this.Auth = {
-          username: '',
-          token: '',
-          role: ''
+    return await axios.post(AccountLogoutUrl, {}, config(token)).then(
+      (response) => {
+        if (response?.data?.success) {
+          this.Auth = {
+            username: "",
+            token: "",
+            role: "",
+          };
+          return response.data;
+        } else {
+          return response;
         }
-        return response.data
-      } else {
-        return response
-      }
-    })
+      },
+    );
   }
   async GetNewToken(refreshToken: string) {
     return await axios
       .post(AccountGetNewTokenUrl, config(refreshToken))
       .then((response) => {
         if (response?.status === 200) {
-          const accessToken: string = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
+          const accessToken: string = response?.data?.accessToken;
+          const data: { username: string; role: string } = jwt_decode(
+            accessToken,
+          );
           if (data?.username && data?.role) {
             return {
               success: true,
               data: {
                 token: accessToken,
                 username: data.username,
-                role: data.role
-              }
-            }
+                role: data.role,
+              },
+            };
           }
         } else {
           return {
             success: false,
-            data: 'No thing'
-          }
+            data: "No thing",
+          };
         }
       })
       .catch((error) => {
-        return error
-      })
+        return error;
+      });
   }
 }
 
-const authenticateApi = new AuthenticateApi()
+const authenticateApi = new AuthenticateApi();
 
-export default authenticateApi
+export default authenticateApi;

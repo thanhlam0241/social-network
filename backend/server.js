@@ -52,7 +52,7 @@ app.use(express.json());
 app.use('/static', express.static('static'));
 // app.use('/avatar', express.static('uploads/avatar'));
 
-app.use('/', require('./routes/root'))
+app.use('/api/', require('./routes/root'))
 
 // // middleware to authenticate token
 // app.use(authenticateToken);

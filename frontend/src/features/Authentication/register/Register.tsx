@@ -18,6 +18,7 @@ import {
 
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import KeyIcon from '@mui/icons-material/Key'
+import { AccountRegisterUrl } from '~/service/api/const/url'
 
 const steps = ['Create username and password', 'Turn on detect face', 'Finish register form']
 
@@ -25,24 +26,53 @@ const cx = classNames.bind(styles)
 
 function RegisterForm() {
    const navigate = useNavigate()
-   const [activeStep, setActiveStep] = useState(1)
+   const [activeStep, setActiveStep] = useState(0)
    const [skipped, setSkipped] = useState(new Set<number>())
 
    const [username, setUsername] = useState('')
    const [password, setPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
 
-   const [imgSrc, setImgSrc] = useState<string | null>(null)
-
+   const [imgBlobs, setImgBlobs] = useState<Blob[]>([])
+   const [disableFinishBtn, setDisableFinishBtn] = useState<boolean>(false)
+   
    const isStepOptional = (step: number) => {
-      return step === 1
+      return false
    }
 
    const isStepSkipped = (step: number) => {
       return skipped.has(step)
    }
 
-   const handleNext = () => {
+   const handleFinish = async () => {
+      var formdata = new FormData();
+      for(let i = 0; i < imgBlobs.length; i++){
+         formdata.append("faces", imgBlobs[i], `${i+1}.jfif`);
+      }
+      formdata.append("username", username);
+      formdata.append("password", password);
+
+      var requestOptions = {
+         method: 'POST',
+         body: formdata
+      };
+      let result = await fetch(AccountRegisterUrl, requestOptions);
+      if(!result.ok){
+         let res = await result.json();
+         alert(res.msgs);
+         if(res.stepError === "face"){
+            setActiveStep(1);
+         }
+         else{
+            setActiveStep(0);
+         }
+      }
+      else{
+         navigate('/authenticate/login');
+      }
+   }
+
+   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (activeStep === 0) {
          if (username === '') {
             alert('Username is empty')
@@ -60,6 +90,12 @@ function RegisterForm() {
             alert('Password and confirm password is not match')
             return
          }
+      }
+      else if (activeStep === 2) {
+         setDisableFinishBtn(true);
+         handleFinish().then(() => {setDisableFinishBtn(false);});
+         
+         return;
       }
       let newSkipped = skipped
       if (isStepSkipped(activeStep)) {
@@ -99,6 +135,17 @@ function RegisterForm() {
    const handleMoveLogin = () => {
       navigate('/authenticate/login')
    }
+
+   const handleCaptureFace = (data: Blob[]) => {
+      if (data && data.length === 30) {
+         setImgBlobs(data);
+         handleNext();
+      }
+      else {
+         alert('Please check your face.')
+      }
+   }
+
    return (
       <div className={cx('register-form')}>
          <h1 style={{ fontWeight: 1000, margin: "0 0 20px 0" }}>Register</h1>
@@ -124,9 +171,10 @@ function RegisterForm() {
          {activeStep === steps.length ? (
             <>
                <Typography sx={{ mt: 1, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
+               
                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                   <Box sx={{ flex: '1 1 auto' }} />
-                  <Button onClick={handleReset}>Reset</Button>
+                  {/* <Button onClick={handleReset}>Reset</Button> */}
                </Box>
             </>
          ) : (
@@ -141,7 +189,7 @@ function RegisterForm() {
                         Skip
                      </Button>
                   )}
-                  <Button onClick={handleNext}>{activeStep === steps.length - 1 ? 'Finish' : 'Next'}</Button>
+                  <Button onClick={handleNext} disabled={activeStep == 1 || disableFinishBtn}>{activeStep === steps.length - 1 ? 'Finish' : 'Next'}</Button>
                </Box>
                {activeStep === 0 && (
                   <Box className={cx('register-box')} key='step-one' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -193,7 +241,7 @@ function RegisterForm() {
                      </FormControl>
                   </Box>
                )}
-               {activeStep === 1 && <Capture setUrl={setImgSrc} />}
+               {activeStep === 1 && <Capture onCaptured={handleCaptureFace} />}
             </>
          )}
 

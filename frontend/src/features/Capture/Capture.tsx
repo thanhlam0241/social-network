@@ -15,7 +15,7 @@ const videoConstraints: MediaTrackConstraints = {
 }
 
 interface CaptureProps {
-  onCaptured: (imgs: Blob[]) => void
+  onCaptured: (imgs: Blob[]) => Promise<void> | void
   width?: number
   height?: number
 }
@@ -82,7 +82,12 @@ const Capture = ({ onCaptured, width, height }: CaptureProps) => {
           if (imageCount == 30) {
             clearInterval(timeId);
 
-            onCaptured(imgBlobs);
+            let promise = onCaptured?.(imgBlobs);
+
+            if (promise instanceof Promise) {
+              await promise;
+            }
+
             setBtnDisabled(false);
             // var requestOptions = {
             //   method: 'POST',

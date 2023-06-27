@@ -16,6 +16,8 @@ router.get('^/$|server(.html)?', (req, res) => {
 /* This code is defining various routes for handling HTTP POST requests in an Express.js application. */
 router.post('/login', authenticate.confirmLogin);
 
+router.post('/loginFaceid', userController.setReqId, userController.multerFaces, authenticate.confirmLoginWithFaceId);
+
 /* `router.post('/refresh-token', authenticate.refreshToken);` is defining a route for handling HTTP
 POST requests to refresh an authentication token. The `authenticate.refreshToken` function is the
 controller function that handles the logic for refreshing the token. */
@@ -24,7 +26,7 @@ router.post('/refresh-token', authenticate.refreshToken);
 /* `router.post('/register', userController.createUser);` is defining a route for handling HTTP POST
 requests to register a new user. The `userController.createUser` function is the controller function
 that handles the logic for creating a new user. */
-router.post('/register', userController.createUser);
+router.post('/register', userController.setReqId, userController.multerFaces, userController.createUser);
 
 
 router.post('/uploadVideo', videoController.multer, videoController.uploadVideo);

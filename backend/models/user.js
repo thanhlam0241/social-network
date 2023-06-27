@@ -19,9 +19,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false
     },
-    token: {
+    faceId: {
         type: String,
-        require: false
+        require: true
     }
 });
 

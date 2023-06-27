@@ -26,3 +26,11 @@
 20230420	21:42:56	a04535d7-c230-4f13-8b7f-4b6af4d6f027		Error: It appears you have done something like `app.use(helmet)`, but it should be `app.use(helmet())`.
 20230507	00:05:55	16709fd7-9c85-4921-b431-fda6b749dcee		Error: Not allowed by CORS
 20230626	14:54:48	2c3465e5-d7e3-4ff6-8db0-3adf2144f684		Error: ENOENT: no such file or directory, open 'C:\Users\linh2\source\repos\BTL\AI\nodejs-react-web\backend\uploads\faces\205a86cc-c30b-4a95-b598-b6669d387e5e\24333691-5761-492d-87c0-509e467741d6.jfif'
+20230627	15:47:59	f7747aea-360d-4e37-ab9c-5600247970d6		Error: ENOENT: no such file or directory, open 'C:\Users\linh2\source\repos\BTL\AI\nodejs-react-web\backend\controller\uploads\faces\ada076d0-3ab5-46dc-a261-9fe3a532d4d0\1.jfif'
+20230627	15:57:28	69c7a774-4e00-4bfc-87df-fae941252c9c		Error: ENOENT: no such file or directory, open 'C:\Users\linh2\source\repos\BTL\AI\nodejs-react-web\backend\controller\uploads\faces\6ecc42bd-5181-4bc5-a1e4-fa441d286e5a\1.jfif'
+20230627	15:59:10	d0e8ee4b-fe08-4113-b0cc-179fb1d99ba4		Error: ENOENT: no such file or directory, open 'C:\Users\linh2\source\repos\BTL\AI\nodejs-react-web\backend\controller\uploads\faces\a83a6081-6ece-4f39-b4ab-25faedb05056\1.jfif'
+20230627	15:59:54	9ba55367-ee69-4599-ae98-6a7f123481ca		Error: ENOENT: no such file or directory, open 'C:\Users\linh2\source\repos\BTL\AI\nodejs-react-web\backend\controller\uploads\faces\2b7f6ac7-5892-4e6f-846f-90794b4dde91\1.jfif'
+20230627	16:34:57	f7a4afd3-d586-4e0f-81e2-0f582a5da04c		Error: Not allowed by CORS
+20230627	16:36:35	b614497a-ef84-4c99-b1fc-1e99c2a4787d		Error: Not allowed by CORS
+20230627	16:37:15	3eee775b-ff1b-4855-98d8-80df75dc1957		Error: Not allowed by CORS
+20230627	16:37:38	e76cd759-3c99-4132-a576-8d987b1b6509		Error: Not allowed by CORS
