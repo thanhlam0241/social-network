@@ -72,7 +72,7 @@ function RegisterForm() {
       }
    }
 
-   const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+   const handleNext = () => {
       if (activeStep === 0) {
          if (username === '') {
             alert('Username is empty')
