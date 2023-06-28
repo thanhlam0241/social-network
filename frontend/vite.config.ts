@@ -9,11 +9,11 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:3500',
+        target: 'http://localhost:3500'
         // changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
+      }
+    }
   },
   css: {
     devSourcemap: true
@@ -22,6 +22,5 @@ export default defineConfig({
     alias: {
       '~': path.resolve(__dirname, './src')
     }
-  },
-
+  }
 })

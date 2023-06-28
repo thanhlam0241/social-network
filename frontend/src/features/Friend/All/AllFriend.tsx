@@ -34,7 +34,7 @@ function AllFriend() {
       <ul className={cx('friend-all-content')}>
         {allFriend?.data?.length > 0 &&
           allFriend?.data.map((item: any) => (
-            <MyFriendCard key={item._id} name={item?.userInformation?.fullName} image={item?.userInformation?.avatar} />
+            <MyFriendCard key={item._id} name={item?.username} image={item?.userInformation?.avatar} />
             // <li key={item._id}>
             // </li>
           ))}

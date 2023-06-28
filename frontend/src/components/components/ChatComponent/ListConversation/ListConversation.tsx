@@ -103,20 +103,20 @@ const ListConversation = () => {
                     ? conversation?.participants[1]
                     : conversation?.participants[0]
 
-                const firstName = otherParticipant?.userInformation?.firstName
-                const lastName = otherParticipant?.userInformation?.lastName
-                let fullName = ''
-                if (!firstName || !lastName) {
-                  fullName = 'Unknown User'
-                } else {
-                  fullName = firstName + ' ' + lastName
-                }
+                // const firstName = otherParticipant?.userInformation?.firstName
+                // const lastName = otherParticipant?.userInformation?.lastName
+                // let fullName = ''
+                // if (!firstName || !lastName) {
+                //   fullName = 'Unknown User'
+                // } else {
+                //   fullName = firstName + ' ' + lastName
+                // }
                 return (
                   <Conversation
                     key={conversation._id}
                     onClick={() => clickToConversation(conversation?._id)}
                     selected={selected === conversation?._id}
-                    name={fullName}
+                    name={otherParticipant?.username}
                     avatar={otherParticipant?.userInformation?.avatar}
                     lastMessage={conversation?.lastMessage}
                   />

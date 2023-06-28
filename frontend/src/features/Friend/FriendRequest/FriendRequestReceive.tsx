@@ -53,7 +53,7 @@ function FriendRequestPage() {
             <FriendRequest
               key={item?.sender?._id}
               type='receive'
-              name={item?.sender?.userInformation?.fullName}
+              name={item?.sender?.username}
               avatar={item?.sender?.userInformation?.avatar}
               title={item?.text}
               onAccept={() => acceptFriendRequestMutation.mutate(item?.sender?._id)}

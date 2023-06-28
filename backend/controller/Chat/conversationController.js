@@ -11,7 +11,7 @@ const getConversationById = async (req, res) => {
             .findOne({ _id: req.params.id })
             .populate(
                 {
-                    path: 'participants', select: 'userInformation',
+                    path: 'participants', select: 'username userInformation',
                     populate: {
                         path: 'userInformation',
                         select: 'firstName lastName fullName avatar -_id'
@@ -44,7 +44,7 @@ const getConversationsByUser = async (req, res) => {
         const user = req.user;
         const conversations = await conversationSchema.find({ participants: user._id })
             .populate({
-                path: 'participants', select: 'isOnline userInformation', populate: {
+                path: 'participants', select: 'username userInformation', populate: {
                     path: 'userInformation',
                     select: 'firstName lastName avatar -_id'
                 }

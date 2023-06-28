@@ -89,11 +89,11 @@ function Recommend() {
       <ul className={cx('friend-recommend-content')}>
         {!isLoading && !error && data?.data ? (
           data?.data.map((item: any) => (
-            <li className={cx('friend-item')} key={item._id}>
+            <li className={cx('friend-item')} key={item?._id}>
               <FriendCard
-                onClick={() => startFriendRequest(item._id)}
-                id={item._id}
-                name={item?.name}
+                onClick={() => startFriendRequest(item?._id)}
+                id={item?._id}
+                name={item?.username}
                 avatar={item?.userInformation?.avatar}
                 //isSend={myFriendRequest?.data?.includes(item._id)}
               />

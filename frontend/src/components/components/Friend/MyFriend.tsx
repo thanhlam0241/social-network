@@ -23,7 +23,7 @@ export default function MultiActionAreaCard({ name, image, viewProfile, removeFr
           sx={{ objectFit: 'cover', objectPosition: 'center', height: 200 }}
           height='200'
           component='img'
-          image={image ? `${AvatarUrl}{image}` : defaultAvatar}
+          image={image ? `${AvatarUrl}${image}` : defaultAvatar}
           //image={image ? `https://i0.wp.com/gamingonphone.com/wp-content/uploads/2021/03/image-1.jpg` : defaultAvatar}
           alt='green iguana'
         />
@@ -41,7 +41,7 @@ export default function MultiActionAreaCard({ name, image, viewProfile, removeFr
             }}
             component='div'
           >
-            {name}
+            {name || 'New User'}
           </Typography>
         </CardContent>
       </CardActionArea>

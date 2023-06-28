@@ -16,15 +16,18 @@ class AuthenticateApi {
       .then((response) => {
         if (response?.status === 200) {
           const accessToken = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
+          const data: { _id: string; username: string; role: string } = jwt_decode(accessToken)
           if (data?.username && data?.role) {
             return {
               success: true,
               data: {
-                token: accessToken,
-                refreshToken: response?.data?.refreshToken,
-                username: data.username,
-                role: data.role
+                auth: {
+                  id: data._id,
+                  token: accessToken,
+                  username: data.username,
+                  role: data.role
+                },
+                refreshToken: response?.data?.refreshToken
               }
             }
           }
@@ -49,15 +52,18 @@ class AuthenticateApi {
       .then((response) => {
         if (response?.status === 200) {
           const accessToken = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
+          const data: { _id: string; username: string; role: string } = jwt_decode(accessToken)
           if (data?.username && data?.role) {
             return {
               success: true,
               data: {
-                token: accessToken,
-                refreshToken: response?.data?.refreshToken,
-                username: data.username,
-                role: data.role
+                auth: {
+                  id: data._id,
+                  token: accessToken,
+                  username: data.username,
+                  role: data.role
+                },
+                refreshToken: response?.data?.refreshToken
               }
             }
           }

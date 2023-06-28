@@ -48,23 +48,21 @@ function LoginForm() {
         // if(!data){
         //   throw Error('Failed to login')
         // }
-        await AuthenService.Login({ username, password })
-          .then((res) => {
-            if (res?.success && res?.data) {
-              dispatch(setAuth(res.data))
-              Cookies.set('atk', res.data.token, { expires: 1 })
-              Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
-              navigate('/')
-            } else {
-              console.log(res)
-              alert(res)
-            }
+        await AuthenService.Login({ username, password }).then((res) => {
+          if (res?.success && res?.data) {
+            dispatch(setAuth(res.data.auth))
+            Cookies.set('atk', res.data.auth.token, { expires: 1 })
+            Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
+            navigate('/')
+          } else {
+            console.log(res)
+            alert(res)
           }
-          )
+        })
       }
     } catch (err) {
       console.log(err)
-      alert('Failed to login'+err)
+      alert('Failed to login' + err)
     }
   }
   // React.useEffect(() => {
@@ -81,8 +79,8 @@ function LoginForm() {
       .then((res) => {
         if (res?.success && res?.data) {
           console.log(res)
-          dispatch(setAuth(res.data))
-          Cookies.set('atk', res.data.token, { expires: 1 })
+          dispatch(setAuth(res.data.auth))
+          Cookies.set('atk', res.data.auth.token, { expires: 1 })
           Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
           navigate('/')
         } else {

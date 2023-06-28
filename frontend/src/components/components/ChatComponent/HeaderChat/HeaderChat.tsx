@@ -17,6 +17,7 @@ interface HeaderChatProps {
 }
 
 function HeaderChat({ infor }: HeaderChatProps) {
+  console.log(infor)
   const navigate = useNavigate()
   return (
     <div className={cx('header-chat')}>
@@ -29,7 +30,7 @@ function HeaderChat({ infor }: HeaderChatProps) {
           src={infor[0]?.userInformation?.avatar ? `${AvatarUrl}${infor[0]?.userInformation?.avatar}` : default_avatar}
           alt='avatar'
         />
-        <p>{infor[0]?.userInformation?.firstName + ' ' + infor[0]?.userInformation?.lastName}</p>
+        <p>{infor[0]?.username}</p>
       </section>
       <section className={cx('chat-action')}>
         <LocalPhoneIcon

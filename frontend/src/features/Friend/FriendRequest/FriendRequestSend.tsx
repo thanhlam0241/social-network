@@ -43,7 +43,7 @@ function FriendRequestPage() {
             <FriendRequest
               type='send'
               key={item?.receiver?._id}
-              name={item?.receiver?.userInformation?.fullName}
+              name={item?.receiver?.username}
               avatar={item?.receiver?.userInformation?.avatar}
               title={item?.text}
               onCancel={() => cancelFriendRequestMutation.mutate(item?.receiver?._id)}

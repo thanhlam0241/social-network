@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 
 import styles from './Conversation.module.scss'
 import classNames from 'classnames/bind'
-import {baseUrl} from '~/service/api/const/url'
+import { baseUrl } from '~/service/api/const/url'
 import CircleIcon from '@mui/icons-material/Circle'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
@@ -55,7 +55,7 @@ export default function Conversation({
           className={cx('chat-avatar')}
           src={
             avatar
-              ? `${AvatarUrl}{avatar}`
+              ? `${AvatarUrl}${avatar}`
               : 'https://lh3.googleusercontent.com/ogw/AOLn63GIHa9tjuXqbWnBLozu-DG8i2tCoLTKkhfrtCZ83A=s32-c-mo'
           }
           alt='avatar'
