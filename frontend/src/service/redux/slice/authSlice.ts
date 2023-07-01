@@ -17,7 +17,8 @@ const initialState: AuthState = {
   id: '',
   username: '',
   token: '',
-  role: ''
+  role: '',
+  loginFirstTime: false
 }
 
 export const authSlice = createSlice({
@@ -32,7 +33,8 @@ export const authSlice = createSlice({
           id: data._id,
           username: data.username,
           role: data.role,
-          token: atk
+          token: atk,
+          loginFirstTime: false
         }
       }
     } else if (rtk) {
@@ -47,7 +49,8 @@ export const authSlice = createSlice({
                   id: data._id,
                   username: data.username,
                   role: data.role,
-                  token: response.data.token
+                  token: response.data.token,
+                  loginFirstTime: false
                 }
               }
             }
@@ -64,7 +67,7 @@ export const authSlice = createSlice({
       state.id = action.payload.id
       state.username = action.payload.username
       state.token = action.payload.token
-      state.role = action.payload.role
+      ;(state.role = action.payload.role), (state.loginFirstTime = action.payload.loginFirstTime)
     }
   }
 })

@@ -50,7 +50,7 @@ function LoginForm() {
         // }
         await AuthenService.Login({ username, password }).then((res) => {
           if (res?.success && res?.data) {
-            dispatch(setAuth(res.data.auth))
+            dispatch(setAuth({ ...res.data.auth }))
             Cookies.set('atk', res.data.auth.token, { expires: 1 })
             Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
             navigate('/')
@@ -79,7 +79,7 @@ function LoginForm() {
       .then((res) => {
         if (res?.success && res?.data) {
           console.log(res)
-          dispatch(setAuth(res.data.auth))
+          dispatch(setAuth({ ...res.data.auth }))
           Cookies.set('atk', res.data.auth.token, { expires: 1 })
           Cookies.set('rtk', res.data.refreshToken, { expires: 7 })
           navigate('/')
@@ -115,7 +115,7 @@ function LoginForm() {
               sx={{ width: '100%' }}
               id='input-with-icon-adornment'
               placeholder='Type your username'
-              defaultValue='helloworld123'
+              defaultValue='test0'
               startAdornment={
                 <InputAdornment position='start'>
                   <AccountCircle />
@@ -130,7 +130,7 @@ function LoginForm() {
               sx={{ width: '100%' }}
               id='input-with-icon-password'
               placeholder='Type your password'
-              defaultValue='helloworld34242'
+              defaultValue='test0'
               startAdornment={
                 <InputAdornment position='start'>
                   <KeyIcon />

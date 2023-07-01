@@ -25,7 +25,8 @@ class AuthenticateApi {
                   id: data._id,
                   token: accessToken,
                   username: data.username,
-                  role: data.role
+                  role: data.role,
+                  loginFirstTime: true
                 },
                 refreshToken: response?.data?.refreshToken
               }
@@ -61,7 +62,8 @@ class AuthenticateApi {
                   id: data._id,
                   token: accessToken,
                   username: data.username,
-                  role: data.role
+                  role: data.role,
+                  loginFirstTime: true
                 },
                 refreshToken: response?.data?.refreshToken
               }
