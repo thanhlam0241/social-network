@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const authenticateTokenSocket = (socket, next) => {
-    const token = socket.handshake.auth.token;
+    const token = socket.cookies.atk;
     //console.log(token)
     if (token == null) {
         return next(new Error("Token is required"));

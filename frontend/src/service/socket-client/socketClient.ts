@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client'
 
-const URL = 'http://localhost:3500'
+export const URL = '/socket'
+// const URL = 'http://localhost:3001'
 interface messageInfor {
   room?: string
   text: string
@@ -29,18 +30,40 @@ export interface ClientToServerEvents {
   'send-message': (messageInfor: messageInfor) => void
 }
 
-const createSocket = (token: string) =>
-  io(URL, {
-    autoConnect: true,
-    //retries: 1,
+// const createSocket = (token: string) =>
+//   io(URL, {
+//     autoConnect: false,
+//     retries: 3,
+//     ackTimeout: 3000,
+//     auth: {
+//       token: token
+//     },
+//     reconnection: true,
+//     reconnectionAttempts: 3,
+//     reconnectionDelay: 1000,
+//     reconnectionDelayMax: 5000
+//   })
+
+//export default createSocket
+
+// export default io(URL, {
+//   //autoConnect: false,
+//   //retries: 3,
+//   ackTimeout: 3000,
+//   reconnection: true,
+//   reconnectionAttempts: 3,
+//   reconnectionDelay: 1000,
+//   reconnectionDelayMax: 5000
+// })
+
+export default function createSocket() {
+  return io(URL, {
+    autoConnect: false,
+    //retries: 3,
     ackTimeout: 3000,
-    auth: {
-      token: token
-    },
     reconnection: true,
     reconnectionAttempts: 3,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000
   })
-
-export default createSocket
+}

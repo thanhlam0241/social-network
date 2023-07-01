@@ -17,7 +17,7 @@ interface HeaderChatProps {
 }
 
 function HeaderChat({ infor }: HeaderChatProps) {
-  console.log(infor)
+  //console.log(infor)
   const navigate = useNavigate()
   return (
     <div className={cx('header-chat')}>

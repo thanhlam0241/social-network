@@ -8,7 +8,7 @@ import className from 'classnames/bind'
 import styles from './header.module.scss'
 import Avatar from '@mui/material/Avatar'
 
-import {baseUrl} from '~/service/api/const/url'
+import { baseUrl } from '~/service/api/const/url'
 
 import Person2Icon from '@mui/icons-material/Person2'
 import SearchIcon from '@mui/icons-material/Search'
@@ -35,7 +35,7 @@ function Header() {
 
   const auth: any = useAppSelector((state) => state.auth)
 
-  console.log(auth)
+  //console.log(auth)
 
   const searchBar = useRef<HTMLInputElement>(null)
 
@@ -73,10 +73,6 @@ function Header() {
         dispatch(setAuth({ id: '', token: '', username: '', role: '' }))
         navigate('/authenticate/login')
       }
-      Cookies.remove('atk')
-      Cookies.remove('rtk')
-      dispatch(setAuth({ id: '', token: '', username: '', role: '' }))
-      navigate('/authenticate/login')
     }
     Cookies.remove('atk')
     Cookies.remove('rtk')

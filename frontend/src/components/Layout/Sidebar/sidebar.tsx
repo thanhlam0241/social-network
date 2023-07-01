@@ -24,7 +24,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
   const auth: any = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  console.log(auth)
+  //console.log(auth)
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => {
     const index = listSideBar.findIndex((item) => {
@@ -32,7 +32,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
         return location.pathname.toString().startsWith(item.root)
       }
     })
-    console.log(index)
+    //console.log(index)
     return index === -1 ? 0 : index
   })
 

@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 // const createError = require('http-errors');
 
 
@@ -44,14 +45,16 @@ const PORT = process.env.PORT || 3500;
 
 connect();
 
-app.use(helmet());
-app.use(morgan('common'));
+//app.use(helmet());
+//app.use(morgan('common'));
 
 //custom middleware logger
 //app.use(logger);
 
 //middlerware cors option
 app.use(cors(corsOptions));
+
+app.use(cookieParser())
 
 //built-in middleware to handler urlencoded data
 // in other word, form data:
@@ -123,6 +126,8 @@ app.use(errorHandler);
 
 const createServerSocket = require('./utils/socket/socketServer');
 
-const { server, io } = createServerSocket(app);
+const { server } = createServerSocket(app);
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+server.listen(3001, () => console.log(`Socket server running on port 3001`));

@@ -13,8 +13,8 @@ import { getConversation } from '~/service/api/chat/chatApi'
 import styles from './ListConversation.module.scss'
 import classNames from 'classnames/bind'
 
-import createSocket, { ServerToClientEvents, ClientToServerEvents } from '~/service/socket-client/socketClient'
-import { Socket } from 'socket.io-client'
+// import createSocket, { ServerToClientEvents, ClientToServerEvents } from '~/service/socket-client/socketClient'
+// import { Socket } from 'socket.io-client'
 
 const cx = classNames.bind(styles)
 const ListConversation = () => {
@@ -22,7 +22,7 @@ const ListConversation = () => {
 
   const [listConversation, setListConversation] = useState<any[]>([])
 
-  const socket = useRef<Socket<ServerToClientEvents, ClientToServerEvents>>()
+  //const socket = useRef<Socket<ServerToClientEvents, ClientToServerEvents>>()
 
   const {
     data: conversations,
@@ -51,33 +51,33 @@ const ListConversation = () => {
     }
   }, [conversations])
 
-  useEffect(() => {
-    function onConnect() {
-      console.log('connected')
-      setIsConnected(true)
-    }
-    function onDisconnect() {
-      console.log('disconnected')
-      setIsConnected(false)
-    }
-    socket.current = createSocket(auth.token)
-    socket.current.on('connected', onConnect)
-    socket.current.emit('setup', auth.id)
+  // useEffect(() => {
+  //   function onConnect() {
+  //     console.log('connected')
+  //     setIsConnected(true)
+  //   }
+  //   function onDisconnect() {
+  //     console.log('disconnected')
+  //     setIsConnected(false)
+  //   }
+  //   socket.current = createSocket(auth.token)
+  //   socket.current.on('connected', onConnect)
+  //   socket.current.emit('setup', auth.id)
 
-    socket.current.on('last-message', (data: any) => {
-      console.log(data)
-    })
+  //   socket.current.on('last-message', (data: any) => {
+  //     console.log(data)
+  //   })
 
-    socket.current.on('disconnect', onDisconnect)
+  //   socket.current.on('disconnect', onDisconnect)
 
-    return () => {
-      socket?.current?.off('connected', onConnect)
-      socket?.current?.off('disconnect', onDisconnect)
-      socket?.current?.off('receive-message')
-      socket?.current?.off('setup')
-      socket?.current?.disconnect()
-    }
-  }, [auth.id])
+  //   return () => {
+  //     socket?.current?.off('connected', onConnect)
+  //     socket?.current?.off('disconnect', onDisconnect)
+  //     socket?.current?.off('receive-message')
+  //     socket?.current?.off('setup')
+  //     socket?.current?.disconnect()
+  //   }
+  // }, [auth.id])
 
   const clickToConversation = (id: number) => {
     setSelected(id)
