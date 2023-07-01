@@ -73,7 +73,7 @@ const Chatbox = () => {
       setIsConnected(false)
     }
     socket.current = createSocket()
-    socket.current.connect()
+    //socket.current.connect()
     socket.current.on('connected', onConnect)
     //socket.current.emit('setup', { userId: auth.id })
     socket.current.emit('join-room', id)
@@ -89,15 +89,15 @@ const Chatbox = () => {
     })
     socket.current.on('disconnect', onDisconnect)
 
-    // return () => {
-    //   if (socket?.current?.io._readyState) {
-    //     socket?.current?.off('connected', onConnect)
-    //     socket?.current?.off('disconnect', onDisconnect)
-    //     socket?.current?.off('receive-message')
-    //     socket?.current?.off('join-room')
-    //     socket?.current?.disconnect()
-    //   }
-    // }
+    return () => {
+      if (socket?.current?.io._readyState) {
+        socket?.current?.off('connected', onConnect)
+        socket?.current?.off('disconnect', onDisconnect)
+        socket?.current?.off('receive-message')
+        socket?.current?.off('join-room')
+        socket?.current?.disconnect()
+      }
+    }
   }, [auth.id, id])
 
   useEffect(() => {

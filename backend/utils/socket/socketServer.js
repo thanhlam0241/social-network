@@ -2,7 +2,7 @@ const http = require('http');
 const { Server } = require("socket.io");
 
 const bodyParser = require('body-parser');
-
+const { instrument } = require("@socket.io/admin-ui");
 const authenticateTokenSocket = require('../../middleware/authenTokenSocket');
 const messageSchema = require('../../models/Chat/message')
 const conversationSchema = require('../../models/Chat/conversation')
@@ -13,8 +13,10 @@ const createServerSocket = (app) => {
     const io = new Server(server, {
         //path: '/socket',
         cors: {
-            origin: "*", // allow to server to accept request from different origin
+            origin: ['*', 'https://admin.socket.io'],
             methods: ["GET", "POST"],
+            allowedHeaders: ["Access-Control-Allow-Credentials"],
+            credentials: true
         },
         connectionStateRecovery: {
             // the backup duration of the sessions and the packets
@@ -101,6 +103,14 @@ const createServerSocket = (app) => {
                 console.log('disconnected');
             });
         }
+    });
+    instrument(io, {
+        auth: {
+            type: "basic",
+            username: "admin",
+            password: "admin",
+        },
+        mode: "development",
     });
     return { server, io };
 }
