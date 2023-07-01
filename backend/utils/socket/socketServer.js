@@ -11,8 +11,9 @@ const createServerSocket = (app) => {
     const server = http.createServer();
 
     const io = new Server(server, {
+        //path: '/socket',
         cors: {
-            origin: "*",
+            origin: "*", // allow to server to accept request from different origin
             methods: ["GET", "POST"],
         },
         connectionStateRecovery: {

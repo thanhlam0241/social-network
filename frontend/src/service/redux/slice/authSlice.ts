@@ -10,6 +10,7 @@ export interface AuthState {
   username: string
   token: string
   role: string
+  loginFirstTime?: boolean
 }
 
 const initialState: AuthState = {

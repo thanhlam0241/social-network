@@ -54,6 +54,7 @@ const Chatbox = () => {
   })
 
   console.log('Is socket connected ? ', socket.current?.connected)
+  console.log('Is socket connected ? ', socket.current)
 
   useEffect(() => {
     if (messages) {
@@ -79,6 +80,7 @@ const Chatbox = () => {
 
     socket.current.on('connect_error', (err) => {
       console.log(`connect_error due to ${err.message}`)
+      //socket.current?.connect()
     })
 
     socket.current.on('receive-message', (message: any) => {
@@ -87,15 +89,15 @@ const Chatbox = () => {
     })
     socket.current.on('disconnect', onDisconnect)
 
-    return () => {
-      if (socket?.current?.io._readyState) {
-        socket?.current?.off('connected', onConnect)
-        socket?.current?.off('disconnect', onDisconnect)
-        socket?.current?.off('receive-message')
-        socket?.current?.off('join-room')
-        socket?.current?.disconnect()
-      }
-    }
+    // return () => {
+    //   if (socket?.current?.io._readyState) {
+    //     socket?.current?.off('connected', onConnect)
+    //     socket?.current?.off('disconnect', onDisconnect)
+    //     socket?.current?.off('receive-message')
+    //     socket?.current?.off('join-room')
+    //     socket?.current?.disconnect()
+    //   }
+    // }
   }, [auth.id, id])
 
   useEffect(() => {

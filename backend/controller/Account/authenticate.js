@@ -28,8 +28,8 @@ const confirmLogin = async (req, res, next) => {
         if (checkPassword) {
             const accessToken = generateAccessToken({ _id: user._id, username: user.username, role: user.role });
             const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
-           // const token = new tokenSchema({ username: user.username, token: refreshToken });
-           //const isSaveToken = await token.save();
+            // const token = new tokenSchema({ username: user.username, token: refreshToken });
+            //const isSaveToken = await token.save();
             // console.log(isSaveToken)
             // if (isSaveToken) {
             // }
@@ -76,12 +76,14 @@ const confirmLoginWithFaceId = async (req, res, next) => {
 }
 
 const refreshToken = async (req, res) => {
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.cookies.rtk;
+    console.log(refreshToken)
     if (!refreshToken) {
         return res.status(401).send("Access denied when try to refresh token");
     }
     try {
         const checkToken = await tokenSchema.findOne({ token: refreshToken });
+        console.log(checkToken)
         if (!checkToken) {
             throw createError.Conflict('Token is not exist');
         }
@@ -101,6 +103,7 @@ const logout = async (req, res) => {
     }
     try {
         const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        console.log(user)
         if (user?.username) {
             const checkUser = await userSchema.findOne({ username: user.username })
             if (!checkUser) {

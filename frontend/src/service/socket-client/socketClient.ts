@@ -1,7 +1,12 @@
 import { io, Socket } from 'socket.io-client'
 
+// import { HttpProxyAgent } from 'http-proxy-agent'
+// const proxy = 'http://localhost:3001'
+// export const opts = { agent: new HttpProxyAgent(proxy) }
+
 export const URL = '/socket'
 // const URL = 'http://localhost:3001'
+
 interface messageInfor {
   room?: string
   text: string
@@ -58,12 +63,15 @@ export interface ClientToServerEvents {
 
 export default function createSocket() {
   return io(URL, {
-    autoConnect: false,
+    protocols: ['http'],
+    autoConnect: false
+    //transports: ['websocket'],
+    //withCredentials: true,
     //retries: 3,
-    ackTimeout: 3000,
-    reconnection: true,
-    reconnectionAttempts: 3,
-    reconnectionDelay: 1000,
-    reconnectionDelayMax: 5000
+    // ackTimeout: 3000,
+    // reconnection: true,
+    // reconnectionAttempts: 3,
+    // reconnectionDelay: 1000,
+    // reconnectionDelayMax: 5000
   })
 }

@@ -15,8 +15,8 @@ export default defineConfig({
       },
       '/socket': {
         target: 'http://localhost:3001',
-        ws: true
-        //changeOrigin: true,
+        ws: false,
+        changeOrigin: true
       }
     }
   },
