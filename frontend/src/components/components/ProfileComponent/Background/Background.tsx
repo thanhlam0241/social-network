@@ -4,6 +4,8 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt'
 
 import { Snackbar, Alert } from '@mui/material'
 
+import { baseUrl } from '~/service/api/const/url'
+
 import { getBackground, getUrlBackground, updateBackground } from '~/service/api/information/informationApi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
@@ -67,7 +69,7 @@ function Background({ id }: BackgroundProps) {
         <img
           loading='lazy'
           className={cx('background_image')}
-          src={background?.url ? getUrlBackground(background?.url) : defaultBackground}
+          src={background?.url ? baseUrl +'/' + (background?.url) : defaultBackground}
           alt='background'
         />
         {id === auth.id && (

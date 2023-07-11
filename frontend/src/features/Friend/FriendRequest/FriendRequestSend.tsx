@@ -11,39 +11,6 @@ import { useAppSelector } from '~/hooks/storeHook'
 
 const cx = classNames.bind(styles)
 
-const data = [
-  {
-    id: '1',
-    name: 'Nguyen Van A',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van B',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van C',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van D',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  },
-  {
-    id: '1',
-    name: 'Nguyen Van E',
-    avatar: 'https://picsum.photos/200',
-    title: 'Friend request'
-  }
-]
-
 function FriendRequestPage() {
   const auth = useAppSelector((state) => state.auth)
 
@@ -75,11 +42,11 @@ function FriendRequestPage() {
           dataFriendRequest?.data.map((item: any) => (
             <FriendRequest
               type='send'
-              key={item.receiver._id}
-              name={item.receiver.userInformation.fullName}
-              avatar={item.receiver.userInformation.avatar}
-              title={item.text}
-              onCancel={() => cancelFriendRequestMutation.mutate(item.receiver._id)}
+              key={item?.receiver?._id}
+              name={item?.receiver?.username}
+              avatar={item?.receiver?.userInformation?.avatar}
+              title={item?.text}
+              onCancel={() => cancelFriendRequestMutation.mutate(item?.receiver?._id)}
             />
           ))}
       </ul>

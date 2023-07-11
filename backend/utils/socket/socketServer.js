@@ -1,16 +1,22 @@
 const http = require('http');
 const { Server } = require("socket.io");
 
+const bodyParser = require('body-parser');
+const { instrument } = require("@socket.io/admin-ui");
 const authenticateTokenSocket = require('../../middleware/authenTokenSocket');
 const messageSchema = require('../../models/Chat/message')
 const conversationSchema = require('../../models/Chat/conversation')
 
 const createServerSocket = (app) => {
-    const server = http.createServer(app);
+    const server = http.createServer();
+
     const io = new Server(server, {
+        //path: '/socket',
         cors: {
-            origin: "*",
+            origin: ['*', 'https://admin.socket.io'],
             methods: ["GET", "POST"],
+            allowedHeaders: ["Access-Control-Allow-Credentials"],
+            credentials: true
         },
         connectionStateRecovery: {
             // the backup duration of the sessions and the packets
@@ -19,7 +25,15 @@ const createServerSocket = (app) => {
             skipMiddlewares: true, // 0.1 second
         }
     });
+    console.log("createServerSocket")
     global.onlineUsers = new Map();
+
+    //io.use(bodyParser.urlencoded({ extended: false }));
+
+    // parse application/json
+    //io.use(bodyParser.json());
+
+
     io.on("connection", (socket) => {
         global.chatSocket = socket;
         if (socket.recovered) {
@@ -27,16 +41,22 @@ const createServerSocket = (app) => {
             // recovery was successful: socket.id, socket.rooms and socket.data were restored
         }
         else {
-            io.use(authenticateTokenSocket);
-
+            console.log("connected");
+            //io.use(authenticateTokenSocket);
+            //console.log(socket.client)
             socket.on("setup", (userId) => {
                 socket.join(userId);
-                socket.to(userId).emit("connected");
+                io.to(userId).emit("connected");
             });
 
             socket.on('join-room', (room) => {
-                if (room) socket.join(room);
-                //socket.in(room).emit('connected', socket.id);
+                console.log('join-room', room)
+                if (room && (typeof room === 'string')) {
+                    console.log('Hello', room)
+                    socket.join(room);
+                    console.log(socket.rooms)
+                    io.in(room).emit('connected', socket.id);
+                }
             });
 
             socket.on("typing", (room) => socket.in(room).emit("typing"));
@@ -44,7 +64,9 @@ const createServerSocket = (app) => {
             socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
             socket.on("send-message", async (messageInfor) => {
+                console.log(socket.rooms)
                 try {
+                    //const messageInfor = JSON.parse(message);
                     const chatId = messageInfor.room;
                     const newMessage = new messageSchema({
                         conversation: chatId,
@@ -53,12 +75,14 @@ const createServerSocket = (app) => {
                     });
                     const isSuccess = await newMessage.save();
                     if (isSuccess) {
+                        //console.log("send-message", messageInfor);
+                        await conversationSchema.findOneAndUpdate({ _id: chatId }, {
+                            lastMessage: messageInfor.text,
+                        });
+                        //socket.emit("receive-message", messageInfor);
                         io.to(chatId).emit("receive-message", messageInfor);
-                        const conversation = await conversationSchema.findById(chatId);
 
-                        conversation.lastMessage = messageInfor.text;
-                        const saveConversation = await conversation.save();
-                        if (saveConversation) io.to(chatId).emit("last-message", { message: messageInfor.text, room: chatId });
+                        //io.to(chatId).emit("last-message", { message: messageInfor.text, room: chatId });
                     }
                 } catch (error) {
                     console.log(error);
@@ -79,6 +103,14 @@ const createServerSocket = (app) => {
                 console.log('disconnected');
             });
         }
+    });
+    instrument(io, {
+        auth: {
+            type: "basic",
+            username: "admin",
+            password: "admin",
+        },
+        mode: "development",
     });
     return { server, io };
 }

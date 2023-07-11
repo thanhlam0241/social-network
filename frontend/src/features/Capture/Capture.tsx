@@ -2,146 +2,139 @@ import Webcam from 'react-webcam'
 import { useRef, useState, useCallback, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './Capture.module.scss'
-import { Button, Skeleton } from '@mui/material'
-import faceApi from '~/service/api/detectFace/faceApi'
+import { Button, ExtendButtonBase, ButtonTypeMap } from '@mui/material'
 
 const cx = classNames.bind(styles)
 
-const videoConstraints = {
-  width: 1000,
-  height: 720,
+const videoConstraints: MediaTrackConstraints = {
   facingMode: {
     exact: 'user'
   }
 }
 
 interface CaptureProps {
-  setUrl: any
+  onCaptured: (imgs: Blob[]) => Promise<void> | void
   width?: number
+  height?: number
 }
 
-const Capture = ({ setUrl, width }: CaptureProps) => {
+const Capture = ({ onCaptured, width, height }: CaptureProps) => {
   const webcamRef = useRef<Webcam>(null)
-  const mediaRecorderRef = useRef<MediaRecorder>()
-  const [capturing, setCapturing] = useState(false)
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([])
+  // const captureBtnRef = useRef<any>(null)
+  const [btnDisabled, setBtnDisabled] = useState<boolean>(false)
+  const [progress, setProgress] = useState<number>(0)
+  // const mediaStreamRef = useRef<MediaStream | null>(null)
+  // const takeVideo = useCallback(async () => {
+  //   if (mediaStreamRef.current) {
+  //     const stream = mediaStreamRef.current
+  //     let recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=h264' });
+  //     let data: Blob[] = [];
 
-  const [isShowVideo, setIsShowVideo] = useState(false)
+  //     recorder.ondataavailable = (event) => data.push(event.data);
+  //     recorder.start();
+  //     recorder.onstop = (ev) => {
+  //       let blob = new Blob(data, { type: 'video/webm' });
+  //       let url = URL.createObjectURL(blob);
+  //       window.open(url);
 
-  useEffect(() => {
-    if (webcamRef?.current?.stream) {
-      mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-        mimeType: 'video/webm'
-      })
-      setIsShowVideo(true)
+  //       var formdata = new FormData();
+  //       formdata.append("video", blob, "authentication.webm");
+
+  //       var requestOptions = {
+  //         method: 'POST',
+  //         body: formdata
+  //       };
+
+  //       fetch("http://localhost:3500/uploadVideo", requestOptions)
+  //         .then(response => response.text())
+  //         .then(result => console.log(result))
+  //         .catch(error => console.log('error', error));
+  //     };
+  //     recorder.onerror = (event) => console.error(event);
+
+  //     setTimeout(() => {
+  //       if (recorder.state === "recording") {
+  //         recorder.stop();
+  //       }
+  //     }, 10 * 1000);
+  //   }
+  // }, [mediaStreamRef, setUrl])
+  // const capturePhoto = takeVideo;
+
+  const capturePhoto = useCallback(async () => {
+    if (webcamRef.current) {
+      setBtnDisabled(true)
+      let imageCount = 0
+      let cam = webcamRef.current
+      // let formdata = new FormData();
+      let imgBlobs: Blob[] = []
+      let timeId = setInterval(async () => {
+        const imageSrc = cam.getScreenshot()
+        if (imageSrc) {
+          imageCount++
+          setProgress(imageCount)
+          let blob = await fetch(imageSrc).then((r) => r.blob())
+          imgBlobs.push(blob)
+          // formdata.append("images", blob, `${imageCount}.jfif`)
+          if (imageCount == 30) {
+            clearInterval(timeId)
+
+            let promise = onCaptured?.(imgBlobs)
+
+            if (promise instanceof Promise) {
+              await promise
+            }
+
+            setBtnDisabled(false)
+            // var requestOptions = {
+            //   method: 'POST',
+            //   body: formdata,
+            //   // redirect: 'follow'
+            // };
+
+            // fetch("http://localhost:3500/uploadImages", requestOptions)
+            //   .then(response => response.text())
+            //   .then(result => console.log(result))
+            //   .catch(error => console.log('error', error))
+            //   .finally(()=>{
+            //     setBtnDisabled(false);
+            //   });
+          }
+        }
+      }, 200)
     }
-  }, [webcamRef])
+  }, [webcamRef, onCaptured, setBtnDisabled, setProgress])
 
-  const handleDataAvailable = useCallback(
-    (event: BlobEvent) => {
-      const { data } = event
-      if (data.size > 0) {
-        setRecordedChunks((prev) => [...prev, data])
-      }
-    },
-    [setRecordedChunks]
-  )
-
-  const handleStartCaptureClick = useCallback(() => {
-    setCapturing(true)
-    if (mediaRecorderRef && webcamRef?.current?.stream) {
-      mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-        mimeType: 'video/webm'
-      })
-      mediaRecorderRef.current.addEventListener('dataavailable', handleDataAvailable)
-      mediaRecorderRef.current.start()
-    }
-  }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable])
-
-  const handleStopCaptureClick = useCallback(() => {
-    if (mediaRecorderRef.current) mediaRecorderRef.current.stop()
-    setCapturing(false)
-  }, [mediaRecorderRef, setCapturing])
-
-  const handleDownload = useCallback(() => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, {
-        type: 'video/webm'
-      })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      document.body.appendChild(a)
-      a.style.display = 'none'
-      a.href = url
-      a.download = 'react-webcam-stream-capture.webm'
-      a.click()
-      window.URL.revokeObjectURL(url)
-      setRecordedChunks([])
-    }
-  }, [recordedChunks])
-
-  const handleIdentify = async () => {
-    const blob = new Blob(recordedChunks, {
-      type: 'video/webm'
-    })
-    const file = new File([blob], 'video.webm')
-    const formData = new FormData()
-    formData.append('file', file)
-    const response = await faceApi.detectFace(formData)
-    if (response) {
-      alert('Đã nhận diện')
-    }
+  const onUserMedia = (stream: MediaStream) => {
+    // mediaStreamRef.current = stream;
   }
-
-  const onUserMedia = () => {
-    console.log('Webcam start')
+  let _videoConstraints = videoConstraints
+  if (width) {
+    _videoConstraints.width = width
   }
-
-  const startCam = () => {
-    setIsShowVideo(true)
+  if (height) {
+    _videoConstraints.height = height
   }
-
-  const stopCam = () => {
-    if (webcamRef?.current?.stream) {
-      const stream = webcamRef.current.stream
-      const tracks = stream.getTracks()
-      tracks.forEach((track) => track.stop())
-      setIsShowVideo(false)
-    }
-  }
-
   return (
     <div className={cx('capture-container')}>
-      {isShowVideo ? (
-        <Webcam
-          ref={webcamRef}
-          audio={false}
-          imageSmoothing={true}
-          screenshotFormat='image/jpeg'
-          videoConstraints={width ? videoConstraints : { ...videoConstraints, width: width }}
-          onUserMedia={onUserMedia}
-        />
-      ) : (
-        <Skeleton variant='rectangular' width={868} height={490} />
-      )}
+      <Webcam
+        ref={webcamRef}
+        audio={false}
+        imageSmoothing={true}
+        screenshotFormat='image/jpeg'
+        videoConstraints={_videoConstraints}
+        width={600}
+        height={320}
+        onUserMedia={onUserMedia}
+      />
+      <div
+        className={cx('capture-frame-box-progress')}
+        style={{ visibility: btnDisabled ? 'visible' : 'collapse', width: 10 * progress }}
+      ></div>
       <div className={cx('detect-face')}></div>
-      {capturing ? (
-        <button onClick={handleStopCaptureClick}>Kết thúc</button>
-      ) : (
-        <button onClick={handleStartCaptureClick}>Bắt đầu nhận diện</button>
-      )}
-      {recordedChunks.length > 0 && <button onClick={handleDownload}>Download</button>}
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Button variant='contained' onClick={handleIdentify}>
-          Identify
-        </Button>
-        <Button variant='contained' onClick={startCam}>
-          Start
-        </Button>
-        <Button variant='contained' onClick={stopCam}>
-          Stop
-        </Button>
-      </div>
+      <Button className={cx('capture-button')} variant='contained' onClick={capturePhoto} disabled={btnDisabled}>
+        Check
+      </Button>
     </div>
   )
 }

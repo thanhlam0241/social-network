@@ -1,6 +1,6 @@
 .login-form {
-  width: 400px;
-  height: 600px;
+  width: 600px;
+  height: 640px;
   margin: auto auto;
   background-color: #fff;
   border-radius: 10px;
@@ -8,13 +8,13 @@
   flex-direction: column;
   align-items: center;
   padding: 20px 0 0 0;
-  gap: 30px;
 }
 
 .div-horizon {
   width: 80%;
   height: 1px;
   background-color: #000;
+  margin-top: 15px;
 }
 
 .button-link-face-detection {
@@ -27,7 +27,7 @@
 }
 
 .footer-signup {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .button-signup {
@@ -46,4 +46,7 @@
     height: 100%;
     border-radius: 0;
   }
+}
+.faceid-description {
+  margin-top: 10px;
 }

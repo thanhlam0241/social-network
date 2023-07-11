@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AccountLoginUrl, AccountLogoutUrl, AccountGetNewTokenUrl } from '../const/url'
+import { AccountGetNewTokenUrl, AccountLoginUrl, AccountLoginWithFaceIdUrl, AccountLogoutUrl } from '../const/url'
 import config from '../const/configAxios'
 import jwt_decode from 'jwt-decode'
 
@@ -10,26 +10,25 @@ interface LoginAccountRequest {
 }
 
 class AuthenticateApi {
-  async Login(data: LoginAccountRequest, action: any) {
+  async Login(data: LoginAccountRequest) {
     return await axios
       .post(AccountLoginUrl, data)
       .then((response) => {
         if (response?.status === 200) {
           const accessToken = response?.data?.accessToken
-          const data: { username: string; role: string } = jwt_decode(accessToken)
+          const data: { _id: string; username: string; role: string } = jwt_decode(accessToken)
           if (data?.username && data?.role) {
-            action({
-              username: data.username,
-              role: data.role,
-              token: accessToken
-            })
             return {
               success: true,
               data: {
-                token: accessToken,
-                refreshToken: response?.data?.refreshToken,
-                username: data.username,
-                role: data.role
+                auth: {
+                  id: data._id,
+                  token: accessToken,
+                  username: data.username,
+                  role: data.role,
+                  loginFirstTime: true
+                },
+                refreshToken: response?.data?.refreshToken
               }
             }
           }
@@ -41,7 +40,44 @@ class AuthenticateApi {
         }
       })
       .catch((error) => {
-        return error
+        return error.response.data
+      })
+  }
+  async LoginWithFaceId(imgBlobs: Blob[]) {
+    const formdata = new FormData()
+    for (let i = 0; i < imgBlobs.length; i++) {
+      formdata.append('faces', imgBlobs[i], `${i + 1}.jfif`)
+    }
+    return await axios
+      .post(AccountLoginWithFaceIdUrl, formdata)
+      .then((response) => {
+        if (response?.status === 200) {
+          const accessToken = response?.data?.accessToken
+          const data: { _id: string; username: string; role: string } = jwt_decode(accessToken)
+          if (data?.username && data?.role) {
+            return {
+              success: true,
+              data: {
+                auth: {
+                  id: data._id,
+                  token: accessToken,
+                  username: data.username,
+                  role: data.role,
+                  loginFirstTime: true
+                },
+                refreshToken: response?.data?.refreshToken
+              }
+            }
+          }
+        } else {
+          return {
+            success: false,
+            data: response
+          }
+        }
+      })
+      .catch((error) => {
+        return error.response.data
       })
   }
   async Logout(token: string | undefined, refToken: string | undefined) {

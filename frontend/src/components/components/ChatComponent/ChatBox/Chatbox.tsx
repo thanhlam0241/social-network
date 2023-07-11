@@ -37,7 +37,7 @@ const Chatbox = () => {
     data: messages,
     isLoading: loadingMessages,
     error: errorMessages
-  } = useQuery(['messages', id], () => getMessagesInConversation(auth.token, id, 1), {
+  } = useQuery(['messages', id], () => getMessagesInConversation(auth?.token, id, 1), {
     enabled: !!id,
     refetchOnWindowFocus: false
   })
@@ -48,10 +48,13 @@ const Chatbox = () => {
     error: errorConversation
   } = useQuery({
     queryKey: ['conversation', id],
-    queryFn: () => getConversationById(auth.token, id!),
+    queryFn: () => getConversationById(auth?.token, id!),
     enabled: !!id,
     refetchOnWindowFocus: false
   })
+
+  console.log('Is socket connected ? ', socket.current?.connected)
+  console.log('Is socket connected ? ', socket.current)
 
   useEffect(() => {
     if (messages) {
@@ -60,6 +63,7 @@ const Chatbox = () => {
   }, [messages])
 
   useEffect(() => {
+    console.log('re-render')
     function onConnect() {
       console.log('connected')
       setIsConnected(true)
@@ -68,10 +72,16 @@ const Chatbox = () => {
       console.log('disconnected')
       setIsConnected(false)
     }
-    socket.current = createSocket(auth.token)
+    socket.current = createSocket()
+    //socket.current.connect()
     socket.current.on('connected', onConnect)
     //socket.current.emit('setup', { userId: auth.id })
     socket.current.emit('join-room', id)
+
+    socket.current.on('connect_error', (err) => {
+      console.log(`connect_error due to ${err.message}`)
+      //socket.current?.connect()
+    })
 
     socket.current.on('receive-message', (message: any) => {
       console.log('Message', message)
@@ -80,11 +90,13 @@ const Chatbox = () => {
     socket.current.on('disconnect', onDisconnect)
 
     return () => {
-      socket?.current?.off('connected', onConnect)
-      socket?.current?.off('disconnect', onDisconnect)
-      socket?.current?.off('receive-message')
-      socket?.current?.off('join-room')
-      socket?.current?.disconnect()
+      if (socket?.current?.io._readyState) {
+        socket?.current?.off('connected', onConnect)
+        socket?.current?.off('disconnect', onDisconnect)
+        socket?.current?.off('receive-message')
+        socket?.current?.off('join-room')
+        socket?.current?.disconnect()
+      }
     }
   }, [auth.id, id])
 
@@ -98,8 +110,17 @@ const Chatbox = () => {
     }
   }, [endRef, chatMessages])
 
+  // useEffect(() => {
+  //   if (socket.current?.connected) console.log('connected')
+  //   else socket.current?.connect()
+  //   socket.current?.emit('join-room', id)
+  // }, [id, socket.current?.connected])
+
   const handleSendMessage = useCallback(
     (message: string) => {
+      console.log(socket?.current)
+      if (socket?.current?.connected) console.log('connected')
+      else socket.current?.connect()
       if (socket.current) {
         socket.current.emit('send-message', {
           room: id,

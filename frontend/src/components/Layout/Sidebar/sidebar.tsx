@@ -24,7 +24,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
   const auth: any = useAppSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  console.log(location.pathname.startsWith('/friends'))
+  //console.log(auth)
 
   const [selectedIndex, setSelectedIndex] = useState<number>(() => {
     const index = listSideBar.findIndex((item) => {
@@ -32,7 +32,7 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
         return location.pathname.toString().startsWith(item.root)
       }
     })
-    console.log(index)
+    //console.log(index)
     return index === -1 ? 0 : index
   })
 
@@ -41,8 +41,10 @@ function Sidebar({ open, location, setOpen }: SidebarProps) {
   }
 
   const handleListItemClick = (index: number, link: string) => {
-    setSelectedIndex(index)
-    navigate(link === '/profile' ? `/profile?id=${auth.id}` : link)
+    if (auth.id) {
+      setSelectedIndex(index)
+      navigate(link === '/profile' ? `/profile?id=${auth.id}` : link)
+    }
   }
 
   useEffect(() => {

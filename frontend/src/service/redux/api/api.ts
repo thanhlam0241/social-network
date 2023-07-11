@@ -3,7 +3,7 @@ import { LoginResponse } from '../type/authenticateType'
 import jwt_decode from 'jwt-decode'
 import type { RootState } from '../store'
 
-const baseUrl = 'http://localhost:3500/'
+import { baseUrl } from '../../api/const/url'
 
 export const api = createApi({
   // Tương tự tên Slice khi tạo Slice thông thường

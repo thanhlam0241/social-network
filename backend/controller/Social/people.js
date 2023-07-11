@@ -2,6 +2,7 @@ const UserSchema = require('../../models/Account/user');
 const FriendSchema = require('../../models/Social/friend');
 const FriendRequestSchema = require('../../models/Social/addFriend');
 //const UserInformationSchema = require('../../models/Account/userInformation');
+const mongoose = require('mongoose');
 
 const requestValidation = require('../../utils/validation/request');
 
@@ -36,11 +37,17 @@ const getRecommendPeople = async (req, res) => {
     const userId = req.user._id;
     console.log(userId)
     try {
-        const listFriends = (await FriendSchema.findOne({ user: userId }));
-
-        const listRecommendPeople = await UserSchema.find({ _id: { $nin: [...listFriends.friends, userId] } })
+        const filterPeople = [userId]
+        const listFriends = await FriendSchema.findOne({ 'user': new mongoose.Types.ObjectId(userId) });
+        console.log(filterPeople)
+        if (listFriends && listFriends?.friends?.length > 0) {
+            filterPeople.push(...listFriends.friends.map((friend) => friend.toString()))
+        }
+        console.log('List friend', listFriends)
+        console.log(filterPeople)
+        const listRecommendPeople = await UserSchema.find({ _id: { $nin: filterPeople } })
             .populate('userInformation', '-__v -_id -email -phone -address')
-            .select('isOnline userInformation ')
+            .select('isOnline userInformation username')
             .skip(skip)
             .limit(numberOfRecommendPeoplePerPage);
 
@@ -67,7 +74,7 @@ const getRequestFriendToYou = async (req, res) => {
             .find({ receiver: user._id })
             .populate({
                 path: 'sender',
-                select: 'isOnline userInformation',
+                select: 'username userInformation',
                 populate: {
                     path: 'userInformation',
                     select: '-__v -_id -email -phone -address'
@@ -98,7 +105,7 @@ const getYourRequestFriend = async (req, res) => {
             .find({ sender: user._id })
             .populate({
                 path: 'receiver',
-                select: 'isOnline userInformation',
+                select: 'username userInformation',
                 populate: {
                     path: 'userInformation',
                     select: '-__v -_id -email -phone -address'
@@ -128,7 +135,7 @@ const getYourFriend = async (req, res) => {
             .findOne({ user: user._id })
             .populate({
                 path: 'friends',
-                select: 'isOnline userInformation',
+                select: 'username userInformation',
                 populate: {
                     path: 'userInformation',
                     select: '-__v -_id -email -phone -address'

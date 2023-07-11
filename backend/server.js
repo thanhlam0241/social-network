@@ -1,11 +1,13 @@
-require('dotenv').config();
+require('dotenv').config({ override: true });
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const helmet = require('helmet')
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 // const createError = require('http-errors');
+
 
 
 const { logger } = require('./middleware/logEvents');
@@ -44,14 +46,16 @@ const PORT = process.env.PORT || 3500;
 
 connect();
 
-app.use(helmet());
-app.use(morgan('common'));
+//app.use(helmet());
+//app.use(morgan('common'));
 
 //custom middleware logger
 //app.use(logger);
 
 //middlerware cors option
 app.use(cors(corsOptions));
+
+app.use(cookieParser())
 
 //built-in middleware to handler urlencoded data
 // in other word, form data:
@@ -70,43 +74,36 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 //built-in middleware to serve static file
-app.use('/static', express.static('static'));
+app.use('api/static', express.static('static'));
 
-app.use('/avatar', (req, res, next) => {
+app.use('/api/avatar', (req, res, next) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     next();
 }
     , express.static('uploads/avatar'));
-app.use('/background', (req, res, next) => {
+app.use('/api/background', (req, res, next) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     next();
 }
     , express.static('uploads/background'));
+app.use('/api/', require('./routes/root'))
 
 app.use('/node_modules', express.static('node_modules'));
 
-app.use('/', require('./routes/root'));
+app.use('/api/face', require('./routes/api/face'));
 
-app.use('/face', require('./routes/api/face'));
+app.use('/api/images/avatar', require('./routes/api/Account/avatar'));
 
-app.use('/images/avatar', require('./routes/api/Account/avatar'));
-
-app.use('/images/background', require('./routes/api/Account/background'));
-
-app.get('/identify', async (req, res) => {
-    const message = await resIdentify.identifycationByVideo('C:/Users/HP PAVILION/Pictures/Camera Roll/WIN_20230523_13_43_24_Pro.mp4')
-    res.json(message)
-})
-
+app.use('/api/images/background', require('./routes/api/Account/background'));
 
 // middleware to authenticate token
 app.use(authenticateToken);
 
-app.use('/users', require('./routes/api/Account/users'));
-app.use('/todo', require('./routes/api/todo'));
-app.use('/chat', require('./routes/api/Social/chat'));
-app.use('/social/friend', require('./routes/api/Social/friend'));
-app.use('/social/people', require('./routes/api/Social/people'));
+app.use('/api/users', require('./routes/api/Account/users'));
+app.use('/api/todo', require('./routes/api/todo'));
+app.use('/api/chat', require('./routes/api/Social/chat'));
+app.use('/api/social/friend', require('./routes/api/Social/friend'));
+app.use('/api/social/people', require('./routes/api/Social/people'));
 
 
 // Route handlers
@@ -130,6 +127,8 @@ app.use(errorHandler);
 
 const createServerSocket = require('./utils/socket/socketServer');
 
-const { server, io } = createServerSocket(app);
+const { server } = createServerSocket(app);
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+server.listen(3001, () => console.log(`Socket server running on port 3001`));

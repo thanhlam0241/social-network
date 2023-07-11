@@ -2,6 +2,7 @@ import styles from './Message.module.scss'
 import classNames from 'classnames/bind'
 
 import default_avatar from '~/assets/images/default_avatar.jpg'
+import { AvatarUrl } from '~/service/api/const/url'
 
 const cx = classNames.bind(styles)
 
@@ -19,11 +20,7 @@ export default function Message({ text, isMine, avatar }: MessageProps) {
       }
     >
       {!isMine && (
-        <img
-          className={cx('message-avatar')}
-          src={avatar ? `http://localhost:3500/avatar/${avatar}` : default_avatar}
-          alt='avatar'
-        />
+        <img className={cx('message-avatar')} src={avatar ? `${AvatarUrl}${avatar}` : default_avatar} alt='avatar' />
       )}
       <span className={isMine ? cx('message-item', 'message_item_mine') : cx('message-item', 'message_item_other')}>
         {text || 'Default message'}

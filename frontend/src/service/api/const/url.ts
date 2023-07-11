@@ -1,8 +1,7 @@
-export const baseUrl = 'http://localhost:3500'
-//const baseUrl = 'https://express-app-ii3u.onrender.com'
-
-//account api
+// const baseUrl = 'http://localhost:3500'
+export const baseUrl = '/api'
 export const AccountLoginUrl = baseUrl + '/login'
+export const AccountLoginWithFaceIdUrl = baseUrl + '/loginFaceid'
 export const AccountRegisterUrl = baseUrl + '/register'
 export const AccountLogoutUrl = baseUrl + '/logout'
 export const AccountGetNewTokenUrl = baseUrl + '/refresh-token'
@@ -30,3 +29,6 @@ export const CancelFriendRequestUrl = FriendUrl + 'cancel-my-request-friend'
 export const ConversationUrl = baseUrl + '/chat/conversation/'
 export const ConversationForUser = ConversationUrl + 'user/'
 export const MessageUrl = baseUrl + '/chat/message/'
+
+export const AvatarUrl = baseUrl + '/avatar/'
+export const BackgroundUrl = baseUrl + '/background/'

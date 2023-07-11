@@ -1,9 +1,10 @@
-require('dotenv').config();
+// require('dotenv-flow').config();
 const bcypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const userSchema = require('../../models/Account/user');
 const tokenSchema = require('../../models/Account/token');
+const grpc = require('../../utils/proto/grpcServices');
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET
@@ -27,15 +28,15 @@ const confirmLogin = async (req, res, next) => {
         if (checkPassword) {
             const accessToken = generateAccessToken({ _id: user._id, username: user.username, role: user.role });
             const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
-            const token = new tokenSchema({ username: user.username, token: refreshToken });
-            const isSaveToken = await token.save();
-            console.log(isSaveToken)
-            if (isSaveToken) {
-                return res.json({
-                    accessToken: accessToken,
-                    refreshToken: refreshToken
-                });
-            }
+            // const token = new tokenSchema({ username: user.username, token: refreshToken });
+            //const isSaveToken = await token.save();
+            // console.log(isSaveToken)
+            // if (isSaveToken) {
+            // }
+            return res.json({
+                accessToken: accessToken,
+                refreshToken: refreshToken
+            });
         }
         else {
             throw createError.Conflict('Password is incorrect');
@@ -49,13 +50,40 @@ const confirmLogin = async (req, res, next) => {
     }
 }
 
+const confirmLoginWithFaceId = async (req, res, next) => {
+    let result = await grpc.IdentificationService.identify(req.files[0].destination);
+
+    const user = await userSchema.findOne({ faceId: result.userId });
+
+    if (!user) {
+        return res.status(404).send(`Not Exist Your Face Id`);
+    }
+    try {
+        const accessToken = generateAccessToken({ username: user.username, role: user.role });
+        const refreshToken = generateRefreshToken({ username: user.username, role: user.role });
+        // await userSchema.findOneAndUpdate({ username: user.username }, { token: refreshToken });
+        res.json({
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        });
+    }
+    catch (err) {
+        if (err.isJoi === true) {
+            err.status = 422;
+        }
+        next(err);
+    }
+}
+
 const refreshToken = async (req, res) => {
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.cookies.rtk;
+    console.log(refreshToken)
     if (!refreshToken) {
         return res.status(401).send("Access denied when try to refresh token");
     }
     try {
         const checkToken = await tokenSchema.findOne({ token: refreshToken });
+        console.log(checkToken)
         if (!checkToken) {
             throw createError.Conflict('Token is not exist');
         }
@@ -75,6 +103,7 @@ const logout = async (req, res) => {
     }
     try {
         const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        console.log(user)
         if (user?.username) {
             const checkUser = await userSchema.findOne({ username: user.username })
             if (!checkUser) {
@@ -92,5 +121,6 @@ const logout = async (req, res) => {
 module.exports = {
     confirmLogin,
     refreshToken,
-    logout
+    logout,
+    confirmLoginWithFaceId
 }

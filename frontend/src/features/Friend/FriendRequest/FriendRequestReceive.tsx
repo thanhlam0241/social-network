@@ -51,13 +51,13 @@ function FriendRequestPage() {
           dataFriendRequest?.data?.length > 0 &&
           dataFriendRequest.data.map((item: any) => (
             <FriendRequest
-              key={item.sender._id}
+              key={item?.sender?._id}
               type='receive'
-              name={item?.sender.userInformation?.fullName}
-              avatar={item?.sender.userInformation?.avatar}
+              name={item?.sender?.username}
+              avatar={item?.sender?.userInformation?.avatar}
               title={item?.text}
-              onAccept={() => acceptFriendRequestMutation.mutate(item.sender._id)}
-              onReject={() => rejectFriendRequestMutation.mutate(item.sender._id)}
+              onAccept={() => acceptFriendRequestMutation.mutate(item?.sender?._id)}
+              onReject={() => rejectFriendRequestMutation.mutate(item?.sender?._id)}
             />
           ))}
       </ul>
